@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demonology Warlock - Skyreach +14 | wcl-compare</title>
+<style>
+:root {
+    --bg: #0f0f1a;
+    --surface: #1a1a2e;
+    --surface-alt: #222244;
+    --surface-hover: #2a2a4a;
+    --border: #333355;
+    --text: #e0e0e0;
+    --text-muted: #8888aa;
+    --text-dim: #666688;
+    --accent: #6c63ff;
+    --accent-dim: #4a4499;
+    --good: #4caf50;
+    --good-dim: #2e7d32;
+    --warn: #ff9800;
+    --warn-dim: #e65100;
+    --bad: #f44336;
+    --bad-dim: #c62828;
+    --boss: #6c63ff;
+    --boss-dim: #3d3699;
+    --trash: #445566;
+    --trash-dim: #334455;
+    --bar-bg: #1a1a30;
+    --bar-user: #6c63ff;
+    --bar-cohort: #445566;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--text-muted);
+     border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.section { margin-bottom: 28px; }
+.muted { color: var(--text-muted); }
+.dim { color: var(--text-dim); }
+
+/* Header */
+.header-meta { color: var(--text-muted); margin-bottom: 16px; font-size: 13px; }
+.metric-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    min-width: 140px;
+    flex: 1;
+}
+.metric-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+                       color: var(--text-muted); margin-bottom: 2px; }
+.metric-card .value { font-size: 24px; font-weight: 700; }
+.metric-card .sub { font-size: 12px; color: var(--text-muted); }
+.val-good { color: var(--good); }
+.val-warn { color: var(--warn); }
+.val-bad { color: var(--bad); }
+.val-neutral { color: var(--text); }
+
+/* Timeline */
+.timeline-wrap { position: relative; margin-bottom: 4px; }
+.timeline { display: flex; height: 28px; border-radius: 6px; overflow: hidden;
+            gap: 1px; background: var(--bg); }
+.seg {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1px; color: transparent;
+    position: relative; cursor: default;
+    min-width: 2px;
+}
+.seg.boss { background: var(--boss); }
+.seg.trash { background: var(--trash); }
+.seg.boss:hover { background: var(--boss-dim); }
+.seg.trash:hover { background: var(--trash-dim); }
+.timeline-labels { display: flex; position: relative; height: 20px; margin-bottom: 2px; }
+.timeline-lbl {
+    position: absolute; font-size: 10px; font-weight: 600; color: var(--text-muted);
+    white-space: nowrap; transform: translateX(-50%);
+    top: 2px;
+}
+.timeline-lbl.boss-lbl { color: var(--accent); }
+.timeline-legend { display: flex; gap: 16px; font-size: 11px; color: var(--text-muted);
+                    margin-bottom: 8px; }
+.legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+              margin-right: 4px; vertical-align: middle; }
+.death-markers { position: relative; height: 12px; margin-bottom: 2px; }
+.death-dot {
+    position: absolute; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--bad); top: 2px; transform: translateX(-4px);
+}
+
+/* Bars */
+.bar-row { margin-bottom: 12px; }
+.bar-label { font-size: 13px; margin-bottom: 4px; font-weight: 600; }
+.bar-bg { background: var(--bar-bg); border-radius: 4px; height: 24px; position: relative;
+           overflow: hidden; margin-bottom: 2px; }
+.bar { height: 100%; border-radius: 4px; transition: width 0.3s; min-width: 1px;
+       display: flex; align-items: center; padding-left: 8px;
+       font-size: 11px; font-weight: 600; color: #fff; }
+.bar.user { background: var(--bar-user); }
+.bar.cohort { background: var(--bar-cohort); opacity: 0.7; }
+.bar-inline-label { font-size: 11px; color: var(--text-muted); margin-left: 4px; }
+
+/* Finding cards */
+.finding-group { margin-bottom: 16px; }
+.finding-group-title { font-size: 13px; font-weight: 600; margin-bottom: 6px;
+                        text-transform: uppercase; letter-spacing: 0.5px; }
+.finding-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.finding-card .name { flex: 1; font-size: 13px; }
+.finding-card .vals { font-size: 12px; color: var(--text-muted); text-align: right;
+                       white-space: nowrap; }
+.merge-breakdown { width: 100%; font-size: 0.85em; color: var(--text-dim);
+                    padding-left: 18px; margin-top: -2px; }
+.severity-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.severity-critical { background: var(--bad); }
+.severity-warning { background: var(--warn); }
+.severity-strong { background: var(--good); }
+.severity-info { background: var(--text-dim); }
+
+/* Pull comparison */
+.pull-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.pull-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    flex: 1;
+    min-width: 120px;
+}
+.pull-stat .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+                     color: var(--text-muted); }
+.pull-stat .value { font-size: 18px; font-weight: 700; }
+.pull-stat .vs { font-size: 12px; color: var(--text-muted); }
+.phase-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.phase-table th { text-align: left; color: var(--text-muted); font-weight: 500;
+                   padding: 6px 8px; border-bottom: 1px solid var(--border);
+                   font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.phase-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.phase-table tr:last-child td { border-bottom: none; }
+
+/* Death cards */
+.death-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+.death-card .title { font-weight: 600; margin-bottom: 6px; }
+.death-card .killing-blow { color: var(--bad); font-weight: 600; }
+.death-card .downtime { color: var(--warn); font-size: 12px; margin-top: 4px; }
+.hit-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; font-size: 12px; }
+.hit-bar .bar-bg { flex: 1; height: 14px; }
+.hit-bar .amount { width: 50px; text-align: right; color: var(--text-muted); font-size: 11px; }
+
+/* Cohort table */
+.cohort-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.cohort-table th { text-align: left; color: var(--text-muted); font-weight: 500;
+                    padding: 6px 8px; border-bottom: 1px solid var(--border);
+                    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.cohort-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.cohort-table tr:last-child td { border-bottom: none; }
+.cohort-table tr:hover td { background: var(--surface-hover); }
+
+/* Details/summary */
+details { margin-top: 8px; }
+details summary {
+    cursor: pointer; color: var(--text-muted); font-size: 12px;
+    padding: 4px 0; user-select: none;
+}
+details summary:hover { color: var(--text); }
+details[open] summary { margin-bottom: 8px; }
+
+/* Collapsible subsections */
+details.subsection { margin-top: 0; margin-bottom: 16px; }
+details.subsection > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+details.subsection > summary::-webkit-details-marker { display: none; }
+details.subsection > summary::marker { display: none; content: ''; }
+details.subsection > summary > h3 { display: inline; margin-bottom: 0; cursor: pointer; }
+details.subsection > summary::before {
+    content: '▾ ';
+    font-size: 10px;
+    color: var(--text-dim);
+}
+details.subsection:not([open]) > summary::before {
+    content: '▸ ';
+}
+details.subsection[open] > summary { margin-bottom: 8px; }
+
+/* Anchor links */
+.anchor-hash {
+    color: var(--text-dim);
+    font-size: 0.8em;
+    opacity: 0;
+    transition: opacity 0.15s;
+    margin-left: 6px;
+    text-decoration: none;
+}
+h2:hover .anchor-hash, h3:hover .anchor-hash,
+summary:hover .anchor-hash { opacity: 1; }
+.anchor-hash:hover { color: var(--accent); text-decoration: none; }
+
+/* GCD / cooldown compact cards */
+.stat-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+.stat-row .label { font-size: 13px; }
+.stat-row .value { font-size: 13px; font-weight: 600; }
+.stat-row .dmg-detail { width: 100%; font-size: 11px; color: var(--text-muted);
+    margin-top: 2px; text-align: right; }
+
+/* Tooltips */
+.finding-card[data-tip] {
+    cursor: help;
+    position: relative;
+}
+.finding-card[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 4px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: max(300px, 100%);
+    max-width: min(440px, 90vw);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.finding-card[data-tip]:hover::after { opacity: 1; pointer-events: auto; }
+.tip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dotted var(--text-dim);
+}
+.tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 6px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: max(300px, 100%);
+    max-width: min(440px, 90vw);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.tip:hover::after { opacity: 1; pointer-events: auto; }
+h3 .tip-icon {
+    display: inline-block;
+    width: 16px; height: 16px; line-height: 16px;
+    text-align: center;
+    border-radius: 50%;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-left: 6px;
+    cursor: help;
+    vertical-align: middle;
+    position: relative;
+}
+h3 .tip-icon::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 6px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: 380px;
+    max-width: 90vw;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+h3 .tip-icon:hover::after { opacity: 1; pointer-events: auto; }
+
+/* CD alignment timeline (Gantt chart) */
+.cd-timeline { margin-top: 16px; }
+.cd-timeline-axis {
+    display: flex; position: relative; height: 20px; margin-left: 180px;
+    border-bottom: 1px solid var(--border);
+}
+.cd-timeline-tick {
+    position: absolute; font-size: 10px; color: var(--text-dim);
+    transform: translateX(-50%); top: 2px;
+}
+.cd-timeline-group-hdr {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-muted); margin: 10px 0 4px;
+}
+.cd-timeline-row {
+    display: flex; align-items: center; height: 22px; margin-bottom: 2px;
+}
+.cd-timeline-label {
+    width: 180px; flex-shrink: 0; font-size: 11px; color: var(--text-muted);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    padding-right: 8px;
+}
+.cd-timeline-track {
+    flex: 1; position: relative; height: 16px;
+    background: var(--bar-bg); border-radius: 3px;
+}
+.cd-timeline-bar {
+    position: absolute; height: 100%; border-radius: 2px;
+    min-width: 2px; cursor: default;
+}
+.cd-timeline-bar.aug-buff { background: var(--accent); opacity: 0.85; }
+.cd-timeline-bar.aug-debuff { background: var(--warn); opacity: 0.85; }
+.cd-timeline-bar.team-cd { background: var(--good); opacity: 0.85; }
+.cd-timeline-bar.breath { background: #e8b931; opacity: 0.9; }
+.cd-timeline-marker {
+    position: absolute; top: 0; width: 1px; height: 100%;
+    background: var(--border); opacity: 0.3; pointer-events: none;
+}
+
+</style>
+</head>
+<body>
+<div class="section">
+  <h1>Demonology Warlock</h1>
+  <div class="header-meta">
+    Skyreach +14 &middot;
+    Cohort: 10 players
+    (ilvl 282&ndash;285)
+  </div>
+  <div class="metric-cards">
+    <div class="metric-card">
+      <div class="label">DPS</div>
+      <div class="value val-bad">87k</div>
+      <div class="sub">cohort 152k</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Parse</div>
+      <div class="value val-bad">0%</div>
+      <div class="sub">&nbsp;</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Deaths</div>
+      <div class="value val-bad">11</div>
+      <div class="sub">cohort 0</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Active Time</div>
+      <div class="value">79%</div>
+      <div class="sub">cohort 92%</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="fight-timeline">Fight Timeline <a href="#fight-timeline" class="anchor-hash">#</a></h2>
+  <div class="death-markers"><div class="death-dot" style="left:19.9%" title="Death"></div><div class="death-dot" style="left:32.1%" title="Death"></div><div class="death-dot" style="left:61.2%" title="Death"></div><div class="death-dot" style="left:63.2%" title="Death"></div><div class="death-dot" style="left:69.8%" title="Death"></div><div class="death-dot" style="left:72.3%" title="Death"></div><div class="death-dot" style="left:73.3%" title="Death"></div><div class="death-dot" style="left:74.5%" title="Death"></div><div class="death-dot" style="left:75.6%" title="Death"></div><div class="death-dot" style="left:75.8%" title="Death"></div><div class="death-dot" style="left:88.1%" title="Death"></div></div>
+  <div class="timeline-wrap">
+    <div class="timeline">
+    <div class="seg trash" style="flex-basis:3.8%" title="Trash pull 1 — 1m0s — 270k DPS"></div>
+    <div class="seg trash" style="flex-basis:3.0%" title="Trash pull 2 — 47.6s — 179k DPS"></div>
+    <div class="seg trash" style="flex-basis:4.0%" title="Trash pull 3 — 1m4s — 251k DPS"></div>
+    <div class="seg boss" style="flex-basis:10.0%" title="Ranjit — 2m40s — 87k DPS"></div>
+    <div class="seg trash" style="flex-basis:2.9%" title="Trash pull 4 — 45.8s — 112k DPS"></div>
+    <div class="seg trash" style="flex-basis:3.6%" title="Trash pull 5 — 56.8s — 97k DPS"></div>
+    <div class="seg trash" style="flex-basis:6.9%" title="Trash pull 6 — 1m50s — 188k DPS"></div>
+    <div class="seg boss" style="flex-basis:5.2%" title="Araknath — 1m23s — 70k DPS"></div>
+    <div class="seg boss" style="flex-basis:10.7%" title="Araknath — 2m50s — 82k DPS"></div>
+    <div class="seg trash" style="flex-basis:3.5%" title="Trash pull 7 — 55.7s — 292k DPS"></div>
+    <div class="seg boss" style="flex-basis:7.3%" title="Rukhran — 1m57s — 120k DPS"></div>
+    <div class="seg trash" style="flex-basis:5.6%" title="Trash pull 8 — 1m30s — 168k DPS"></div>
+    <div class="seg trash" style="flex-basis:1.1%" title="Trash pull 9 — 16.7s — 45k DPS"></div>
+    <div class="seg trash" style="flex-basis:3.4%" title="Trash pull 10 — 54.4s — 178k DPS"></div>
+    <div class="seg trash" style="flex-basis:1.4%" title="Trash pull 11 — 22.2s — 330k DPS"></div>
+    <div class="seg trash" style="flex-basis:2.3%" title="Trash pull 12 — 36.7s — 69k DPS"></div>
+    <div class="seg trash" style="flex-basis:4.6%" title="Trash pull 13 — 1m14s — 8k DPS"></div>
+    <div class="seg trash" style="flex-basis:3.3%" title="Trash pull 14 — 52.0s — 156k DPS"></div>
+    <div class="seg boss" style="flex-basis:7.2%" title="High Sage Viryx — 1m54s — 76k DPS"></div>
+    <div class="seg boss" style="flex-basis:10.2%" title="High Sage Viryx — 2m43s — 94k DPS"></div>
+    </div>
+    <div class="timeline-labels">
+    <span class="timeline-lbl boss-lbl" style="left:15.8%">Ranjit (3:29)</span>
+    <span class="timeline-lbl boss-lbl" style="left:36.8%">Araknath (10:05)</span>
+    <span class="timeline-lbl boss-lbl" style="left:44.7%">Araknath (11:53)</span>
+    <span class="timeline-lbl boss-lbl" style="left:57.2%">Rukhran (16:12)</span>
+    <span class="timeline-lbl boss-lbl" style="left:86.2%">High Sage Viryx (27:58)</span>
+    <span class="timeline-lbl boss-lbl" style="left:94.9%">High Sage Viryx (31:01)</span>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-bottom:4px">
+    <span>0:13</span>
+    <span>16:59</span>
+    <span>33:44</span>
+  </div>
+  <div class="timeline-legend">
+    <span><span class="legend-dot" style="background:var(--boss)"></span>Boss</span>
+    <span><span class="legend-dot" style="background:var(--trash)"></span>Trash</span>
+    <span><span class='legend-dot' style='background:var(--bad)'></span>Death</span>
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="pull-comparison">Pull Comparison <a href="#pull-comparison" class="anchor-hash">#</a></h2>
+  <div class="pull-stats">
+    <div class="pull-stat">
+      <div class="label">Trash Pulls</div>
+      <div class="value">14</div>
+      <div class="vs">cohort 5</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Avg Pull Duration</div>
+      <div class="value">56.1s</div>
+      <div class="vs">cohort 1m35s</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Trash Time</div>
+      <div class="value">13m5s</div>
+      <div class="vs">cohort 7m57s</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Time Split</div>
+      <div class="value">49% / 51%</div>
+      <div class="vs">trash / boss (cohort 47%)</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="section">
+  <h2 id="per-segment-dps">Per-Segment DPS <a href="#per-segment-dps" class="anchor-hash">#</a></h2>
+    <div class="bar-row">
+      <div class="bar-label">Ranjit</div>
+      <div class="bar-bg"><div class="bar user" style="width:26.2%">You: 87k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:23.7%">Cohort: 78k</div></div>
+      <details>
+        <summary>Rotation detail (15 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-neutral">137.1s / 159.6s active (86%) <span class="muted">(cohort 86%)</span></span></div>
+<div class="stat-row"><span class="label">Hand of Gul&#x27;dan</span><span class="value val-warn">12.8/min <span class="muted">cohort 13.9/min</span></span><div class="dmg-detail">total 522k &middot; avg hit 14k (cohort 15k)</div></div>
+<div class="stat-row"><span class="label">Demonbolt</span><span class="value val-bad">9.4/min <span class="muted">cohort 12.1/min</span></span><div class="dmg-detail">total 511k &middot; avg hit 20k (cohort 16k)</div></div>
+<div class="stat-row"><span class="label">Shadow Bolt</span><span class="value val-good">9.8/min <span class="muted">cohort 7.3/min</span></span><div class="dmg-detail">total 333k &middot; avg hit 13k (cohort 9k)</div></div>
+<div class="stat-row"><span class="label">Implosion</span><span class="value val-good">3.4/min <span class="muted">cohort 3.0/min</span></span><div class="dmg-detail">total 247k &middot; avg hit 5k (cohort 4k)</div></div>
+<div class="stat-row"><span class="label">Call Dreadstalkers</span><span class="value val-warn">2.6/min <span class="muted">cohort 3.0/min</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-warn">1.5/min <span class="muted">cohort 1.7/min</span></span><div class="dmg-detail">total 599k &middot; avg hit 150k (cohort 133k)</div></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-warn">0.8/min <span class="muted">cohort 0.9/min</span></span></div>
+<div class="stat-row"><span class="label">Grimoire: Imp Lord</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.4/min</span></span></div>
+<div class="stat-row"><span class="label">Power Siphon</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Demonic Core</span><span class="value val-good">73% uptime <span class="muted">cohort 55%</span></span></div>
+<div class="stat-row"><span class="label">Dominion of Argus</span><span class="value val-neutral">31% uptime <span class="muted">cohort 36%</span></span></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-neutral">25% uptime <span class="muted">cohort 29%</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-neutral">5% uptime <span class="muted">cohort 5%</span></span></div>
+<div class="stat-row"><span class="label">Infernal Bolt</span><span class="value val-neutral">6% uptime <span class="muted">cohort 10%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Araknath</div>
+      <div class="bar-bg"><div class="bar user" style="width:21.3%">You: 70k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:24.2%">Cohort: 80k</div></div>
+      <details>
+        <summary>Rotation detail (15 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">45.8s / 83.5s active (55%) <span class="muted">(cohort 86%)</span></span></div>
+<div class="stat-row"><span class="label">Hand of Gul&#x27;dan</span><span class="value val-bad">7.2/min <span class="muted">cohort 14.7/min</span></span><div class="dmg-detail">total 190k &middot; avg hit 16k (cohort 14k)</div></div>
+<div class="stat-row"><span class="label">Demonbolt</span><span class="value val-bad">5.8/min <span class="muted">cohort 11.7/min</span></span><div class="dmg-detail">total 198k &middot; avg hit 25k (cohort 16k)</div></div>
+<div class="stat-row"><span class="label">Shadow Bolt</span><span class="value val-bad">5.0/min <span class="muted">cohort 7.6/min</span></span><div class="dmg-detail">total 73k &middot; avg hit 10k (cohort 9k)</div></div>
+<div class="stat-row"><span class="label">Implosion</span><span class="value val-bad">2.2/min <span class="muted">cohort 3.0/min</span></span><div class="dmg-detail">total 62k &middot; avg hit 4k (cohort 4k)</div></div>
+<div class="stat-row"><span class="label">Call Dreadstalkers</span><span class="value val-bad">2.2/min <span class="muted">cohort 2.7/min</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-warn">1.4/min <span class="muted">cohort 1.7/min</span></span><div class="dmg-detail">total 308k &middot; avg hit 154k (cohort 105k)</div></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-warn">0.7/min <span class="muted">cohort 0.8/min</span></span></div>
+<div class="stat-row"><span class="label">Grimoire: Imp Lord</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.4/min</span></span></div>
+<div class="stat-row"><span class="label">Power Siphon</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Demonic Core</span><span class="value val-good">65% uptime <span class="muted">cohort 57%</span></span></div>
+<div class="stat-row"><span class="label">Dominion of Argus</span><span class="value val-warn">30% uptime <span class="muted">cohort 35%</span></span></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-neutral">24% uptime <span class="muted">cohort 28%</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-neutral">7% uptime <span class="muted">cohort 6%</span></span></div>
+<div class="stat-row"><span class="label">Infernal Bolt</span><span class="value val-neutral">5% uptime <span class="muted">cohort 8%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Araknath</div>
+      <div class="bar-bg"><div class="bar user" style="width:24.7%">You: 82k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:24.2%">Cohort: 80k</div></div>
+      <details>
+        <summary>Rotation detail (15 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">45.8s / 83.5s active (55%) <span class="muted">(cohort 86%)</span></span></div>
+<div class="stat-row"><span class="label">Hand of Gul&#x27;dan</span><span class="value val-bad">7.2/min <span class="muted">cohort 14.7/min</span></span><div class="dmg-detail">total 190k &middot; avg hit 16k (cohort 14k)</div></div>
+<div class="stat-row"><span class="label">Demonbolt</span><span class="value val-bad">5.8/min <span class="muted">cohort 11.7/min</span></span><div class="dmg-detail">total 198k &middot; avg hit 25k (cohort 16k)</div></div>
+<div class="stat-row"><span class="label">Shadow Bolt</span><span class="value val-bad">5.0/min <span class="muted">cohort 7.6/min</span></span><div class="dmg-detail">total 73k &middot; avg hit 10k (cohort 9k)</div></div>
+<div class="stat-row"><span class="label">Implosion</span><span class="value val-bad">2.2/min <span class="muted">cohort 3.0/min</span></span><div class="dmg-detail">total 62k &middot; avg hit 4k (cohort 4k)</div></div>
+<div class="stat-row"><span class="label">Call Dreadstalkers</span><span class="value val-bad">2.2/min <span class="muted">cohort 2.7/min</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-warn">1.4/min <span class="muted">cohort 1.7/min</span></span><div class="dmg-detail">total 308k &middot; avg hit 154k (cohort 105k)</div></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-warn">0.7/min <span class="muted">cohort 0.8/min</span></span></div>
+<div class="stat-row"><span class="label">Grimoire: Imp Lord</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.4/min</span></span></div>
+<div class="stat-row"><span class="label">Power Siphon</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Demonic Core</span><span class="value val-good">65% uptime <span class="muted">cohort 57%</span></span></div>
+<div class="stat-row"><span class="label">Dominion of Argus</span><span class="value val-warn">30% uptime <span class="muted">cohort 35%</span></span></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-neutral">24% uptime <span class="muted">cohort 28%</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-neutral">7% uptime <span class="muted">cohort 6%</span></span></div>
+<div class="stat-row"><span class="label">Infernal Bolt</span><span class="value val-neutral">5% uptime <span class="muted">cohort 8%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Rukhran</div>
+      <div class="bar-bg"><div class="bar user" style="width:36.2%">You: 120k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:26.9%">Cohort: 89k</div></div>
+      <details>
+        <summary>Rotation detail (15 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-warn">95.7s / 116.6s active (82%) <span class="muted">(cohort 86%)</span></span></div>
+<div class="stat-row"><span class="label">Hand of Gul&#x27;dan</span><span class="value val-neutral">14.4/min <span class="muted">cohort 14.5/min</span></span><div class="dmg-detail">total 628k &middot; avg hit 18k (cohort 14k)</div></div>
+<div class="stat-row"><span class="label">Demonbolt</span><span class="value val-warn">10.8/min <span class="muted">cohort 11.7/min</span></span><div class="dmg-detail">total 454k &middot; avg hit 23k (cohort 18k)</div></div>
+<div class="stat-row"><span class="label">Shadow Bolt</span><span class="value val-good">8.2/min <span class="muted">cohort 7.4/min</span></span><div class="dmg-detail">total 166k &middot; avg hit 10k (cohort 11k)</div></div>
+<div class="stat-row"><span class="label">Implosion</span><span class="value val-good">3.6/min <span class="muted">cohort 3.0/min</span></span><div class="dmg-detail">total 215k &middot; avg hit 6k (cohort 5k)</div></div>
+<div class="stat-row"><span class="label">Call Dreadstalkers</span><span class="value val-warn">2.6/min <span class="muted">cohort 2.9/min</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-warn">1.5/min <span class="muted">cohort 1.7/min</span></span><div class="dmg-detail">total 282k &middot; avg hit 94k (cohort 109k)</div></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-good">1.0/min <span class="muted">cohort 1.0/min</span></span></div>
+<div class="stat-row"><span class="label">Grimoire: Imp Lord</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.4/min</span></span></div>
+<div class="stat-row"><span class="label">Power Siphon</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Demonic Core</span><span class="value val-neutral">64% uptime <span class="muted">cohort 59%</span></span></div>
+<div class="stat-row"><span class="label">Dominion of Argus</span><span class="value val-neutral">43% uptime <span class="muted">cohort 38%</span></span></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-neutral">34% uptime <span class="muted">cohort 32%</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-neutral">7% uptime <span class="muted">cohort 6%</span></span></div>
+<div class="stat-row"><span class="label">Infernal Bolt</span><span class="value val-neutral">10% uptime <span class="muted">cohort 7%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">High Sage Viryx</div>
+      <div class="bar-bg"><div class="bar user" style="width:22.8%">You: 76k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:28.4%">Cohort: 94k</div></div>
+      <details>
+        <summary>Rotation detail (15 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">89.7s / 114.1s active (79%) <span class="muted">(cohort 88%)</span></span></div>
+<div class="stat-row"><span class="label">Hand of Gul&#x27;dan</span><span class="value val-bad">10.5/min <span class="muted">cohort 14.0/min</span></span><div class="dmg-detail">total 368k &middot; avg hit 17k (cohort 15k)</div></div>
+<div class="stat-row"><span class="label">Demonbolt</span><span class="value val-bad">6.3/min <span class="muted">cohort 11.3/min</span></span><div class="dmg-detail">total 298k &middot; avg hit 25k (cohort 18k)</div></div>
+<div class="stat-row"><span class="label">Shadow Bolt</span><span class="value val-good">11.0/min <span class="muted">cohort 7.4/min</span></span><div class="dmg-detail">total 231k &middot; avg hit 11k (cohort 11k)</div></div>
+<div class="stat-row"><span class="label">Implosion</span><span class="value val-warn">2.6/min <span class="muted">cohort 3.1/min</span></span><div class="dmg-detail">total 141k &middot; avg hit 4k (cohort 6k)</div></div>
+<div class="stat-row"><span class="label">Call Dreadstalkers</span><span class="value val-warn">2.6/min <span class="muted">cohort 3.1/min</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-bad">1.1/min <span class="muted">cohort 1.5/min</span></span><div class="dmg-detail">total 170k &middot; avg hit 85k (cohort 124k)</div></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-neutral">1.1/min <span class="muted">cohort 1.0/min</span></span></div>
+<div class="stat-row"><span class="label">Grimoire: Imp Lord</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Power Siphon</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Demonic Core</span><span class="value val-neutral">53% uptime <span class="muted">cohort 52%</span></span></div>
+<div class="stat-row"><span class="label">Dominion of Argus</span><span class="value val-neutral">43% uptime <span class="muted">cohort 40%</span></span></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-neutral">35% uptime <span class="muted">cohort 32%</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-neutral">4% uptime <span class="muted">cohort 6%</span></span></div>
+<div class="stat-row"><span class="label">Infernal Bolt</span><span class="value val-neutral">5% uptime <span class="muted">cohort 6%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">High Sage Viryx</div>
+      <div class="bar-bg"><div class="bar user" style="width:28.5%">You: 94k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:28.4%">Cohort: 94k</div></div>
+      <details>
+        <summary>Rotation detail (15 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">89.7s / 114.1s active (79%) <span class="muted">(cohort 88%)</span></span></div>
+<div class="stat-row"><span class="label">Hand of Gul&#x27;dan</span><span class="value val-bad">10.5/min <span class="muted">cohort 14.0/min</span></span><div class="dmg-detail">total 368k &middot; avg hit 17k (cohort 15k)</div></div>
+<div class="stat-row"><span class="label">Demonbolt</span><span class="value val-bad">6.3/min <span class="muted">cohort 11.3/min</span></span><div class="dmg-detail">total 298k &middot; avg hit 25k (cohort 18k)</div></div>
+<div class="stat-row"><span class="label">Shadow Bolt</span><span class="value val-good">11.0/min <span class="muted">cohort 7.4/min</span></span><div class="dmg-detail">total 231k &middot; avg hit 11k (cohort 11k)</div></div>
+<div class="stat-row"><span class="label">Implosion</span><span class="value val-warn">2.6/min <span class="muted">cohort 3.1/min</span></span><div class="dmg-detail">total 141k &middot; avg hit 4k (cohort 6k)</div></div>
+<div class="stat-row"><span class="label">Call Dreadstalkers</span><span class="value val-warn">2.6/min <span class="muted">cohort 3.1/min</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-bad">1.1/min <span class="muted">cohort 1.5/min</span></span><div class="dmg-detail">total 170k &middot; avg hit 85k (cohort 124k)</div></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-neutral">1.1/min <span class="muted">cohort 1.0/min</span></span></div>
+<div class="stat-row"><span class="label">Grimoire: Imp Lord</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Power Siphon</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Demonic Core</span><span class="value val-neutral">53% uptime <span class="muted">cohort 52%</span></span></div>
+<div class="stat-row"><span class="label">Dominion of Argus</span><span class="value val-neutral">43% uptime <span class="muted">cohort 40%</span></span></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-neutral">35% uptime <span class="muted">cohort 32%</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-neutral">4% uptime <span class="muted">cohort 6%</span></span></div>
+<div class="stat-row"><span class="label">Infernal Bolt</span><span class="value val-neutral">5% uptime <span class="muted">cohort 6%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Trash (overall)</div>
+      <div class="bar-bg"><div class="bar user" style="width:51.0%">You: 169k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:82.1%">Cohort: 272k</div></div>
+      <details>
+        <summary>Rotation detail (15 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">598.4s / 785.1s active (76%) <span class="muted">(cohort 82%)</span></span></div>
+<div class="stat-row"><span class="label">Hand of Gul&#x27;dan</span><span class="value val-bad">9.9/min <span class="muted">cohort 13.5/min</span></span><div class="dmg-detail">total 8.5M &middot; avg hit 15k (cohort 14k)</div></div>
+<div class="stat-row"><span class="label">Demonbolt</span><span class="value val-bad">6.1/min <span class="muted">cohort 9.9/min</span></span><div class="dmg-detail">total 1.7M &middot; avg hit 21k (cohort 18k)</div></div>
+<div class="stat-row"><span class="label">Shadow Bolt</span><span class="value val-good">9.9/min <span class="muted">cohort 8.4/min</span></span><div class="dmg-detail">total 1.4M &middot; avg hit 10k (cohort 10k)</div></div>
+<div class="stat-row"><span class="label">Implosion</span><span class="value val-neutral">3.1/min <span class="muted">cohort 3.0/min</span></span><div class="dmg-detail">total 6.2M &middot; avg hit 7k (cohort 8k)</div></div>
+<div class="stat-row"><span class="label">Call Dreadstalkers</span><span class="value val-warn">2.7/min <span class="muted">cohort 2.8/min</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-bad">1.0/min <span class="muted">cohort 1.4/min</span></span><div class="dmg-detail">total 4.5M &middot; avg hit 120k (cohort 104k)</div></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-warn">0.9/min <span class="muted">cohort 1.0/min</span></span></div>
+<div class="stat-row"><span class="label">Grimoire: Imp Lord</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.4/min</span></span></div>
+<div class="stat-row"><span class="label">Power Siphon</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Demonic Core</span><span class="value val-neutral">55% uptime <span class="muted">cohort 53%</span></span></div>
+<div class="stat-row"><span class="label">Dominion of Argus</span><span class="value val-warn">35% uptime <span class="muted">cohort 42%</span></span></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant</span><span class="value val-neutral">29% uptime <span class="muted">cohort 34%</span></span></div>
+<div class="stat-row"><span class="label">Ruination</span><span class="value val-neutral">6% uptime <span class="muted">cohort 7%</span></span></div>
+<div class="stat-row"><span class="label">Infernal Bolt</span><span class="value val-neutral">6% uptime <span class="muted">cohort 9%</span></span></div>
+      </details>
+    </div>
+
+  <details>
+    <summary>Per-trash-pull DPS (14 pulls)</summary>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 1</div>
+        <div class="bar-bg"><div class="bar user" style="width:81.5%">270k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 2</div>
+        <div class="bar-bg"><div class="bar user" style="width:54.1%">179k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 3</div>
+        <div class="bar-bg"><div class="bar user" style="width:75.9%">251k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 4</div>
+        <div class="bar-bg"><div class="bar user" style="width:33.9%">112k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 5</div>
+        <div class="bar-bg"><div class="bar user" style="width:29.3%">97k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 6</div>
+        <div class="bar-bg"><div class="bar user" style="width:56.9%">188k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 7</div>
+        <div class="bar-bg"><div class="bar user" style="width:88.1%">292k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 8</div>
+        <div class="bar-bg"><div class="bar user" style="width:50.8%">168k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 9</div>
+        <div class="bar-bg"><div class="bar user" style="width:13.7%">45k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 10</div>
+        <div class="bar-bg"><div class="bar user" style="width:53.7%">178k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 11</div>
+        <div class="bar-bg"><div class="bar user" style="width:99.8%">330k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 12</div>
+        <div class="bar-bg"><div class="bar user" style="width:20.9%">69k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 13</div>
+        <div class="bar-bg"><div class="bar user" style="width:2.4%">8k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 14</div>
+        <div class="bar-bg"><div class="bar user" style="width:47.1%">156k</div></div>
+      </div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="rotation">Rotation <a href="#rotation" class="anchor-hash">#</a></h2>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--text)">Active DPS</div>
+<div class="finding-card" data-tip="DPS counting only time you were alive and in combat. Removes death downtime so you can see your actual rotation quality separately from survivability.
+If your overall DPS is low but Active DPS is close to cohort, deaths are the main problem, not your rotation."><div class="severity-dot severity-critical"></div><div class="name">Active DPS</div><div class="vals">110k <span class="muted">cohort 168k</span> <span class="val-bad">-35%</span></div></div>
+  </div>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--warn)">Improvements</div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-warning"></div><div class="name">Grimoire: Imp Lord casts/min</div><div class="vals">0.0/min <span class="muted">cohort 0.5/min</span> <span class="val-bad">-100%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Demonbolt casts/min</div><div class="vals">6.9/min <span class="muted">cohort 10.6/min</span> <span class="val-bad">-35%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Ruination casts/min</div><div class="vals">1.1/min <span class="muted">cohort 1.5/min</span> <span class="val-bad">-28%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Hand of Gul&#x27;dan casts/min</div><div class="vals">10.6/min <span class="muted">cohort 13.5/min</span> <span class="val-bad">-21%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Call Dreadstalkers casts/min</div><div class="vals">2.8/min <span class="muted">cohort 3.0/min</span> <span class="val-warn">-7%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Demonic Core uptime</div><div class="vals">68% <span class="muted">cohort 65%</span> <span class="val-good">+6%</span></div></div>
+  </div>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--good)">Strong Points</div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-strong"></div><div class="name">Infernal Bolt uptime</div><div class="vals">6% <span class="muted">cohort 10%</span> <span class="val-bad">-42%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-strong"></div><div class="name">Ruination uptime</div><div class="vals">5% <span class="muted">cohort 8%</span> <span class="val-bad">-32%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Shadow Bolt casts/min</div><div class="vals">10.8/min <span class="muted">cohort 9.5/min</span> <span class="val-good">+13%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Implosion casts/min</div><div class="vals">3.1/min <span class="muted">cohort 2.8/min</span> <span class="val-good">+11%</span></div></div>
+  </div>
+  <details>
+    <summary>On par (3 metrics)</summary>
+    <div class="finding-group">
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-info"></div><div class="name">Summon Demonic Tyrant casts/min</div><div class="vals">0.9/min <span class="muted">cohort 0.9/min</span> <span class="val-neutral">+2%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-info"></div><div class="name">Dominion of Argus uptime</div><div class="vals">38% <span class="muted">cohort 38%</span> <span class="val-neutral">-2%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-info"></div><div class="name">Summon Demonic Tyrant uptime</div><div class="vals">31% <span class="muted">cohort 31%</span> <span class="val-neutral">-0%</span></div></div>
+    </div>
+  </details>
+  <details>
+    <summary>Damage distribution (1 metrics, varies with pull size)</summary>
+    <div class="finding-group">
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-critical"></div><div class="name">Hand of Gul&#x27;dan damage %</div><div class="vals">9% <span class="muted">cohort 12%</span> <span class="val-bad">-22%</span></div></div>
+    </div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="details">Details <a href="#details" class="anchor-hash">#</a></h2>
+  <details class="subsection" open><summary><h3 id="deaths">Deaths<span class="tip-icon" data-tip="Each death shows the last few hits you took and the killing blow. Look at the damage sources — could you have interrupted, moved, or used a defensive?">?</span> <a href="#deaths" class="anchor-hash">#</a></h3></summary>
+    <div class="death-card">
+      <div class="title">Death #1 at 6:54 — Trash pull 4</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Melee</span><div class="bar-bg"><div class="bar user" style="width:39%"></div></div><span class="amount">202k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fiery Talon</span><div class="bar-bg"><div class="bar user" style="width:6%"></div></div><span class="amount">30k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Solar Barrier</span><div class="bar-bg"><div class="bar user" style="width:6%"></div></div><span class="amount">29k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Solar Barrier</span><div class="bar-bg"><div class="bar user" style="width:6%"></div></div><span class="amount">29k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">134</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Melee</span><div class="bar-bg"><div class="bar" style="width:26%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">134k</span></div>
+<div class="downtime">Dead for 4.5s</div>
+    </div>
+    <div class="death-card">
+      <div class="title">Death #2 at 10:59 — Araknath</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">145</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">145</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">145</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">145</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">145</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Supernova</span><div class="bar-bg"><div class="bar" style="width:96%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">500k</span></div>
+<div class="downtime">Dead for 34.5s</div>
+    </div>
+    <div class="death-card">
+      <div class="title">Death #3 at 20:44 — Trash pull 8</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Melee</span><div class="bar-bg"><div class="bar user" style="width:46%"></div></div><span class="amount">242k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">287</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">287</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">287</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">287</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Melee</span><div class="bar-bg"><div class="bar" style="width:34%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">177k</span></div>
+<div class="downtime">Dead for 5.8s</div>
+    </div>
+    <div class="death-card">
+      <div class="title">Death #4 at 21:23 — Trash pull 9</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">2k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Ricocheting Chakram</span><div class="bar-bg"><div class="bar user" style="width:23%"></div></div><span class="amount">121k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">2k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">2k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">2k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Falling</span><div class="bar-bg"><div class="bar" style="width:29%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">150k</span></div>
+<div class="downtime">Dead for 5.3s</div>
+    </div>
+    <div class="death-card">
+      <div class="title">Death #5 at 23:38 — Trash pull 11</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">214</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">214</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Melee</span><div class="bar-bg"><div class="bar user" style="width:39%"></div></div><span class="amount">206k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">133</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">133</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Melee</span><div class="bar-bg"><div class="bar" style="width:7%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">34k</span></div>
+<div class="downtime">Dead for 5.6s</div>
+    </div>
+    <div class="death-card">
+      <div class="title">Death #6 at 24:27 — Trash pull 12</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Melee</span><div class="bar-bg"><div class="bar user" style="width:36%"></div></div><span class="amount">190k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Melee</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">0</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:1%"></div></div><span class="amount">3k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:1%"></div></div><span class="amount">3k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:1%"></div></div><span class="amount">3k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Melee</span><div class="bar-bg"><div class="bar" style="width:51%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">264k</span></div>
+<div class="downtime">Dead for 3.9s</div>
+    </div>
+    <div class="death-card">
+      <div class="title">Death #7 at 24:48 — Trash pull 13</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Repel</span><div class="bar-bg"><div class="bar user" style="width:49%"></div></div><span class="amount">254k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">2k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">2k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">2k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">2k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Fel Armor</span><div class="bar-bg"><div class="bar" style="width:0%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">2k</span></div>
+<div class="downtime">Dead for 11.1s</div>
+    </div>
+    <div class="death-card">
+      <div class="title">Death #8 at 25:11 — Trash pull 13</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">147</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Solar Flame</span><div class="bar-bg"><div class="bar user" style="width:29%"></div></div><span class="amount">152k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">147</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">147</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">147</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Blade Rush</span><div class="bar-bg"><div class="bar" style="width:26%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">138k</span></div>
+<div class="downtime">Dead for 2.5s</div>
+    </div>
+    <div class="death-card">
+      <div class="title">Death #9 at 25:34 — Trash pull 13</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Repel</span><div class="bar-bg"><div class="bar" style="width:44%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">231k</span></div>
+<div class="downtime">Dead for 6.9s</div>
+    </div>
+    <div class="death-card">
+      <div class="title">Death #10 at 25:37 — Trash pull 13</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Repel</span><div class="bar-bg"><div class="bar" style="width:44%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">231k</span></div>
+<div class="downtime">Dead for 3.2s</div>
+    </div>
+    <div class="death-card">
+      <div class="title">Death #11 at 29:45 — High Sage Viryx</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Shadow Mend</span><div class="bar-bg"><div class="bar user" style="width:3%"></div></div><span class="amount">16k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">157</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">157</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Shadow Mend</span><div class="bar-bg"><div class="bar user" style="width:3%"></div></div><span class="amount">16k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Fel Armor</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">198</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Melee</span><div class="bar-bg"><div class="bar" style="width:100%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">522k</span></div>
+<div class="downtime">Dead for 16.9s</div>
+    </div>
+  </details>
+  <details class="subsection" open><summary><h3 id="gcd-efficiency">GCD Efficiency<span class="tip-icon" data-tip="Counts moments where you weren&#x27;t pressing any button during combat. Each wasted GCD is ~1.5s of doing nothing.
+Common causes: running without instant casts, hesitating on what to press next, or being dead.">?</span> <a href="#gcd-efficiency" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Wasted GCDs</span>
+    <span class="value val-warn">68 (1m36s idle)</span>
+  </div>
+<div class="stat-row"><span class="label">&nbsp;&nbsp;↳ Dead</span><span class="value val-bad">3 (9.9s)</span></div><div class="stat-row"><span class="label">&nbsp;&nbsp;↳ Idle</span><span class="value val-warn">65 (1m26s)</span></div>
+  <div class="stat-row">
+    <span class="label">Cohort</span>
+    <span class="value">32 (best 22)</span>
+  </div>
+<div class="stat-row"><span class="label">Rate</span><span class="value">2.6/min (cohort 2.0/min, best 1.2/min)</span></div>
+  <div class="stat-row">
+    <span class="label">Effective GCD</span>
+    <span class="value">1.28s (haste 16.9%)</span>
+  </div>
+<div class="stat-row"><span class="label">Worst segment</span><span class="value">Trash pull 13 (9 wasted)</span></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="cooldown-hold-times">Cooldown Hold Times<span class="tip-icon" data-tip="Time between a cooldown becoming available and you pressing it. Lower is better — a 10s hold on a 30s CD means the ability sat ready for 10 seconds while you could have been using it.
+Check the &#x27;worst&#x27; timestamp to find where you held the longest.">?</span> <a href="#cooldown-hold-times" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row"><span class="label">Implosion (CD: 15s)</span><span class="value val-warn">avg 9.2s hold <span class="muted">cohort 8.2s</span></span></div>
+<div class="stat-row"><span class="label">Call Dreadstalkers (CD: 20s)</span><span class="value val-bad">avg 7.3s hold <span class="muted">cohort 2.3s</span></span></div>
+<div class="stat-row"><span class="label">Summon Demonic Tyrant (CD: 60s)</span><span class="value val-bad">avg 22.1s hold <span class="muted">cohort 13.6s</span></span></div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="survivability">Survivability <a href="#survivability" class="anchor-hash">#</a></h2>
+  <details class="subsection" open><summary><h3 id="damage-taken">Damage Taken <a href="#damage-taken" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Total damage taken</span>
+    <span class="value">42.9M (21k DTPS)</span>
+  </div>
+  <div style="margin-top:8px">
+<div class="hit-bar"><span style="width:180px;font-size:12px">Scorching Ray</span><div class="bar-bg"><div class="bar user" style="width:100%"></div></div><span class="amount">6.2M (14.5%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Light Ray</span><div class="bar-bg"><div class="bar user" style="width:93%"></div></div><span class="amount">5.8M (13.5%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Melee</span><div class="bar-bg"><div class="bar user" style="width:65%"></div></div><span class="amount">4.0M (9.4%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Blade Rush</span><div class="bar-bg"><div class="bar user" style="width:60%"></div></div><span class="amount">3.8M (8.7%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Burning Rush</span><div class="bar-bg"><div class="bar user" style="width:48%"></div></div><span class="amount">3.0M (7.0%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Fan of Blades</span><div class="bar-bg"><div class="bar user" style="width:42%"></div></div><span class="amount">2.6M (6.2%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Solar Flame</span><div class="bar-bg"><div class="bar user" style="width:35%"></div></div><span class="amount">2.2M (5.1%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Solar Bolt</span><div class="bar-bg"><div class="bar user" style="width:28%"></div></div><span class="amount">1.8M (4.1%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Burning Pursuit</span><div class="bar-bg"><div class="bar user" style="width:26%"></div></div><span class="amount">1.6M (3.8%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Supernova</span><div class="bar-bg"><div class="bar user" style="width:22%"></div></div><span class="amount">1.4M (3.2%)</span></div>
+  </div>
+  </details>
+  <details class="subsection" open><summary><h3 id="damage-spikes">Damage Spikes <a href="#damage-spikes" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Spikes detected</span>
+    <span class="value">17</span>
+  </div>
+<div class="stat-row"><span class="label">Undefended spikes</span><span class="value val-bad">12 of 17</span></div>
+  <details>
+    <summary>Spike details (17 spikes)</summary>
+<div class="death-card"><div class="title">Spike #1 at 5:45 — Ranjit</div><div style="font-size:13px">391k in 3.5s (112k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Chakram Vortex (226k), Fan of Blades (164k), Fel Armor (1k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Unending Resolve, Dark Pact</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Shifting Sands (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (334k): <span style="color:var(--accent);font-size:11px">Demonic Healthstone (317k), Soul Leech (10k), Fel Armor (4k), Leech (2k), Fel Synergy (1k)</span></div><div style="font-size:12px">External (101k): <span style="color:var(--good);font-size:11px">Void Shield (74k), Atonement (24k), Lightbearer (2k), Fate Mirror (424), Shifting Sands (230)</span></div></div>
+<div class="death-card"><div class="title">Spike #2 at 6:27 — Trash pull 4</div><div style="font-size:13px">359k in 4.0s (90k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Solar Bolt (350k), Fel Armor (9k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Unending Resolve, Dark Pact</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Void Shield (from Perazen), Atonement (from Perazen), Visage (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (61k): <span style="color:var(--accent);font-size:11px">Soul Leech (39k), Fel Armor (18k), Leech (2k), Fel Synergy (2k)</span></div><div style="font-size:12px">External (161k): <span style="color:var(--good);font-size:11px">Void Shield (101k), Atonement (43k), Prayer of Mending (11k), Piety (5k), Penance (Contrition) (746), Shifting Sands (288)</span></div></div>
+<div class="death-card"><div class="title">Spike #3 at 6:50 — Trash pull 4</div><div style="font-size:13px">641k in 5.5s (117k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (495k), Solar Barrier (115k), Fiery Talon (30k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Dark Pact</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Unending Resolve</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Black Attunement (from Dzin), Prayer of Mending (from Perazen), Defy Fate (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (174k): <span style="color:var(--accent);font-size:11px">Dark Pact (164k), Soul Leech (7k), Fel Armor (2k), Fel Synergy (1k), Leech (492)</span></div><div style="font-size:12px">External (52k): <span style="color:var(--good);font-size:11px">Refreshing Drink (36k), Defy Fate (15k), Lightbearer (290)</span></div></div>
+<div class="death-card"><div class="title">Spike #4 at 7:17 — Trash pull 5</div><div style="font-size:13px">357k in 4.0s (89k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Solar Bolt (354k), Fel Armor (3k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Unending Resolve, Dark Pact</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Visage (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (17k): <span style="color:var(--accent);font-size:11px">Soul Leech (10k), Leech (4k), Fel Synergy (2k), Fel Armor (545)</span></div><div style="font-size:12px">External (81k): <span style="color:var(--good);font-size:11px">Penance (46k), Refreshing Drink (26k), Atonement (7k), Penance (Contrition) (1k), Lightbearer (400), Shifting Sands (262), Piety (94)</span></div></div>
+<div class="death-card"><div class="title">Spike #5 at 7:29 — Trash pull 5</div><div style="font-size:13px">471k in 4.5s (105k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Solar Bolt (352k), Solar Barrier (84k), Shadow Mend (33k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Unending Resolve, Dark Pact</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Blaze of Light (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (22k): <span style="color:var(--accent);font-size:11px">Soul Leech (12k), Leech (5k), Fel Armor (3k), Fel Synergy (2k)</span></div><div style="font-size:12px">External (508k): <span style="color:var(--good);font-size:11px">Penance (196k), Void Shield (190k), Atonement (60k), Divine Aegis (24k), Piety (23k), Prayer of Mending (5k), Penance (Contrition Crit) (4k), Lightbearer (3k), Penance (Contrition) (2k)</span></div></div>
+<div class="death-card"><div class="title">Spike #6 at 9:14 — Trash pull 6</div><div style="font-size:13px">411k in 3.0s (137k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Solar Flame (409k), Fel Armor (1k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Dark Pact, Unending Resolve</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Black Attunement (from Dzin), Prescience (from Dzin), Blaze of Light (from Perazen), Divine Aegis (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (196k): <span style="color:var(--accent);font-size:11px">Dark Pact (129k), Infernal Vitality (50k), Soul Leech (10k), Leech (3k), Fel Armor (3k), Fel Synergy (1k)</span></div><div style="font-size:12px">External (228k): <span style="color:var(--good);font-size:11px">Penance (117k), Atonement (56k), Divine Aegis (19k), Void Shield (14k), Piety (13k), Penance (Contrition) (4k), Penance (Contrition Crit) (3k), Lightbearer (2k)</span></div></div>
+<div class="death-card"><div class="title">Spike #7 at 10:57 — Araknath</div><div style="font-size:13px">500k in 5.5s (91k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Supernova (500k), Fel Armor (725)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Unending Resolve, Dark Pact</span></div><div style="font-size:12px;margin-top:2px">Self (112k): <span style="color:var(--accent);font-size:11px">Soulburn: Drain Life (96k), Soul Leech (8k), Fel Armor (7k), Leech (469), Fel Synergy (445)</span></div><div style="font-size:12px">External (7k): <span style="color:var(--good);font-size:11px">Shifting Sands (4k), Atonement (2k), Piety (123)</span></div></div>
+<div class="death-card"><div class="title">Spike #8 at 13:39 — Araknath</div><div style="font-size:13px">370k in 5.5s (67k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Supernova (366k), Fel Armor (4k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Dark Pact</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Unending Resolve</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (261k): <span style="color:var(--accent);font-size:11px">Dark Pact (240k), Soul Leech (15k), Fel Armor (7k), Fel Synergy (204)</span></div><div style="font-size:12px">External (148k): <span style="color:var(--good);font-size:11px">Chrono Ward (60k), Divine Aegis (42k), Power Word: Radiance (25k), Shifting Sands (10k), Atonement (10k), Refreshing Drink (11)</span></div></div>
+<div class="death-card"><div class="title">Spike #9 at 20:25 — Trash pull 8</div><div style="font-size:13px">538k in 3.5s (154k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (514k), Burning Rush (19k), Fel Armor (5k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Dark Pact</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Unending Resolve</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prescience (from Dzin), Blaze of Light (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (349k): <span style="color:var(--accent);font-size:11px">Demonic Healthstone (316k), Soul Leech (18k), Fel Armor (11k), Leech (2k), Fel Synergy (2k), Dark Pact (558)</span></div><div style="font-size:12px">External (220k): <span style="color:var(--good);font-size:11px">Penance (93k), Refreshing Drink (67k), Void Shield (39k), Atonement (13k), Penance (Contrition) (2k), Prayer of Mending (2k), Penance (Contrition Crit) (1k), Divine Aegis (1k), Piety (584)</span></div></div>
+<div class="death-card"><div class="title">Spike #10 at 20:39 — Trash pull 8</div><div style="font-size:13px">690k in 5.5s (126k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (661k), Solar Barrier (28k), Fel Armor (2k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Dark Pact</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Unending Resolve</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (44k): <span style="color:var(--accent);font-size:11px">Leech (15k), Soul Leech (12k), Dark Pact (11k), Fel Armor (5k), Fel Synergy (1k)</span></div><div style="font-size:12px">External (11k): <span style="color:var(--good);font-size:11px">Atonement (8k), Prayer of Mending (2k), Shifting Sands (518), Piety (285)</span></div></div>
+<div class="death-card"><div class="title">Spike #11 at 21:18 — Trash pull 9</div><div style="font-size:13px">658k in 5.5s (120k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Repel (259k), Ricocheting Chakram (241k), Falling (150k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Unending Resolve, Dark Pact</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (60k): <span style="color:var(--accent);font-size:11px">Soul Leech (46k), Fel Armor (12k), Leech (990), Fel Synergy (901)</span></div><div style="font-size:12px">External (30k): <span style="color:var(--good);font-size:11px">Refreshing Drink (24k), Prayer of Mending (5k)</span></div></div>
+<div class="death-card"><div class="title">Spike #12 at 23:26 — Trash pull 11</div><div style="font-size:13px">555k in 5.5s (101k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Blade Rush (295k), Repel (253k), Fel Armor (6k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Unending Resolve, Dark Pact</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (492k): <span style="color:var(--accent);font-size:11px">Demonic Healthstone (310k), Mortal Coil (155k), Soul Leech (15k), Leech (10k), Fel Synergy (3k)</span></div><div style="font-size:12px">External (144k): <span style="color:var(--good);font-size:11px">Penance (121k), Atonement (14k), Penance (Contrition) (3k), Penance (Contrition Crit) (2k), Prayer of Mending (2k), Piety (1k), Shifting Sands (598)</span></div></div>
+<div class="death-card"><div class="title">Spike #13 at 23:33 — Trash pull 11</div><div style="font-size:13px">647k in 5.5s (118k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (526k), Ricocheting Chakram (118k), Fel Armor (2k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Unending Resolve, Dark Pact</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Divine Aegis (from Perazen), Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (24k): <span style="color:var(--accent);font-size:11px">Soul Leech (11k), Leech (9k), Fel Armor (2k), Fel Synergy (1k)</span></div><div style="font-size:12px">External (118k): <span style="color:var(--good);font-size:11px">Penance (64k), Atonement (33k), Divine Aegis (13k), Penance (Contrition Crit) (3k), Prayer of Mending (3k), Penance (Contrition) (871), Shifting Sands (175)</span></div></div>
+<div class="death-card"><div class="title">Spike #14 at 24:22 — Trash pull 12</div><div style="font-size:13px">718k in 5.5s (131k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (707k), Fel Armor (11k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Unending Resolve, Dark Pact</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Arcanoweave Insight (from Unndin), Visage (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (91k): <span style="color:var(--accent);font-size:11px">Soul Leech (62k), Fel Armor (25k), Leech (4k), Fel Synergy (691)</span></div><div style="font-size:12px">External (80k): <span style="color:var(--good);font-size:11px">Chrono Ward (80k)</span></div></div>
+<div class="death-card"><div class="title">Spike #15 at 25:07 — Trash pull 13</div><div style="font-size:13px">745k in 5.5s (136k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Solar Flame (457k), Blade Rush (284k), Fel Armor (4k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Unending Resolve, Dark Pact</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Blaze of Light (from Perazen), Divine Aegis (from Perazen), Refreshing Drink (from Gingerbrute), Power Word: Shield (from Perazen), Prayer of Mending (from Perazen), Devotion Aura (from Unndin)</span></div><div style="font-size:12px;margin-top:2px">Self (14k): <span style="color:var(--accent);font-size:11px">Soul Leech (9k), Fel Armor (4k), Fel Synergy (1k), Leech (422)</span></div><div style="font-size:12px">External (387k): <span style="color:var(--good);font-size:11px">Power Word: Shield (150k), Penance (97k), Atonement (48k), Void Shield (27k), Refreshing Drink (25k), Piety (19k), Divine Aegis (8k), Prayer of Mending (5k), Visage (4k), Penance (Contrition) (2k), Penance (Contrition Crit) (1k), Lightbearer (547)</span></div></div>
+<div class="death-card"><div class="title">Spike #16 at 29:08 — High Sage Viryx</div><div style="font-size:13px">473k in 4.5s (105k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Scorching Ray (299k), Blazing Ground (151k), Burning Rush (23k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Unending Resolve, Dark Pact</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (331k): <span style="color:var(--accent);font-size:11px">Demonic Healthstone (316k), Soul Leech (8k), Leech (3k), Fel Armor (2k), Fel Synergy (2k)</span></div><div style="font-size:12px">External (95k): <span style="color:var(--good);font-size:11px">Penance (60k), Atonement (28k), Penance (Contrition) (5k), Prayer of Mending (2k)</span></div></div>
+<div class="death-card"><div class="title">Spike #17 at 29:42 — High Sage Viryx</div><div style="font-size:13px">573k in 5.5s (104k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (522k), Shadow Mend (49k), Fel Armor (927)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Unending Resolve, Dark Pact</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Inferno&#x27;s Blessing (from Dzin), Shifting Sands (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (10k): <span style="color:var(--accent);font-size:11px">Soul Leech (7k), Fel Armor (1k), Fel Synergy (793), Leech (752)</span></div><div style="font-size:12px">External (3k): <span style="color:var(--good);font-size:11px">Atonement (3k), Piety (586), Shifting Sands (69)</span></div></div>
+  </details>
+  </details>
+  <details class="subsection" open><summary><h3 id="defensive-usage">Defensive Usage <a href="#defensive-usage" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Unending Resolve</span><span class="value val-bad">5/11 uses (45%)</span><div style="font-size:11px;color:var(--text-muted)">1 during spikes, 4 outside</div></div>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Dark Pact</span><span class="value val-bad">9/33 uses (27%)</span><div style="font-size:11px;color:var(--text-muted)">4 during spikes, 5 outside</div></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="healing-received">Healing Received <a href="#healing-received" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Effective healing</span>
+    <span class="value">36.2M</span>
+  </div>
+  <div class="stat-row">
+    <span class="label">Overheal</span>
+    <span class="value val-neutral">22%</span>
+  </div>
+  <div class="stat-row">
+    <span class="label">Self-healing</span>
+    <span class="value">11.4M (31.4%)</span>
+  </div>
+  <details open style="margin-left:16px;margin-bottom:8px">
+    <summary style="cursor:pointer;color:var(--text-muted);font-size:12px;user-select:none">
+      Self-healing breakdown (12 abilities)</summary>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Demonic Healthstone <span class="muted">(12 casts)</span></span><div class="bar-bg"><div class="bar" style="width:100%;background:var(--accent)"></div></div><span class="amount">3.4M <span class="muted">(9% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Soul Leech <span class="muted">(1959 casts)</span></span><div class="bar-bg"><div class="bar" style="width:90%;background:var(--accent)"></div></div><span class="amount">3.1M</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Dark Pact <span class="muted">(45 casts)</span></span><div class="bar-bg"><div class="bar" style="width:45%;background:var(--accent)"></div></div><span class="amount">1.5M</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Mortal Coil <span class="muted">(7 casts)</span></span><div class="bar-bg"><div class="bar" style="width:24%;background:var(--accent)"></div></div><span class="amount">815k <span class="muted">(14% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Fel Armor <span class="muted">(429 casts)</span></span><div class="bar-bg"><div class="bar" style="width:20%;background:var(--accent)"></div></div><span class="amount">666k</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Leech <span class="muted">(635 casts)</span></span><div class="bar-bg"><div class="bar" style="width:15%;background:var(--accent)"></div></div><span class="amount">499k <span class="muted">(4% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Infernal Vitality <span class="muted">(50 casts)</span></span><div class="bar-bg"><div class="bar" style="width:14%;background:var(--accent)"></div></div><span class="amount">483k <span class="muted">(42% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Fel Synergy <span class="muted">(1159 casts)</span></span><div class="bar-bg"><div class="bar" style="width:8%;background:var(--accent)"></div></div><span class="amount">267k <span class="muted">(0% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Silvermoon Health Potion <span class="muted">(1 casts)</span></span><div class="bar-bg"><div class="bar" style="width:6%;background:var(--accent)"></div></div><span class="amount">216k</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Soulburn: Drain Life <span class="muted">(6 casts)</span></span><div class="bar-bg"><div class="bar" style="width:6%;background:var(--accent)"></div></div><span class="amount">205k</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Drain Life <span class="muted">(8 casts)</span></span><div class="bar-bg"><div class="bar" style="width:6%;background:var(--accent)"></div></div><span class="amount">188k</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Fate Mirror <span class="muted">(7 casts)</span></span><div class="bar-bg"><div class="bar" style="width:0%;background:var(--accent)"></div></div><span class="amount">5k <span class="muted">(71% oh)</span></span></div>
+  </details>
+  <div class="stat-row">
+    <span class="label">External healing</span>
+    <span class="value">24.9M (68.6%)</span>
+  </div>
+  <details>
+    <summary>Top sources (10)</summary>
+    <div style="margin-top:8px">
+<div class="hit-bar"><span style="width:180px;font-size:12px">Atonement <span class="muted">(Perazen)</span></span><div class="bar-bg"><div class="bar" style="width:100%;background:var(--good)"></div></div><span class="amount">4.0M (11.1%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Void Shield <span class="muted">(Perazen)</span></span><div class="bar-bg"><div class="bar" style="width:98%;background:var(--good)"></div></div><span class="amount">4.0M (11.0%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Penance <span class="muted">(Perazen)</span></span><div class="bar-bg"><div class="bar" style="width:88%;background:var(--good)"></div></div><span class="amount">3.5M (9.7%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Demonic Healthstone <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:85%;background:var(--good)"></div></div><span class="amount">3.4M (9.4%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Soul Leech <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:76%;background:var(--good)"></div></div><span class="amount">3.1M (8.5%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Shadow Mend <span class="muted">(Perazen)</span></span><div class="bar-bg"><div class="bar" style="width:68%;background:var(--good)"></div></div><span class="amount">2.7M (7.5%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Chrono Ward <span class="muted">(Dzin)</span></span><div class="bar-bg"><div class="bar" style="width:45%;background:var(--good)"></div></div><span class="amount">1.8M (5.0%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Dark Pact <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:38%;background:var(--good)"></div></div><span class="amount">1.5M (4.3%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Divine Aegis <span class="muted">(Perazen)</span></span><div class="bar-bg"><div class="bar" style="width:33%;background:var(--good)"></div></div><span class="amount">1.3M (3.6%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Refreshing Drink <span class="muted">(Gingerbrute)</span></span><div class="bar-bg"><div class="bar" style="width:32%;background:var(--good)"></div></div><span class="amount">1.3M (3.6%)</span></div>
+    </div>
+  </details>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="cohort">Cohort <a href="#cohort" class="anchor-hash">#</a></h2>
+  <table class="cohort-table">
+    <tr><th>#</th><th>Player</th><th>ilvl</th><th>DPS</th><th>Deaths</th><th>Log</th></tr>
+    <tr><td>1</td><td>Xirequacker-Illidan</td><td>284</td><td>163k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/Vrxmk963JyzWnBFD#fight=20" target="_blank">WCL</a></td></tr>
+    <tr><td>2</td><td>Boblicçious-Ragnaros</td><td>282</td><td>160k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/NXfPTzY3cdg1F6kB#fight=7" target="_blank">WCL</a></td></tr>
+    <tr><td>3</td><td>Fengcharming-罗宁</td><td>282</td><td>156k</td><td>1 death</td><td><a href="https://www.warcraftlogs.com/reports/kcwKVnHLrq1RtBCj#fight=2" target="_blank">WCL</a></td></tr>
+    <tr><td>4</td><td>Petiwl-Area52</td><td>283</td><td>156k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/kxYmB2rgpV7DQTGf#fight=2" target="_blank">WCL</a></td></tr>
+    <tr><td>5</td><td>Checkolian-TarrenMill</td><td>282</td><td>154k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/TLvbBqCGD6f2tHFR#fight=5" target="_blank">WCL</a></td></tr>
+    <tr><td>6</td><td>Xabock-Dentarg</td><td>282</td><td>151k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/vfDZPnGRjm3dAQ9c#fight=25" target="_blank">WCL</a></td></tr>
+    <tr><td>7</td><td>Aimer-冰风岗</td><td>283</td><td>150k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/N3JRdTkcCnGP2wQa#fight=14" target="_blank">WCL</a></td></tr>
+    <tr><td>8</td><td>Zhutoro-芬里斯</td><td>282</td><td>150k</td><td>1 death</td><td><a href="https://www.warcraftlogs.com/reports/ykfRCvH4YxVhMW28#fight=3" target="_blank">WCL</a></td></tr>
+    <tr><td>9</td><td>Xerophobous-Draenor</td><td>285</td><td>148k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/MY8m1AJvWDBRaPfk#fight=14" target="_blank">WCL</a></td></tr>
+    <tr><td>10</td><td>Estus-Frostwolf</td><td>282</td><td>144k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/6K2nRCkZHm4b9BdJ#fight=2" target="_blank">WCL</a></td></tr>
+  </table>
+</div>
+<div style="text-align:center;padding:24px 0;font-size:11px;color:var(--text-dim)">
+  Generated by <a href="https://github.com">wcl-compare</a>
+</div>
+<script>
+(function() {
+  function openAndScroll(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var node = el.closest('details');
+    while (node) {
+      node.open = true;
+      node = node.parentElement ? node.parentElement.closest('details') : null;
+    }
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('.anchor-hash');
+    if (link) {
+      e.preventDefault();
+      var id = link.getAttribute('href').slice(1);
+      history.replaceState(null, '', '#' + id);
+      openAndScroll(id);
+    }
+  });
+  if (location.hash) openAndScroll(location.hash.slice(1));
+})();
+</script>
+</body>
+</html>
