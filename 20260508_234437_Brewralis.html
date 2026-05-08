@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brewmaster Monk - Windrunner Spire +15 | wcl-compare</title>
+<style>
+:root {
+    --bg: #0f0f1a;
+    --surface: #1a1a2e;
+    --surface-alt: #222244;
+    --surface-hover: #2a2a4a;
+    --border: #333355;
+    --text: #e0e0e0;
+    --text-muted: #8888aa;
+    --text-dim: #666688;
+    --accent: #6c63ff;
+    --accent-dim: #4a4499;
+    --good: #4caf50;
+    --good-dim: #2e7d32;
+    --warn: #ff9800;
+    --warn-dim: #e65100;
+    --bad: #f44336;
+    --bad-dim: #c62828;
+    --boss: #6c63ff;
+    --boss-dim: #3d3699;
+    --trash: #445566;
+    --trash-dim: #334455;
+    --bar-bg: #1a1a30;
+    --bar-user: #6c63ff;
+    --bar-cohort: #445566;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--text-muted);
+     border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.section { margin-bottom: 28px; }
+.muted { color: var(--text-muted); }
+.dim { color: var(--text-dim); }
+
+/* Header */
+.header-meta { color: var(--text-muted); margin-bottom: 16px; font-size: 13px; }
+.metric-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    min-width: 140px;
+    flex: 1;
+}
+.metric-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+                       color: var(--text-muted); margin-bottom: 2px; }
+.metric-card .value { font-size: 24px; font-weight: 700; }
+.metric-card .sub { font-size: 12px; color: var(--text-muted); }
+.val-good { color: var(--good); }
+.val-warn { color: var(--warn); }
+.val-bad { color: var(--bad); }
+.val-neutral { color: var(--text); }
+
+/* Timeline */
+.timeline-wrap { position: relative; margin-bottom: 4px; }
+.timeline { display: flex; height: 28px; border-radius: 6px; overflow: hidden;
+            gap: 1px; background: var(--bg); }
+.seg {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1px; color: transparent;
+    position: relative; cursor: default;
+    min-width: 2px;
+}
+.seg.boss { background: var(--boss); }
+.seg.trash { background: var(--trash); }
+.seg.boss:hover { background: var(--boss-dim); }
+.seg.trash:hover { background: var(--trash-dim); }
+.timeline-labels { display: flex; position: relative; height: 20px; margin-bottom: 2px; }
+.timeline-lbl {
+    position: absolute; font-size: 10px; font-weight: 600; color: var(--text-muted);
+    white-space: nowrap; transform: translateX(-50%);
+    top: 2px;
+}
+.timeline-lbl.boss-lbl { color: var(--accent); }
+.timeline-legend { display: flex; gap: 16px; font-size: 11px; color: var(--text-muted);
+                    margin-bottom: 8px; }
+.legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+              margin-right: 4px; vertical-align: middle; }
+.death-markers { position: relative; height: 12px; margin-bottom: 2px; }
+.death-dot {
+    position: absolute; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--bad); top: 2px; transform: translateX(-4px);
+}
+
+/* Bars */
+.bar-row { margin-bottom: 12px; }
+.bar-label { font-size: 13px; margin-bottom: 4px; font-weight: 600; }
+.bar-bg { background: var(--bar-bg); border-radius: 4px; height: 24px; position: relative;
+           overflow: hidden; margin-bottom: 2px; }
+.bar { height: 100%; border-radius: 4px; transition: width 0.3s; min-width: 1px;
+       display: flex; align-items: center; padding-left: 8px;
+       font-size: 11px; font-weight: 600; color: #fff; }
+.bar.user { background: var(--bar-user); }
+.bar.cohort { background: var(--bar-cohort); opacity: 0.7; }
+.bar-inline-label { font-size: 11px; color: var(--text-muted); margin-left: 4px; }
+
+/* Finding cards */
+.finding-group { margin-bottom: 16px; }
+.finding-group-title { font-size: 13px; font-weight: 600; margin-bottom: 6px;
+                        text-transform: uppercase; letter-spacing: 0.5px; }
+.finding-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.finding-card .name { flex: 1; font-size: 13px; }
+.finding-card .vals { font-size: 12px; color: var(--text-muted); text-align: right;
+                       white-space: nowrap; }
+.merge-breakdown { width: 100%; font-size: 0.85em; color: var(--text-dim);
+                    padding-left: 18px; margin-top: -2px; }
+.severity-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.severity-critical { background: var(--bad); }
+.severity-warning { background: var(--warn); }
+.severity-strong { background: var(--good); }
+.severity-info { background: var(--text-dim); }
+
+/* Pull comparison */
+.pull-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.pull-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    flex: 1;
+    min-width: 120px;
+}
+.pull-stat .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+                     color: var(--text-muted); }
+.pull-stat .value { font-size: 18px; font-weight: 700; }
+.pull-stat .vs { font-size: 12px; color: var(--text-muted); }
+.phase-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.phase-table th { text-align: left; color: var(--text-muted); font-weight: 500;
+                   padding: 6px 8px; border-bottom: 1px solid var(--border);
+                   font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.phase-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.phase-table tr:last-child td { border-bottom: none; }
+
+/* Death cards */
+.death-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+.death-card .title { font-weight: 600; margin-bottom: 6px; }
+.death-card .killing-blow { color: var(--bad); font-weight: 600; }
+.death-card .downtime { color: var(--warn); font-size: 12px; margin-top: 4px; }
+.hit-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; font-size: 12px; }
+.hit-bar .bar-bg { flex: 1; height: 14px; }
+.hit-bar .amount { width: 50px; text-align: right; color: var(--text-muted); font-size: 11px; }
+
+/* Cohort table */
+.cohort-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.cohort-table th { text-align: left; color: var(--text-muted); font-weight: 500;
+                    padding: 6px 8px; border-bottom: 1px solid var(--border);
+                    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.cohort-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.cohort-table tr:last-child td { border-bottom: none; }
+.cohort-table tr:hover td { background: var(--surface-hover); }
+
+/* Details/summary */
+details { margin-top: 8px; }
+details summary {
+    cursor: pointer; color: var(--text-muted); font-size: 12px;
+    padding: 4px 0; user-select: none;
+}
+details summary:hover { color: var(--text); }
+details[open] summary { margin-bottom: 8px; }
+
+/* Collapsible subsections */
+details.subsection { margin-top: 0; margin-bottom: 16px; }
+details.subsection > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+details.subsection > summary::-webkit-details-marker { display: none; }
+details.subsection > summary::marker { display: none; content: ''; }
+details.subsection > summary > h3 { display: inline; margin-bottom: 0; cursor: pointer; }
+details.subsection > summary::before {
+    content: '▾ ';
+    font-size: 10px;
+    color: var(--text-dim);
+}
+details.subsection:not([open]) > summary::before {
+    content: '▸ ';
+}
+details.subsection[open] > summary { margin-bottom: 8px; }
+
+/* Anchor links */
+.anchor-hash {
+    color: var(--text-dim);
+    font-size: 0.8em;
+    opacity: 0;
+    transition: opacity 0.15s;
+    margin-left: 6px;
+    text-decoration: none;
+}
+h2:hover .anchor-hash, h3:hover .anchor-hash,
+summary:hover .anchor-hash { opacity: 1; }
+.anchor-hash:hover { color: var(--accent); text-decoration: none; }
+
+/* GCD / cooldown compact cards */
+.stat-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+.stat-row .label { font-size: 13px; }
+.stat-row .value { font-size: 13px; font-weight: 600; }
+.stat-row .dmg-detail { width: 100%; font-size: 11px; color: var(--text-muted);
+    margin-top: 2px; text-align: right; }
+
+/* Tooltips */
+.finding-card[data-tip] {
+    cursor: help;
+    position: relative;
+}
+.finding-card[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 4px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: max(300px, 100%);
+    max-width: min(440px, 90vw);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.finding-card[data-tip]:hover::after { opacity: 1; pointer-events: auto; }
+.tip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dotted var(--text-dim);
+}
+.tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 6px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: max(300px, 100%);
+    max-width: min(440px, 90vw);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.tip:hover::after { opacity: 1; pointer-events: auto; }
+h3 .tip-icon {
+    display: inline-block;
+    width: 16px; height: 16px; line-height: 16px;
+    text-align: center;
+    border-radius: 50%;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-left: 6px;
+    cursor: help;
+    vertical-align: middle;
+    position: relative;
+}
+h3 .tip-icon::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 6px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: 380px;
+    max-width: 90vw;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+h3 .tip-icon:hover::after { opacity: 1; pointer-events: auto; }
+
+/* CD alignment timeline (Gantt chart) */
+.cd-timeline { margin-top: 16px; }
+.cd-timeline-axis {
+    display: flex; position: relative; height: 20px; margin-left: 180px;
+    border-bottom: 1px solid var(--border);
+}
+.cd-timeline-tick {
+    position: absolute; font-size: 10px; color: var(--text-dim);
+    transform: translateX(-50%); top: 2px;
+}
+.cd-timeline-group-hdr {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-muted); margin: 10px 0 4px;
+}
+.cd-timeline-row {
+    display: flex; align-items: center; height: 22px; margin-bottom: 2px;
+}
+.cd-timeline-label {
+    width: 180px; flex-shrink: 0; font-size: 11px; color: var(--text-muted);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    padding-right: 8px;
+}
+.cd-timeline-track {
+    flex: 1; position: relative; height: 16px;
+    background: var(--bar-bg); border-radius: 3px;
+}
+.cd-timeline-bar {
+    position: absolute; height: 100%; border-radius: 2px;
+    min-width: 2px; cursor: default;
+}
+.cd-timeline-bar.aug-buff { background: var(--accent); opacity: 0.85; }
+.cd-timeline-bar.aug-debuff { background: var(--warn); opacity: 0.85; }
+.cd-timeline-bar.team-cd { background: var(--good); opacity: 0.85; }
+.cd-timeline-bar.breath { background: #e8b931; opacity: 0.9; }
+.cd-timeline-marker {
+    position: absolute; top: 0; width: 1px; height: 100%;
+    background: var(--border); opacity: 0.3; pointer-events: none;
+}
+
+</style>
+</head>
+<body>
+<div class="section">
+  <h1>Brewmaster Monk</h1>
+  <div class="header-meta">
+    Windrunner Spire +15 &middot;
+    Cohort: 10 players
+    (ilvl 277&ndash;282)
+  </div>
+  <div class="metric-cards">
+    <div class="metric-card">
+      <div class="label">DPS</div>
+      <div class="value val-bad">60k</div>
+      <div class="sub">cohort 103k</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Parse</div>
+      <div class="value val-bad">0%</div>
+      <div class="sub">&nbsp;</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Deaths</div>
+      <div class="value val-warn">1</div>
+      <div class="sub">cohort 0</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Active Time</div>
+      <div class="value">89%</div>
+      <div class="sub">cohort 93%</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="fight-timeline">Fight Timeline <a href="#fight-timeline" class="anchor-hash">#</a></h2>
+  <div class="death-markers"><div class="death-dot" style="left:67.1%" title="Death"></div></div>
+  <div class="timeline-wrap">
+    <div class="timeline">
+    <div class="seg trash" style="flex-basis:3.7%" title="Trash pull 1 — 1m4s — 117k DPS"></div>
+    <div class="seg trash" style="flex-basis:6.6%" title="Trash pull 2 — 1m54s — 80k DPS"></div>
+    <div class="seg trash" style="flex-basis:7.5%" title="Trash pull 3 — 2m10s — 59k DPS"></div>
+    <div class="seg boss" style="flex-basis:10.8%" title="Derelict Duo — 3m6s — 52k DPS"></div>
+    <div class="seg trash" style="flex-basis:5.7%" title="Trash pull 4 — 1m39s — 82k DPS"></div>
+    <div class="seg trash" style="flex-basis:11.7%" title="Trash pull 5 — 3m21s — 102k DPS"></div>
+    <div class="seg boss" style="flex-basis:12.9%" title="Emberdawn — 3m42s — 40k DPS"></div>
+    <div class="seg trash" style="flex-basis:8.2%" title="Trash pull 6 — 2m22s — 103k DPS"></div>
+    <div class="seg trash" style="flex-basis:0.7%" title="Trash pull 7 — 12.2s — 14k DPS"></div>
+    <div class="seg trash" style="flex-basis:9.3%" title="Trash pull 8 — 2m40s — 99k DPS"></div>
+    <div class="seg boss" style="flex-basis:11.4%" title="Commander Kroluk — 3m17s — 38k DPS"></div>
+    <div class="seg boss" style="flex-basis:11.5%" title="Restless Heart — 3m18s — 34k DPS"></div>
+    </div>
+    <div class="timeline-labels">
+    <span class="timeline-lbl boss-lbl" style="left:23.3%">Derelict Duo (5:54)</span>
+    <span class="timeline-lbl boss-lbl" style="left:52.5%">Emberdawn (14:59)</span>
+    <span class="timeline-lbl boss-lbl" style="left:82.8%">Commander Kroluk (25:16)</span>
+    <span class="timeline-lbl boss-lbl" style="left:94.3%">Restless Heart (29:03)</span>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-bottom:4px">
+    <span>0:16</span>
+    <span>16:19</span>
+    <span>32:21</span>
+  </div>
+  <div class="timeline-legend">
+    <span><span class="legend-dot" style="background:var(--boss)"></span>Boss</span>
+    <span><span class="legend-dot" style="background:var(--trash)"></span>Trash</span>
+    <span><span class='legend-dot' style='background:var(--bad)'></span>Death</span>
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="pull-comparison">Pull Comparison <a href="#pull-comparison" class="anchor-hash">#</a></h2>
+  <div class="pull-stats">
+    <div class="pull-stat">
+      <div class="label">Trash Pulls</div>
+      <div class="value">8</div>
+      <div class="vs">cohort 4</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Avg Pull Duration</div>
+      <div class="value">1m55s</div>
+      <div class="vs">cohort 2m56s</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Trash Time</div>
+      <div class="value">15m21s</div>
+      <div class="vs">cohort 11m43s</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Time Split</div>
+      <div class="value">53% / 47%</div>
+      <div class="vs">trash / boss (cohort 53%)</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="section">
+  <h2 id="per-segment-dps">Per-Segment DPS <a href="#per-segment-dps" class="anchor-hash">#</a></h2>
+    <div class="bar-row">
+      <div class="bar-label">Derelict Duo</div>
+      <div class="bar-bg"><div class="bar user" style="width:29.9%">You: 52k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:47.2%">Cohort: 82k</div></div>
+      <details>
+        <summary>Rotation detail (15 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">168.3s / 186.1s active (90%) <span class="muted">(cohort 98%)</span></span></div>
+<div class="stat-row"><span class="label">Keg Smash</span><span class="value val-bad">10.6/min <span class="muted">cohort 13.5/min</span></span><div class="dmg-detail">total 1.9M &middot; avg hit 29k (cohort 29k)</div></div>
+<div class="stat-row"><span class="label">Breath of Fire</span><span class="value val-bad">9.4/min <span class="muted">cohort 12.9/min</span></span><div class="dmg-detail">total 1.1M &middot; avg hit 5k (cohort 7k)</div></div>
+<div class="stat-row"><span class="label">Blackout Kick</span><span class="value val-neutral">11.9/min <span class="muted">cohort 11.7/min</span></span><div class="dmg-detail">total 473k &middot; avg hit 13k (cohort 16k)</div></div>
+<div class="stat-row"><span class="label">Purifying Brew</span><span class="value val-warn">8.1/min <span class="muted">cohort 9.0/min</span></span></div>
+<div class="stat-row"><span class="label">Tiger Palm</span><span class="value val-warn">11.3/min <span class="muted">cohort 13.0/min</span></span><div class="dmg-detail">total 1.3M &middot; avg hit 37k (cohort 72k)</div></div>
+<div class="stat-row"><span class="label">Chi Burst</span><span class="value val-bad">0.0/min <span class="muted">cohort 1.3/min</span></span><div class="dmg-detail">total 0 &middot; avg hit 0 (cohort 35k)</div></div>
+<div class="stat-row"><span class="label">Expel Harm</span><span class="value val-good">1.3/min <span class="muted">cohort 0.2/min</span></span><div class="dmg-detail">total 55k &middot; avg hit 14k (cohort 12k)</div></div>
+<div class="stat-row"><span class="label">Invoke Niuzao, the Black Ox</span><span class="value val-good">0.6/min <span class="muted">cohort 0.4/min</span></span></div>
+<div class="stat-row"><span class="label">Fortifying Brew</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.4/min</span></span></div>
+<div class="stat-row"><span class="label">Shuffle</span><span class="value val-neutral">100% uptime <span class="muted">cohort 100%</span></span></div>
+<div class="stat-row"><span class="label">Blackout Combo</span><span class="value val-neutral">26% uptime <span class="muted">cohort 22%</span></span></div>
+<div class="stat-row"><span class="label">Invoke Niuzao, the Black Ox</span><span class="value val-good">27% uptime <span class="muted">cohort 18%</span></span></div>
+<div class="stat-row"><span class="label">Empty Barrel</span><span class="value val-good">17% uptime <span class="muted">cohort 11%</span></span></div>
+<div class="stat-row"><span class="label">Fortifying Brew</span><span class="value val-warn">0% uptime <span class="muted">cohort 10%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Emberdawn</div>
+      <div class="bar-bg"><div class="bar user" style="width:23.2%">You: 40k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:37.1%">Cohort: 64k</div></div>
+      <details>
+        <summary>Rotation detail (15 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-warn">208.1s / 221.9s active (94%) <span class="muted">(cohort 98%)</span></span></div>
+<div class="stat-row"><span class="label">Keg Smash</span><span class="value val-warn">11.6/min <span class="muted">cohort 12.6/min</span></span><div class="dmg-detail">total 1.8M &middot; avg hit 40k (cohort 29k)</div></div>
+<div class="stat-row"><span class="label">Breath of Fire</span><span class="value val-bad">10.0/min <span class="muted">cohort 12.4/min</span></span><div class="dmg-detail">total 732k &middot; avg hit 5k (cohort 7k)</div></div>
+<div class="stat-row"><span class="label">Blackout Kick</span><span class="value val-neutral">12.4/min <span class="muted">cohort 12.2/min</span></span><div class="dmg-detail">total 545k &middot; avg hit 12k (cohort 17k)</div></div>
+<div class="stat-row"><span class="label">Purifying Brew</span><span class="value val-good">7.8/min <span class="muted">cohort 7.4/min</span></span></div>
+<div class="stat-row"><span class="label">Tiger Palm</span><span class="value val-neutral">13.0/min <span class="muted">cohort 13.1/min</span></span><div class="dmg-detail">total 1.9M &middot; avg hit 39k (cohort 57k)</div></div>
+<div class="stat-row"><span class="label">Chi Burst</span><span class="value val-bad">0.0/min <span class="muted">cohort 1.6/min</span></span><div class="dmg-detail">total 0 &middot; avg hit 0 (cohort 30k)</div></div>
+<div class="stat-row"><span class="label">Expel Harm</span><span class="value val-bad">0.3/min <span class="muted">cohort 0.6/min</span></span><div class="dmg-detail">total 8k &middot; avg hit 8k (cohort 11k)</div></div>
+<div class="stat-row"><span class="label">Invoke Niuzao, the Black Ox</span><span class="value val-bad">0.5/min <span class="muted">cohort 0.6/min</span></span></div>
+<div class="stat-row"><span class="label">Fortifying Brew</span><span class="value val-bad">0.3/min <span class="muted">cohort 0.4/min</span></span></div>
+<div class="stat-row"><span class="label">Shuffle</span><span class="value val-neutral">100% uptime <span class="muted">cohort 100%</span></span></div>
+<div class="stat-row"><span class="label">Blackout Combo</span><span class="value val-neutral">24% uptime <span class="muted">cohort 23%</span></span></div>
+<div class="stat-row"><span class="label">Invoke Niuzao, the Black Ox</span><span class="value val-neutral">23% uptime <span class="muted">cohort 26%</span></span></div>
+<div class="stat-row"><span class="label">Empty Barrel</span><span class="value val-good">26% uptime <span class="muted">cohort 13%</span></span></div>
+<div class="stat-row"><span class="label">Fortifying Brew</span><span class="value val-neutral">7% uptime <span class="muted">cohort 10%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Commander Kroluk</div>
+      <div class="bar-bg"><div class="bar user" style="width:22.2%">You: 38k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:36.1%">Cohort: 62k</div></div>
+      <details>
+        <summary>Rotation detail (15 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">168.2s / 196.8s active (85%) <span class="muted">(cohort 94%)</span></span></div>
+<div class="stat-row"><span class="label">Keg Smash</span><span class="value val-warn">10.7/min <span class="muted">cohort 11.8/min</span></span><div class="dmg-detail">total 1.6M &middot; avg hit 30k (cohort 31k)</div></div>
+<div class="stat-row"><span class="label">Breath of Fire</span><span class="value val-bad">8.5/min <span class="muted">cohort 11.2/min</span></span><div class="dmg-detail">total 904k &middot; avg hit 6k (cohort 7k)</div></div>
+<div class="stat-row"><span class="label">Blackout Kick</span><span class="value val-neutral">10.7/min <span class="muted">cohort 11.2/min</span></span><div class="dmg-detail">total 366k &middot; avg hit 10k (cohort 15k)</div></div>
+<div class="stat-row"><span class="label">Purifying Brew</span><span class="value val-warn">6.7/min <span class="muted">cohort 7.5/min</span></span></div>
+<div class="stat-row"><span class="label">Tiger Palm</span><span class="value val-bad">7.6/min <span class="muted">cohort 10.8/min</span></span><div class="dmg-detail">total 1.1M &middot; avg hit 44k (cohort 61k)</div></div>
+<div class="stat-row"><span class="label">Chi Burst</span><span class="value val-bad">0.0/min <span class="muted">cohort 1.1/min</span></span><div class="dmg-detail">total 0 &middot; avg hit 0 (cohort 26k)</div></div>
+<div class="stat-row"><span class="label">Expel Harm</span><span class="value val-good">0.9/min <span class="muted">cohort 0.7/min</span></span><div class="dmg-detail">total 33k &middot; avg hit 11k (cohort 14k)</div></div>
+<div class="stat-row"><span class="label">Invoke Niuzao, the Black Ox</span><span class="value val-warn">0.6/min <span class="muted">cohort 0.7/min</span></span></div>
+<div class="stat-row"><span class="label">Fortifying Brew</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.3/min</span></span></div>
+<div class="stat-row"><span class="label">Shuffle</span><span class="value val-neutral">100% uptime <span class="muted">cohort 100%</span></span></div>
+<div class="stat-row"><span class="label">Blackout Combo</span><span class="value val-good">30% uptime <span class="muted">cohort 22%</span></span></div>
+<div class="stat-row"><span class="label">Invoke Niuzao, the Black Ox</span><span class="value val-neutral">25% uptime <span class="muted">cohort 28%</span></span></div>
+<div class="stat-row"><span class="label">Empty Barrel</span><span class="value val-good">22% uptime <span class="muted">cohort 12%</span></span></div>
+<div class="stat-row"><span class="label">Fortifying Brew</span><span class="value val-warn">0% uptime <span class="muted">cohort 8%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Restless Heart</div>
+      <div class="bar-bg"><div class="bar user" style="width:19.8%">You: 34k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:30.5%">Cohort: 53k</div></div>
+      <details>
+        <summary>Rotation detail (15 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">165.2s / 198.1s active (83%) <span class="muted">(cohort 98%)</span></span></div>
+<div class="stat-row"><span class="label">Keg Smash</span><span class="value val-bad">10.3/min <span class="muted">cohort 12.2/min</span></span><div class="dmg-detail">total 1.3M &middot; avg hit 38k (cohort 40k)</div></div>
+<div class="stat-row"><span class="label">Breath of Fire</span><span class="value val-bad">9.7/min <span class="muted">cohort 11.9/min</span></span><div class="dmg-detail">total 616k &middot; avg hit 5k (cohort 7k)</div></div>
+<div class="stat-row"><span class="label">Blackout Kick</span><span class="value val-warn">10.3/min <span class="muted">cohort 11.1/min</span></span><div class="dmg-detail">total 439k &middot; avg hit 13k (cohort 16k)</div></div>
+<div class="stat-row"><span class="label">Purifying Brew</span><span class="value val-neutral">7.9/min <span class="muted">cohort 8.0/min</span></span></div>
+<div class="stat-row"><span class="label">Tiger Palm</span><span class="value val-bad">8.5/min <span class="muted">cohort 12.8/min</span></span><div class="dmg-detail">total 1.1M &middot; avg hit 41k (cohort 65k)</div></div>
+<div class="stat-row"><span class="label">Chi Burst</span><span class="value val-bad">0.0/min <span class="muted">cohort 1.3/min</span></span><div class="dmg-detail">total 0 &middot; avg hit 0 (cohort 30k)</div></div>
+<div class="stat-row"><span class="label">Expel Harm</span><span class="value val-good">0.9/min <span class="muted">cohort 0.2/min</span></span><div class="dmg-detail">total 22k &middot; avg hit 7k (cohort 14k)</div></div>
+<div class="stat-row"><span class="label">Invoke Niuzao, the Black Ox</span><span class="value val-bad">0.6/min <span class="muted">cohort 0.8/min</span></span></div>
+<div class="stat-row"><span class="label">Fortifying Brew</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.4/min</span></span></div>
+<div class="stat-row"><span class="label">Shuffle</span><span class="value val-neutral">99% uptime <span class="muted">cohort 100%</span></span></div>
+<div class="stat-row"><span class="label">Blackout Combo</span><span class="value val-good">29% uptime <span class="muted">cohort 22%</span></span></div>
+<div class="stat-row"><span class="label">Invoke Niuzao, the Black Ox</span><span class="value val-warn">25% uptime <span class="muted">cohort 31%</span></span></div>
+<div class="stat-row"><span class="label">Empty Barrel</span><span class="value val-good">17% uptime <span class="muted">cohort 12%</span></span></div>
+<div class="stat-row"><span class="label">Fortifying Brew</span><span class="value val-warn">0% uptime <span class="muted">cohort 9%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Trash (overall)</div>
+      <div class="bar-bg"><div class="bar user" style="width:52.3%">You: 90k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:90.7%">Cohort: 157k</div></div>
+      <details>
+        <summary>Rotation detail (15 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-warn">854.4s / 921.4s active (93%) <span class="muted">(cohort 96%)</span></span></div>
+<div class="stat-row"><span class="label">Keg Smash</span><span class="value val-warn">11.3/min <span class="muted">cohort 12.3/min</span></span><div class="dmg-detail">total 18.2M &middot; avg hit 19k (cohort 19k)</div></div>
+<div class="stat-row"><span class="label">Breath of Fire</span><span class="value val-bad">9.4/min <span class="muted">cohort 11.8/min</span></span><div class="dmg-detail">total 10.5M &middot; avg hit 4k (cohort 5k)</div></div>
+<div class="stat-row"><span class="label">Blackout Kick</span><span class="value val-neutral">10.6/min <span class="muted">cohort 10.1/min</span></span><div class="dmg-detail">total 2.0M &middot; avg hit 12k (cohort 16k)</div></div>
+<div class="stat-row"><span class="label">Purifying Brew</span><span class="value val-good">9.2/min <span class="muted">cohort 7.7/min</span></span></div>
+<div class="stat-row"><span class="label">Tiger Palm</span><span class="value val-warn">7.9/min <span class="muted">cohort 9.2/min</span></span><div class="dmg-detail">total 4.2M &middot; avg hit 35k (cohort 67k)</div></div>
+<div class="stat-row"><span class="label">Chi Burst</span><span class="value val-bad">0.0/min <span class="muted">cohort 1.1/min</span></span><div class="dmg-detail">total 0 &middot; avg hit 0 (cohort 22k)</div></div>
+<div class="stat-row"><span class="label">Expel Harm</span><span class="value val-bad">0.2/min <span class="muted">cohort 0.4/min</span></span><div class="dmg-detail">total 33k &middot; avg hit 11k (cohort 13k)</div></div>
+<div class="stat-row"><span class="label">Invoke Niuzao, the Black Ox</span><span class="value val-good">0.6/min <span class="muted">cohort 0.5/min</span></span></div>
+<div class="stat-row"><span class="label">Fortifying Brew</span><span class="value val-bad">0.2/min <span class="muted">cohort 0.4/min</span></span></div>
+<div class="stat-row"><span class="label">Shuffle</span><span class="value val-neutral">100% uptime <span class="muted">cohort 100%</span></span></div>
+<div class="stat-row"><span class="label">Blackout Combo</span><span class="value val-good">26% uptime <span class="muted">cohort 20%</span></span></div>
+<div class="stat-row"><span class="label">Invoke Niuzao, the Black Ox</span><span class="value val-neutral">22% uptime <span class="muted">cohort 23%</span></span></div>
+<div class="stat-row"><span class="label">Empty Barrel</span><span class="value val-good">18% uptime <span class="muted">cohort 11%</span></span></div>
+<div class="stat-row"><span class="label">Fortifying Brew</span><span class="value val-neutral">5% uptime <span class="muted">cohort 9%</span></span></div>
+      </details>
+    </div>
+
+  <details>
+    <summary>Per-trash-pull DPS (8 pulls)</summary>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 1</div>
+        <div class="bar-bg"><div class="bar user" style="width:67.7%">117k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 2</div>
+        <div class="bar-bg"><div class="bar user" style="width:46.3%">80k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 3</div>
+        <div class="bar-bg"><div class="bar user" style="width:34.3%">59k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 4</div>
+        <div class="bar-bg"><div class="bar user" style="width:47.2%">82k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 5</div>
+        <div class="bar-bg"><div class="bar user" style="width:58.9%">102k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 6</div>
+        <div class="bar-bg"><div class="bar user" style="width:59.3%">103k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 7</div>
+        <div class="bar-bg"><div class="bar user" style="width:8.1%">14k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 8</div>
+        <div class="bar-bg"><div class="bar user" style="width:57.0%">99k</div></div>
+      </div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="rotation">Rotation <a href="#rotation" class="anchor-hash">#</a></h2>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--text)">Active DPS</div>
+<div class="finding-card" data-tip="DPS counting only time you were alive and in combat. Removes death downtime so you can see your actual rotation quality separately from survivability.
+If your overall DPS is low but Active DPS is close to cohort, deaths are the main problem, not your rotation."><div class="severity-dot severity-critical"></div><div class="name">Active DPS</div><div class="vals">67k <span class="muted">cohort 112k</span> <span class="val-bad">-40%</span></div></div>
+  </div>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--warn)">Improvements</div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Chi Burst casts/min</div><div class="vals">0.0/min <span class="muted">cohort 1.1/min</span> <span class="val-bad">-100%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Empty Barrel uptime</div><div class="vals">20% <span class="muted">cohort 11%</span> <span class="val-good">+79%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Fortifying Brew casts/min</div><div class="vals">0.1/min <span class="muted">cohort 0.3/min</span> <span class="val-bad">-52%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Blackout Combo uptime</div><div class="vals">28% <span class="muted">cohort 22%</span> <span class="val-good">+24%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Breath of Fire casts/min</div><div class="vals">9.5/min <span class="muted">cohort 11.6/min</span> <span class="val-bad">-18%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-warning"></div><div class="name">Tiger Palm casts/min</div><div class="vals">9.0/min <span class="muted">cohort 10.1/min</span> <span class="val-warn">-11%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Keg Smash casts/min</div><div class="vals">11.2/min <span class="muted">cohort 12.5/min</span> <span class="val-warn">-10%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-warning"></div><div class="name">Expel Harm casts/min</div><div class="vals">0.5/min <span class="muted">cohort 0.6/min</span> <span class="val-warn">-5%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-warning"></div><div class="name">Invoke Niuzao, the Black Ox casts/min</div><div class="vals">0.6/min <span class="muted">cohort 0.6/min</span> <span class="val-neutral">-3%</span></div></div>
+  </div>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--good)">Strong Points</div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-strong"></div><div class="name">Fortifying Brew uptime</div><div class="vals">3% <span class="muted">cohort 8%</span> <span class="val-bad">-55%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Purifying Brew casts/min</div><div class="vals">8.5/min <span class="muted">cohort 7.8/min</span> <span class="val-good">+9%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-strong"></div><div class="name">Shuffle uptime</div><div class="vals">106% <span class="muted">cohort 104%</span> <span class="val-neutral">+2%</span></div></div>
+  </div>
+  <details>
+    <summary>On par (2 metrics)</summary>
+    <div class="finding-group">
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-info"></div><div class="name">Invoke Niuzao, the Black Ox uptime</div><div class="vals">23% <span class="muted">cohort 26%</span> <span class="val-warn">-8%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-info"></div><div class="name">Blackout Kick casts/min</div><div class="vals">11.0/min <span class="muted">cohort 10.7/min</span> <span class="val-neutral">+3%</span></div></div>
+    </div>
+  </details>
+  <details>
+    <summary>Damage distribution (4 metrics, varies with pull size)</summary>
+    <div class="finding-group">
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-warning"></div><div class="name">Tiger Palm damage %</div><div class="vals">8% <span class="muted">cohort 11%</span> <span class="val-bad">-21%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-warning"></div><div class="name">Breath of Fire damage %</div><div class="vals">16% <span class="muted">cohort 16%</span> <span class="val-neutral">-2%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-strong"></div><div class="name">Keg Smash damage %</div><div class="vals">31% <span class="muted">cohort 27%</span> <span class="val-good">+14%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-strong"></div><div class="name">Special Delivery damage %</div><div class="vals">5% <span class="muted">cohort 0%</span> <span class="val-neutral">+0%</span></div></div>
+    </div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="details">Details <a href="#details" class="anchor-hash">#</a></h2>
+  <details class="subsection" open><summary><h3 id="deaths">Deaths<span class="tip-icon" data-tip="Each death shows the last few hits you took and the killing blow. Look at the damage sources — could you have interrupted, moved, or used a defensive?">?</span> <a href="#deaths" class="anchor-hash">#</a></h3></summary>
+    <div class="death-card">
+      <div class="title">Death #1 at 21:47 — Unknown</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Melee</span><div class="bar-bg"><div class="bar user" style="width:100%"></div></div><span class="amount">138k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Shred Flesh</span><div class="bar-bg"><div class="bar user" style="width:64%"></div></div><span class="amount">88k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Melee</span><div class="bar-bg"><div class="bar user" style="width:0%"></div></div><span class="amount">0</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Stagger</span><div class="bar-bg"><div class="bar user" style="width:23%"></div></div><span class="amount">31k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Stagger</span><div class="bar-bg"><div class="bar user" style="width:12%"></div></div><span class="amount">16k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Intercepting Charge</span><div class="bar-bg"><div class="bar" style="width:77%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">107k</span></div>
+<div class="downtime">Dead for 4.1s</div>
+    </div>
+  </details>
+  <details class="subsection" open><summary><h3 id="gcd-efficiency">GCD Efficiency<span class="tip-icon" data-tip="Counts moments where you weren&#x27;t pressing any button during combat. Each wasted GCD is ~1.5s of doing nothing.
+Common causes: running without instant casts, hesitating on what to press next, or being dead.">?</span> <a href="#gcd-efficiency" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Wasted GCDs</span>
+    <span class="value val-neutral">9 (48.0s idle)</span>
+  </div>
+
+  <div class="stat-row">
+    <span class="label">Cohort</span>
+    <span class="value">3 (best 1)</span>
+  </div>
+<div class="stat-row"><span class="label">Rate</span><span class="value">0.3/min (cohort 0.1/min, best 0.0/min)</span></div>
+  <div class="stat-row">
+    <span class="label">Effective GCD</span>
+    <span class="value">1.41s (haste 6.5%)</span>
+  </div>
+<div class="stat-row"><span class="label">Worst segment</span><span class="value">Restless Heart (3 wasted)</span></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="cooldown-hold-times">Cooldown Hold Times<span class="tip-icon" data-tip="Time between a cooldown becoming available and you pressing it. Lower is better — a 10s hold on a 30s CD means the ability sat ready for 10 seconds while you could have been using it.
+Check the &#x27;worst&#x27; timestamp to find where you held the longest.">?</span> <a href="#cooldown-hold-times" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row"><span class="label">Keg Smash (CD: 8s)</span><span class="value val-neutral">avg 0.9s hold <span class="muted">cohort 0.4s</span></span></div>
+<div class="stat-row"><span class="label">Breath of Fire (CD: 15s)</span><span class="value val-neutral">avg 0.7s hold <span class="muted">cohort 0.2s</span></span></div>
+<div class="stat-row"><span class="label">Blackout Kick (CD: 3s)</span><span class="value val-neutral">avg 3.1s hold <span class="muted">cohort 3.0s</span></span></div>
+<div class="stat-row"><span class="label">Purifying Brew (CD: 20s)</span><span class="value val-neutral">avg 0.5s hold <span class="muted">cohort 0.5s</span></span></div>
+<div class="stat-row"><span class="label">Expel Harm (CD: 15s)</span><span class="value val-bad">avg 102.3s hold <span class="muted">cohort 52.7s</span></span></div>
+<div class="stat-row"><span class="label">Invoke Niuzao, the Black Ox (CD: 180s)</span><span class="value val-neutral">avg 0.0s hold <span class="muted">cohort 0.0s</span></span></div>
+<div class="stat-row"><span class="label">Fortifying Brew (CD: 360s)</span><span class="value val-bad">avg 102.2s hold <span class="muted">cohort 0.0s</span></span></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="buff-uptime-gaps">Buff Uptime Gaps<span class="tip-icon" data-tip="Shows gaps where a maintained buff fell off during combat. These are buffs you should keep active near-permanently (like Ebon Might) — every gap is lost throughput.
+Cooldown-based buffs (Breath of Eons, Fury of the Aspects) are not shown here since their gaps are just the CD running.">?</span> <a href="#buff-uptime-gaps" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row"><span class="label">Shuffle</span><span class="value val-bad">9 gaps, 2.5s total <span class="muted">cohort 5</span></span></div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="survivability">Survivability <a href="#survivability" class="anchor-hash">#</a></h2>
+  <details class="subsection" open><summary><h3 id="damage-taken">Damage Taken <a href="#damage-taken" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Total damage taken</span>
+    <span class="value">261.2M (135k DTPS)</span>
+  </div>
+  <div style="margin-top:8px">
+<div class="hit-bar"><span style="width:180px;font-size:12px">Melee</span><div class="bar-bg"><div class="bar user" style="width:100%"></div></div><span class="amount">138.3M (52.9%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Stagger</span><div class="bar-bg"><div class="bar user" style="width:41%"></div></div><span class="amount">57.0M (21.8%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Searing Beak</span><div class="bar-bg"><div class="bar user" style="width:8%"></div></div><span class="amount">11.1M (4.3%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Rampage</span><div class="bar-bg"><div class="bar user" style="width:8%"></div></div><span class="amount">10.9M (4.2%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Squall Leap</span><div class="bar-bg"><div class="bar user" style="width:4%"></div></div><span class="amount">5.2M (2.0%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Bone Hack</span><div class="bar-bg"><div class="bar user" style="width:3%"></div></div><span class="amount">4.7M (1.8%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Puncturing Bite</span><div class="bar-bg"><div class="bar user" style="width:2%"></div></div><span class="amount">3.2M (1.2%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Brutal Chop</span><div class="bar-bg"><div class="bar user" style="width:2%"></div></div><span class="amount">2.9M (1.1%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Tempest Slash</span><div class="bar-bg"><div class="bar user" style="width:1%"></div></div><span class="amount">1.9M (0.7%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Splattered</span><div class="bar-bg"><div class="bar user" style="width:1%"></div></div><span class="amount">1.9M (0.7%)</span></div>
+  </div>
+  </details>
+  <details class="subsection" open><summary><h3 id="damage-spikes">Damage Spikes <a href="#damage-spikes" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Spikes detected</span>
+    <span class="value">32</span>
+  </div>
+<div class="stat-row"><span class="label">Undefended spikes</span><span class="value val-bad">26 of 32</span></div>
+  <details>
+    <summary>Spike details (32 spikes)</summary>
+<div class="death-card"><div class="title">Spike #1 at 0:23 — Trash pull 1</div><div style="font-size:13px">2.3M in 5.5s (424k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (2.0M), Stagger (212k), Arcane Salvo (119k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Blaze of Light (from Perazen), Divine Aegis (from Perazen), Fury of the Aspects (from Dzin), Zephyr (from Dzin), Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.5M): <span style="color:var(--accent);font-size:11px">Stagger (1.8M), Celestial Infusion (165k), Gai Plin&#x27;s Imperial Brew (137k), Refreshing Drink (101k), Vital Flame (69k), Celestial Fortune (66k), Gift of the Ox (57k), Leech (40k), Yu&#x27;lon&#x27;s Grace (38k)</span></div><div style="font-size:12px">External (309k): <span style="color:var(--good);font-size:11px">Atonement (95k), Penance (Twinsight) (89k), Power Word: Shield (80k), Divine Aegis (18k), Prayer of Mending (9k), Penance (Contrition Crit) (5k), Prescience (4k), Fate Mirror (3k), Lightbearer (2k), Penance (Contrition) (2k), Piety (2k)</span></div></div>
+<div class="death-card"><div class="title">Spike #2 at 0:42 — Trash pull 1</div><div style="font-size:13px">2.2M in 5.5s (398k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.7M), Stagger (214k), Spirit Bolt (167k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Perazen), Power Word: Shield (from Perazen), Atonement (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.3M): <span style="color:var(--accent);font-size:11px">Stagger (1.5M), Gai Plin&#x27;s Imperial Brew (214k), Celestial Fortune (195k), Celestial Infusion (119k), Vital Flame (100k), Refreshing Drink (69k), Leech (50k), Gift of the Ox (29k), Yu&#x27;lon&#x27;s Grace (9k)</span></div><div style="font-size:12px">External (168k): <span style="color:var(--good);font-size:11px">Power Word: Shield (78k), Atonement (48k), Piety (27k), Prayer of Mending (9k), Penance (Contrition Crit) (3k), Lightbearer (2k), Penance (Contrition) (2k)</span></div></div>
+<div class="death-card"><div class="title">Spike #3 at 2:39 — Trash pull 2</div><div style="font-size:13px">1.4M in 3.5s (401k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (757k), Stagger (270k), Fierce Slash (229k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Zephyr (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (1.3M): <span style="color:var(--accent);font-size:11px">Stagger (1.0M), Celestial Fortune (95k), Yu&#x27;lon&#x27;s Grace (74k), Gift of the Ox (52k), Refreshing Drink (30k), Vital Flame (26k), Leech (19k)</span></div><div style="font-size:12px">External (421k): <span style="color:var(--good);font-size:11px">Shadow Mend (303k), Atonement (83k), Piety (27k), Lightbearer (4k), Penance (Contrition) (2k), Penance (Contrition Crit) (1k), Fate Mirror (534), Prescience (17)</span></div></div>
+<div class="death-card"><div class="title">Spike #4 at 2:44 — Trash pull 2</div><div style="font-size:13px">2.6M in 6.5s (402k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (970k), Stagger (610k), Poison Blades (601k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Void Shield (from Perazen), Prayer of Mending (from Perazen), Pain Suppression (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.2M): <span style="color:var(--accent);font-size:11px">Stagger (1.3M), Gai Plin&#x27;s Imperial Brew (223k), Elixir of Determination (142k), Celestial Fortune (118k), Celestial Infusion (115k), Refreshing Drink (80k), Gift of the Ox (75k), Vital Flame (72k), Leech (33k), Yu&#x27;lon&#x27;s Grace (27k)</span></div><div style="font-size:12px">External (901k): <span style="color:var(--good);font-size:11px">Shadow Mend (340k), Void Shield (316k), Atonement (170k), Piety (47k), Lightbearer (10k), Fate Mirror (7k), Penance (Contrition Crit) (4k), Penance (Contrition) (3k), Prayer of Mending (2k), Prescience (997)</span></div></div>
+<div class="death-card"><div class="title">Spike #5 at 2:55 — Trash pull 2</div><div style="font-size:13px">3.6M in 9.5s (378k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (2.4M), Stagger (670k), Fierce Slash (247k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Visage (from Dzin), Prayer of Mending (from Perazen), Void Shield (from Perazen), Divine Aegis (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (3.5M): <span style="color:var(--accent);font-size:11px">Stagger (2.6M), Silvermoon Health Potion (255k), Gift of the Ox (149k), Vital Flame (144k), Celestial Fortune (108k), Refreshing Drink (105k), Leech (47k), Gai Plin&#x27;s Imperial Brew (34k), Yu&#x27;lon&#x27;s Grace (9k)</span></div><div style="font-size:12px">External (884k): <span style="color:var(--good);font-size:11px">Shadow Mend (410k), Void Shield (160k), Divine Aegis (142k), Atonement (92k), Power Word: Radiance (32k), Prescience (15k), Piety (12k), Lightbearer (5k), Prayer of Mending (5k), Penance (Contrition Crit) (4k), Fate Mirror (2k), Penance (Contrition) (2k), Shifting Sands (200)</span></div></div>
+<div class="death-card"><div class="title">Spike #6 at 4:13 — Trash pull 3</div><div style="font-size:13px">1.4M in 3.5s (391k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Brutal Chop (717k), Melee (423k), Stagger (227k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px">Self (1.5M): <span style="color:var(--accent);font-size:11px">Stagger (1.0M), Celestial Infusion (111k), Gift of the Ox (77k), Refreshing Drink (68k), Celestial Fortune (65k), Gai Plin&#x27;s Imperial Brew (50k), Vital Flame (29k), Leech (18k)</span></div><div style="font-size:12px">External (443k): <span style="color:var(--good);font-size:11px">Shadow Mend (228k), Divine Aegis (142k), Atonement (52k), Piety (15k), Lightbearer (2k), Penance (Contrition) (1k), Penance (Contrition Crit) (1k)</span></div></div>
+<div class="death-card"><div class="title">Spike #7 at 6:13 — Derelict Duo</div><div style="font-size:13px">2.0M in 4.5s (434k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Bone Hack (1.5M), Stagger (339k), Splattered (121k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Power Word: Shield (from Perazen), Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.1M): <span style="color:var(--accent);font-size:11px">Stagger (1.4M), Gai Plin&#x27;s Imperial Brew (164k), Celestial Fortune (126k), Celestial Infusion (123k), Refreshing Drink (89k), Gift of the Ox (76k), Vital Flame (66k), Leech (34k), Yu&#x27;lon&#x27;s Grace (9k)</span></div><div style="font-size:12px">External (395k): <span style="color:var(--good);font-size:11px">Power Word: Shield (209k), Penance (97k), Atonement (37k), Divine Aegis (31k), Piety (9k), Lightbearer (5k), Penance (Contrition Crit) (4k), Prayer of Mending (2k), Fate Mirror (598)</span></div></div>
+<div class="death-card"><div class="title">Spike #8 at 7:10 — Derelict Duo</div><div style="font-size:13px">2.3M in 5.5s (411k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Bone Hack (1.6M), Melee (263k), Stagger (203k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Divine Aegis (from Perazen), Visage (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (2.4M): <span style="color:var(--accent);font-size:11px">Stagger (1.7M), Gai Plin&#x27;s Imperial Brew (188k), Healthstone (168k), Elixir of Determination (91k), Vital Flame (79k), Leech (64k), Celestial Fortune (45k), Refreshing Drink (36k), Celestial Infusion (29k), Gift of the Ox (15k), Yu&#x27;lon&#x27;s Grace (9k)</span></div><div style="font-size:12px">External (96k): <span style="color:var(--good);font-size:11px">Atonement (60k), Divine Aegis (21k), Power Word: Radiance (7k), Lightbearer (4k), Penance (Contrition) (1k), Penance (Contrition Crit) (1k), Piety (977), Shifting Sands (165)</span></div></div>
+<div class="death-card"><div class="title">Spike #9 at 8:08 — Derelict Duo</div><div style="font-size:13px">2.6M in 6.5s (394k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Bone Hack (1.5M), Stagger (444k), Melee (429k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Blaze of Light (from Perazen), Divine Aegis (from Perazen), Void Shield (from Perazen), Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.3M): <span style="color:var(--accent);font-size:11px">Stagger (1.7M), Gift of the Ox (181k), Celestial Fortune (126k), Gai Plin&#x27;s Imperial Brew (102k), Celestial Infusion (85k), Vital Flame (55k), Leech (27k), Yu&#x27;lon&#x27;s Grace (18k), Refreshing Drink (17k), Expel Harm (15k)</span></div><div style="font-size:12px">External (653k): <span style="color:var(--good);font-size:11px">Flash Heal (163k), Void Shield (134k), Atonement (96k), Penance (92k), Penance (Twinsight) (79k), Divine Aegis (68k), Piety (7k), Lightbearer (4k), Penance (Contrition) (4k), Penance (Contrition Crit) (3k), Prayer of Mending (2k)</span></div></div>
+<div class="death-card"><div class="title">Spike #10 at 13:06 — Trash pull 5</div><div style="font-size:13px">2.2M in 5.5s (398k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.7M), Stagger (526k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Blaze of Light (from Perazen), Void Shield (from Perazen), Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.1M): <span style="color:var(--accent);font-size:11px">Stagger (1.6M), Elixir of Determination (136k), Celestial Infusion (115k), Celestial Fortune (99k), Gift of the Ox (88k), Vital Flame (27k), Refreshing Drink (17k), Leech (12k)</span></div><div style="font-size:12px">External (928k): <span style="color:var(--good);font-size:11px">Shadow Mend (354k), Void Shield (279k), Penance (84k), Atonement (82k), Penance (Twinsight) (64k), Piety (40k), Divine Aegis (12k), Prayer of Mending (5k), Penance (Contrition) (4k), Penance (Contrition Crit) (2k), Lightbearer (2k), Fate Mirror (76)</span></div></div>
+<div class="death-card"><div class="title">Spike #11 at 13:25 — Trash pull 5</div><div style="font-size:13px">1.2M in 3.0s (404k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (732k), Spore Dispersal (179k), Stagger (172k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (1.3M): <span style="color:var(--accent);font-size:11px">Stagger (993k), Gift of the Ox (114k), Yu&#x27;lon&#x27;s Grace (71k), Vital Flame (63k), Elixir of Determination (38k), Celestial Fortune (35k), Leech (25k)</span></div><div style="font-size:12px">External (211k): <span style="color:var(--good);font-size:11px">Power Word: Shield (91k), Atonement (81k), Prayer of Mending (15k), Lightbearer (10k), Piety (5k), Fate Mirror (4k), Penance (Contrition) (2k), Prescience (1k), Shifting Sands (422)</span></div></div>
+<div class="death-card"><div class="title">Spike #12 at 13:46 — Trash pull 5</div><div style="font-size:13px">1.4M in 3.0s (452k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.3M), Stagger (82k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px">Self (1.4M): <span style="color:var(--accent);font-size:11px">Stagger (1.1M), Gai Plin&#x27;s Imperial Brew (135k), Vital Flame (107k), Celestial Fortune (106k), Leech (17k)</span></div><div style="font-size:12px">External (154k): <span style="color:var(--good);font-size:11px">Atonement (69k), Void Shield (51k), Piety (19k), Penance (Twinsight) (7k), Lightbearer (4k), Penance (Contrition) (2k), Penance (Contrition Crit) (2k), Divine Aegis (972)</span></div></div>
+<div class="death-card"><div class="title">Spike #13 at 13:52 — Trash pull 5</div><div style="font-size:13px">3.8M in 9.0s (425k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (2.6M), Stagger (534k), Spore Dispersal (412k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Visage (from Dzin), Power Word: Shield (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (3.7M): <span style="color:var(--accent);font-size:11px">Stagger (2.5M), Vital Flame (453k), Celestial Fortune (127k), Celestial Infusion (120k), Elixir of Determination (116k), Gift of the Ox (91k), Yu&#x27;lon&#x27;s Grace (76k), Gai Plin&#x27;s Imperial Brew (75k), Refreshing Drink (64k), Leech (63k)</span></div><div style="font-size:12px">External (705k): <span style="color:var(--good);font-size:11px">Shadow Mend (342k), Power Word: Shield (151k), Atonement (90k), Void Shield (81k), Piety (19k), Prayer of Mending (15k), Penance (Contrition Crit) (3k), Lightbearer (3k), Penance (Contrition) (730), Shifting Sands (120)</span></div></div>
+<div class="death-card"><div class="title">Spike #14 at 17:45 — Emberdawn</div><div style="font-size:13px">1.2M in 3.5s (349k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Searing Beak (819k), Melee (308k), Stagger (93k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (1.6M): <span style="color:var(--accent);font-size:11px">Stagger (1.1M), Celestial Infusion (112k), Refreshing Drink (83k), Celestial Fortune (79k), Yu&#x27;lon&#x27;s Grace (59k), Gift of the Ox (56k), Gai Plin&#x27;s Imperial Brew (47k), Leech (20k), Vital Flame (14k), Fate Mirror (6k)</span></div><div style="font-size:12px">External (324k): <span style="color:var(--good);font-size:11px">Void Shield (103k), Penance (Twinsight) (86k), Piety (65k), Atonement (41k), Divine Aegis (22k), Penance (Contrition Crit) (3k), Prayer of Mending (3k), Penance (Contrition) (2k)</span></div></div>
+<div class="death-card"><div class="title">Spike #15 at 19:46 — Trash pull 6</div><div style="font-size:13px">3.2M in 8.0s (403k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (2.3M), Stagger (754k), Interrupting Screech (169k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Power Word: Shield (from Perazen), Prayer of Mending (from Perazen), Visage (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (3.0M): <span style="color:var(--accent);font-size:11px">Stagger (2.0M), Celestial Fortune (205k), Gai Plin&#x27;s Imperial Brew (156k), Vital Flame (155k), Gift of the Ox (130k), Elixir of Determination (130k), Celestial Infusion (115k), Refreshing Drink (100k), Leech (32k)</span></div><div style="font-size:12px">External (589k): <span style="color:var(--good);font-size:11px">Atonement (184k), Power Word: Shield (182k), Shadow Mend (129k), Penance (Twinsight) (46k), Piety (21k), Fate Mirror (10k), Prayer of Mending (7k), Prescience (5k), Penance (Contrition) (3k), Penance (Contrition Crit) (3k)</span></div></div>
+<div class="death-card"><div class="title">Spike #16 at 20:03 — Trash pull 6</div><div style="font-size:13px">2.5M in 6.0s (423k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.8M), Stagger (536k), Precise Cut (179k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Zephyr (from Dzin), Devotion Aura (from Unndin), Prescience (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (3.3M): <span style="color:var(--accent);font-size:11px">Stagger (2.1M), Celestial Fortune (360k), Gai Plin&#x27;s Imperial Brew (251k), Silvermoon Health Potion (230k), Vital Flame (191k), Leech (68k), Refreshing Drink (67k), Gift of the Ox (39k), Fate Mirror (11k)</span></div><div style="font-size:12px">External (406k): <span style="color:var(--good);font-size:11px">Power Word: Shield (201k), Atonement (91k), Penance (63k), Piety (32k), Prayer of Mending (17k), Penance (Contrition) (2k), Lightbearer (1k), Shifting Sands (31)</span></div></div>
+<div class="death-card"><div class="title">Spike #17 at 20:15 — Trash pull 6</div><div style="font-size:13px">1.9M in 5.0s (380k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.4M), Precise Cut (278k), Stagger (269k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px">Self (2.4M): <span style="color:var(--accent);font-size:11px">Stagger (1.6M), Vital Flame (249k), Celestial Infusion (126k), Celestial Fortune (120k), Gai Plin&#x27;s Imperial Brew (113k), Leech (83k), Gift of the Ox (82k), Refreshing Drink (77k), Fate Mirror (17k)</span></div><div style="font-size:12px">External (116k): <span style="color:var(--good);font-size:11px">Atonement (60k), Void Shield (47k), Prescience (3k), Lightbearer (2k), Penance (Contrition) (2k), Piety (1k)</span></div></div>
+<div class="death-card"><div class="title">Spike #18 at 20:21 — Trash pull 6</div><div style="font-size:13px">7.9M in 15.5s (510k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (6.2M), Stagger (1.2M), Arrow Rain (332k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Void Shield (from Perazen), Prayer of Mending (from Perazen), Blaze of Light (from Perazen), Divine Aegis (from Perazen), Arcanoweave Insight (from Unndin)</span></div><div style="font-size:12px;margin-top:2px">Self (7.6M): <span style="color:var(--accent);font-size:11px">Stagger (5.0M), Gai Plin&#x27;s Imperial Brew (627k), Vital Flame (584k), Celestial Fortune (565k), Refreshing Drink (227k), Gift of the Ox (225k), Celestial Infusion (190k), Leech (151k), Chi Transfer (31k), Fate Mirror (21k)</span></div><div style="font-size:12px">External (944k): <span style="color:var(--good);font-size:11px">Atonement (365k), Void Shield (315k), Penance (Twinsight) (104k), Piety (104k), Divine Aegis (24k), Lightbearer (11k), Penance (Contrition Crit) (10k), Prayer of Mending (7k), Penance (Contrition) (3k), Prescience (1k), Shifting Sands (344)</span></div></div>
+<div class="death-card"><div class="title">Spike #19 at 20:51 — Trash pull 6</div><div style="font-size:13px">2.4M in 5.5s (429k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.5M), Stagger (434k), Precise Cut (173k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Expel Harm</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Perazen), Visage (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (2.4M): <span style="color:var(--accent);font-size:11px">Stagger (1.5M), Gai Plin&#x27;s Imperial Brew (237k), Elixir of Determination (202k), Vital Flame (135k), Celestial Fortune (124k), Gift of the Ox (124k), Refreshing Drink (66k), Leech (40k), Expel Harm (14k)</span></div><div style="font-size:12px">External (213k): <span style="color:var(--good);font-size:11px">Atonement (97k), Power Word: Radiance (66k), Divine Aegis (21k), Lightbearer (14k), Piety (9k), Prayer of Mending (5k), Penance (Contrition) (982), Shifting Sands (468)</span></div></div>
+<div class="death-card"><div class="title">Spike #20 at 22:49 — Trash pull 8</div><div style="font-size:13px">2.2M in 5.5s (393k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.6M), Stagger (295k), Shred Flesh (243k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Perazen), Void Shield (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.8M): <span style="color:var(--accent);font-size:11px">Stagger (1.9M), Celestial Infusion (209k), Gai Plin&#x27;s Imperial Brew (167k), Celestial Fortune (158k), Refreshing Drink (101k), Vital Flame (89k), Elixir of Determination (71k), Gift of the Ox (56k), Leech (17k)</span></div><div style="font-size:12px">External (342k): <span style="color:var(--good);font-size:11px">Void Shield (143k), Verdant Embrace (108k), Atonement (59k), Piety (15k), Lightbearer (5k), Prayer of Mending (4k), Penance (Contrition Crit) (4k), Penance (Contrition) (2k), Shifting Sands (204)</span></div></div>
+<div class="death-card"><div class="title">Spike #21 at 22:56 — Trash pull 8</div><div style="font-size:13px">3.0M in 6.5s (463k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (2.2M), Stagger (489k), Flame Nova (159k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Perazen), Visage (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (3.2M): <span style="color:var(--accent);font-size:11px">Stagger (1.9M), Vital Flame (320k), Celestial Fortune (302k), Gai Plin&#x27;s Imperial Brew (233k), Gift of the Ox (146k), Refreshing Drink (120k), Celestial Infusion (85k), Yu&#x27;lon&#x27;s Grace (64k), Leech (51k)</span></div><div style="font-size:12px">External (285k): <span style="color:var(--good);font-size:11px">Power Word: Shield (139k), Atonement (103k), Piety (31k), Penance (Contrition Crit) (4k), Lightbearer (3k), Prayer of Mending (2k), Penance (Contrition) (2k), Fate Mirror (64), Shifting Sands (4)</span></div></div>
+<div class="death-card"><div class="title">Spike #22 at 23:05 — Trash pull 8</div><div style="font-size:13px">2.7M in 7.0s (382k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (2.1M), Stagger (506k), Gore Whirl (58k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Divine Aegis (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.6M): <span style="color:var(--accent);font-size:11px">Stagger (1.9M), Gai Plin&#x27;s Imperial Brew (236k), Vital Flame (223k), Celestial Fortune (94k), Leech (50k), Gift of the Ox (45k), Yu&#x27;lon&#x27;s Grace (34k)</span></div><div style="font-size:12px">External (575k): <span style="color:var(--good);font-size:11px">Power Word: Shield (255k), Flash Heal (215k), Divine Aegis (43k), Atonement (28k), Piety (13k), Prayer of Mending (12k), Lightbearer (6k), Penance (Contrition) (3k), Shifting Sands (43)</span></div></div>
+<div class="death-card"><div class="title">Spike #23 at 23:15 — Trash pull 8</div><div style="font-size:13px">1.7M in 4.0s (431k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.3M), Stagger (339k), Gore Whirl (83k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Perazen), Blaze of Light (from Perazen), Divine Aegis (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.3M): <span style="color:var(--accent);font-size:11px">Stagger (1.6M), Vital Flame (203k), Gai Plin&#x27;s Imperial Brew (170k), Elixir of Determination (107k), Celestial Fortune (95k), Gift of the Ox (59k), Leech (45k), Celestial Infusion (26k)</span></div><div style="font-size:12px">External (509k): <span style="color:var(--good);font-size:11px">Divine Aegis (166k), Shadow Mend (154k), Penance (132k), Atonement (36k), Piety (11k), Prayer of Mending (5k), Penance (Contrition) (2k), Penance (Contrition Crit) (2k), Lightbearer (1k), Shifting Sands (56)</span></div></div>
+<div class="death-card"><div class="title">Spike #24 at 23:22 — Trash pull 8</div><div style="font-size:13px">7.2M in 18.0s (402k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (5.5M), Stagger (1.3M), Intercepting Charge (243k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Blaze of Light (from Perazen), Divine Aegis (from Perazen), Void Shield (from Perazen), Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (6.7M): <span style="color:var(--accent);font-size:11px">Stagger (4.7M), Vital Flame (505k), Celestial Fortune (295k), Elixir of Determination (282k), Celestial Infusion (215k), Leech (211k), Gift of the Ox (195k), Refreshing Drink (161k), Gai Plin&#x27;s Imperial Brew (64k), Yu&#x27;lon&#x27;s Grace (11k)</span></div><div style="font-size:12px">External (1.2M): <span style="color:var(--good);font-size:11px">Shadow Mend (386k), Penance (236k), Atonement (171k), Void Shield (159k), Divine Aegis (157k), Piety (47k), Prayer of Mending (10k), Penance (Contrition) (6k), Lightbearer (5k), Penance (Contrition Crit) (2k), Fate Mirror (124), Shifting Sands (47)</span></div></div>
+<div class="death-card"><div class="title">Spike #25 at 25:22 — Commander Kroluk</div><div style="font-size:13px">2.5M in 6.0s (419k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Rampage (2.1M), Stagger (368k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Power Word: Shield (from Perazen), Atonement (from Perazen), Prayer of Mending (from Perazen), Blaze of Light (from Perazen), Divine Aegis (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.2M): <span style="color:var(--accent);font-size:11px">Stagger (1.6M), Celestial Infusion (118k), Celestial Fortune (107k), Refreshing Drink (101k), Elixir of Determination (72k), Vital Flame (47k), Gai Plin&#x27;s Imperial Brew (41k), Gift of the Ox (29k), Leech (26k)</span></div><div style="font-size:12px">External (455k): <span style="color:var(--good);font-size:11px">Power Word: Shield (159k), Penance (121k), Void Shield (101k), Divine Aegis (27k), Atonement (24k), Fate Mirror (11k), Penance (Contrition Crit) (4k), Prescience (4k), Prayer of Mending (2k), Penance (Contrition) (672), Lightbearer (67), Shifting Sands (2)</span></div></div>
+<div class="death-card"><div class="title">Spike #26 at 25:57 — Commander Kroluk</div><div style="font-size:13px">1.2M in 3.0s (407k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (871k), Intercepting Charge (240k), Stagger (109k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Celestial Brew, Stoneform</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Fortifying Brew, Expel Harm</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Visage (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (1.5M): <span style="color:var(--accent);font-size:11px">Stagger (851k), Silvermoon Health Potion (255k), Celestial Fortune (190k), Elixir of Determination (73k), Celestial Infusion (55k), Refreshing Drink (34k), Leech (4k), Vital Flame (5)</span></div><div style="font-size:12px">External (212k): <span style="color:var(--good);font-size:11px">Void Shield (172k), Shadow Mend (36k), Atonement (3k), Lightbearer (1k), Shifting Sands (56), Piety (44)</span></div></div>
+<div class="death-card"><div class="title">Spike #27 at 26:27 — Commander Kroluk</div><div style="font-size:13px">2.9M in 6.5s (441k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Rampage (2.2M), Stagger (496k), Melee (162k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Atonement (from Perazen), Blaze of Light (from Perazen), Divine Aegis (from Perazen), Visage (from Dzin), Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.3M): <span style="color:var(--accent);font-size:11px">Stagger (1.8M), Celestial Infusion (115k), Gift of the Ox (99k), Elixir of Determination (70k), Celestial Fortune (65k), Refreshing Drink (52k), Vital Flame (27k), Leech (10k), Fate Mirror (6k)</span></div><div style="font-size:12px">External (934k): <span style="color:var(--good);font-size:11px">Shadow Mend (368k), Penance (264k), Divine Aegis (195k), Atonement (37k), Piety (30k), Void Shield (26k), Penance (Contrition Crit) (6k), Penance (Contrition) (3k), Prayer of Mending (2k), Prescience (1k), Lightbearer (1k), Shifting Sands (46)</span></div></div>
+<div class="death-card"><div class="title">Spike #28 at 26:54 — Commander Kroluk</div><div style="font-size:13px">2.6M in 6.0s (428k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Rampage (2.1M), Stagger (442k), Melee (0)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Visage (from Dzin), Divine Aegis (from Perazen), Prescience (from Dzin), Power Word: Shield (from Perazen), Prayer of Mending (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.4M): <span style="color:var(--accent);font-size:11px">Stagger (1.7M), Gift of the Ox (161k), Refreshing Drink (142k), Celestial Fortune (132k), Celestial Infusion (119k), Gai Plin&#x27;s Imperial Brew (59k), Vital Flame (37k), Elixir of Determination (27k), Leech (23k), Fate Mirror (22k), Expel Harm (8k)</span></div><div style="font-size:12px">External (748k): <span style="color:var(--good);font-size:11px">Power Word: Shield (205k), Penance (198k), Flash Heal (175k), Divine Aegis (103k), Atonement (47k), Piety (6k), Penance (Contrition Crit) (4k), Prescience (3k), Prayer of Mending (3k), Penance (Contrition) (3k), Lightbearer (2k), Shifting Sands (66)</span></div></div>
+<div class="death-card"><div class="title">Spike #29 at 27:27 — Commander Kroluk</div><div style="font-size:13px">1.8M in 5.0s (369k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.3M), Stagger (343k), Throw Axe (195k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Expel Harm</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Divine Aegis (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (1.9M): <span style="color:var(--accent);font-size:11px">Stagger (1.1M), Celestial Fortune (199k), Celestial Infusion (128k), Gai Plin&#x27;s Imperial Brew (123k), Gift of the Ox (98k), Elixir of Determination (76k), Refreshing Drink (72k), Vital Flame (40k), Expel Harm (16k), Leech (11k)</span></div><div style="font-size:12px">External (314k): <span style="color:var(--good);font-size:11px">Penance (Twinsight) (110k), Atonement (70k), Power Word: Radiance (66k), Divine Aegis (46k), Shifting Sands (17k), Penance (Contrition Crit) (4k), Piety (1k), Penance (Contrition) (985)</span></div></div>
+<div class="death-card"><div class="title">Spike #30 at 27:47 — Commander Kroluk</div><div style="font-size:13px">2.5M in 6.0s (416k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Rampage (2.3M), Stagger (235k), Melee (0)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Power Word: Fortitude (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.2M): <span style="color:var(--accent);font-size:11px">Stagger (1.6M), Gai Plin&#x27;s Imperial Brew (126k), Celestial Infusion (118k), Celestial Fortune (107k), Refreshing Drink (105k), Gift of the Ox (60k), Leech (42k), Vital Flame (29k), Fate Mirror (4k)</span></div><div style="font-size:12px">External (295k): <span style="color:var(--good);font-size:11px">Void Shield (236k), Atonement (49k), Piety (5k), Lightbearer (2k), Penance (Contrition Crit) (2k), Prescience (1k), Shifting Sands (69)</span></div></div>
+<div class="death-card"><div class="title">Spike #31 at 28:14 — Commander Kroluk</div><div style="font-size:13px">2.6M in 6.0s (440k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Rampage (2.2M), Stagger (434k), Melee (0)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Power Word: Shield (from Perazen), Blaze of Light (from Perazen)</span></div><div style="font-size:12px;margin-top:2px">Self (2.3M): <span style="color:var(--accent);font-size:11px">Stagger (1.6M), Gai Plin&#x27;s Imperial Brew (134k), Refreshing Drink (132k), Elixir of Determination (120k), Celestial Infusion (107k), Celestial Fortune (103k), Gift of the Ox (42k), Vital Flame (20k), Leech (12k)</span></div><div style="font-size:12px">External (407k): <span style="color:var(--good);font-size:11px">Power Word: Shield (146k), Penance (140k), Atonement (43k), Divine Aegis (32k), Void Shield (28k), Piety (8k), Prayer of Mending (5k), Penance (Contrition Crit) (3k), Penance (Contrition) (1k), Lightbearer (1k), Fate Mirror (170)</span></div></div>
+<div class="death-card"><div class="title">Spike #32 at 32:12 — Restless Heart</div><div style="font-size:13px">1.3M in 3.5s (365k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Tempest Slash (638k), Melee (391k), Stagger (133k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Fortifying Brew, Expel Harm, Celestial Brew, Stoneform</span></div><div style="font-size:12px;margin-top:2px">Self (1.3M): <span style="color:var(--accent);font-size:11px">Stagger (839k), Celestial Fortune (106k), Celestial Infusion (99k), Refreshing Drink (92k), Gai Plin&#x27;s Imperial Brew (68k), Gift of the Ox (28k), Yu&#x27;lon&#x27;s Grace (28k), Vital Flame (20k), Leech (13k)</span></div><div style="font-size:12px">External (34k): <span style="color:var(--good);font-size:11px">Atonement (22k), Lightbearer (5k), Penance (Contrition Crit) (3k), Piety (2k), Penance (Contrition) (2k)</span></div></div>
+  </details>
+  </details>
+  <details class="subsection" open><summary><h3 id="defensive-usage">Defensive Usage <a href="#defensive-usage" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Fortifying Brew</span><span class="value val-good">4/5 uses (80%)</span><div style="font-size:11px;color:var(--text-muted)">2 during spikes, 2 outside</div></div>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Expel Harm</span><span class="value val-bad">15/129 uses (12%)</span><div style="font-size:11px;color:var(--text-muted)">2 during spikes, 13 outside</div></div>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Celestial Brew</span><span class="value val-bad">0/43 uses (0%)</span></div>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Stoneform</span><span class="value val-bad">0/16 uses (0%)</span></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="healing-received">Healing Received <a href="#healing-received" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Effective healing</span>
+    <span class="value">263.7M</span>
+  </div>
+  <div class="stat-row">
+    <span class="label">Overheal</span>
+    <span class="value val-neutral">11%</span>
+  </div>
+  <div class="stat-row">
+    <span class="label">Self-healing</span>
+    <span class="value">214.2M (81.3%)</span>
+  </div>
+  <details open style="margin-left:16px;margin-bottom:8px">
+    <summary style="cursor:pointer;color:var(--text-muted);font-size:12px;user-select:none">
+      Self-healing breakdown (15 abilities)</summary>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Stagger <span class="muted">(1737 casts)</span></span><div class="bar-bg"><div class="bar" style="width:100%;background:var(--accent)"></div></div><span class="amount">141.5M</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Celestial Fortune <span class="muted">(8084 casts)</span></span><div class="bar-bg"><div class="bar" style="width:9%;background:var(--accent)"></div></div><span class="amount">13.1M <span class="muted">(36% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Vital Flame <span class="muted">(14356 casts)</span></span><div class="bar-bg"><div class="bar" style="width:8%;background:var(--accent)"></div></div><span class="amount">12.0M <span class="muted">(33% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Gai Plin&#x27;s Imperial Brew <span class="muted">(244 casts)</span></span><div class="bar-bg"><div class="bar" style="width:7%;background:var(--accent)"></div></div><span class="amount">10.4M <span class="muted">(21% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Celestial Infusion <span class="muted">(1312 casts)</span></span><div class="bar-bg"><div class="bar" style="width:6%;background:var(--accent)"></div></div><span class="amount">8.5M</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Refreshing Drink <span class="muted">(605 casts)</span></span><div class="bar-bg"><div class="bar" style="width:6%;background:var(--accent)"></div></div><span class="amount">8.2M <span class="muted">(18% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Gift of the Ox <span class="muted">(440 casts)</span></span><div class="bar-bg"><div class="bar" style="width:5%;background:var(--accent)"></div></div><span class="amount">7.4M <span class="muted">(13% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Leech <span class="muted">(1154 casts)</span></span><div class="bar-bg"><div class="bar" style="width:3%;background:var(--accent)"></div></div><span class="amount">4.9M <span class="muted">(7% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Yu&#x27;lon&#x27;s Grace <span class="muted">(366 casts)</span></span><div class="bar-bg"><div class="bar" style="width:2%;background:var(--accent)"></div></div><span class="amount">3.2M</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Elixir of Determination <span class="muted">(178 casts)</span></span><div class="bar-bg"><div class="bar" style="width:2%;background:var(--accent)"></div></div><span class="amount">3.0M</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Chi Transfer <span class="muted">(13 casts)</span></span><div class="bar-bg"><div class="bar" style="width:1%;background:var(--accent)"></div></div><span class="amount">1.0M <span class="muted">(64% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Silvermoon Health Potion <span class="muted">(3 casts)</span></span><div class="bar-bg"><div class="bar" style="width:1%;background:var(--accent)"></div></div><span class="amount">740k</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Healthstone <span class="muted">(2 casts)</span></span><div class="bar-bg"><div class="bar" style="width:0%;background:var(--accent)"></div></div><span class="amount">184k</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Expel Harm <span class="muted">(15 casts)</span></span><div class="bar-bg"><div class="bar" style="width:0%;background:var(--accent)"></div></div><span class="amount">111k <span class="muted">(23% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Fate Mirror <span class="muted">(354 casts)</span></span><div class="bar-bg"><div class="bar" style="width:0%;background:var(--accent)"></div></div><span class="amount">99k <span class="muted">(51% oh)</span></span></div>
+  </details>
+  <div class="stat-row">
+    <span class="label">External healing</span>
+    <span class="value">49.4M (18.7%)</span>
+  </div>
+  <details>
+    <summary>Top sources (10)</summary>
+    <div style="margin-top:8px">
+<div class="hit-bar"><span style="width:180px;font-size:12px">Stagger <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:100%;background:var(--good)"></div></div><span class="amount">141.5M (53.7%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Celestial Fortune <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:9%;background:var(--good)"></div></div><span class="amount">13.1M (5.0%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Vital Flame <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:8%;background:var(--good)"></div></div><span class="amount">12.0M (4.6%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Void Shield <span class="muted">(Perazen)</span></span><div class="bar-bg"><div class="bar" style="width:8%;background:var(--good)"></div></div><span class="amount">12.0M (4.5%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Gai Plin&#x27;s Imperial Brew <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:7%;background:var(--good)"></div></div><span class="amount">10.4M (3.9%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Atonement <span class="muted">(Perazen)</span></span><div class="bar-bg"><div class="bar" style="width:7%;background:var(--good)"></div></div><span class="amount">9.5M (3.6%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Celestial Infusion <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:6%;background:var(--good)"></div></div><span class="amount">8.5M (3.2%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Refreshing Drink <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:6%;background:var(--good)"></div></div><span class="amount">8.2M (3.1%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Gift of the Ox <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:5%;background:var(--good)"></div></div><span class="amount">7.4M (2.8%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Shadow Mend <span class="muted">(Perazen)</span></span><div class="bar-bg"><div class="bar" style="width:4%;background:var(--good)"></div></div><span class="amount">5.6M (2.1%)</span></div>
+    </div>
+  </details>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="cohort">Cohort <a href="#cohort" class="anchor-hash">#</a></h2>
+  <table class="cohort-table">
+    <tr><th>#</th><th>Player</th><th>ilvl</th><th>DPS</th><th>Deaths</th><th>Log</th></tr>
+    <tr><td>1</td><td>Wastedyxuth-Kazzak</td><td>282</td><td>109k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/R69KDCag27FrcjwV#fight=15" target="_blank">WCL</a></td></tr>
+    <tr><td>2</td><td>Uncweaving-Area52</td><td>281</td><td>108k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/1nm3ZX7B8KRqLNYw#fight=1" target="_blank">WCL</a></td></tr>
+    <tr><td>3</td><td>Lilnym-Stormscale</td><td>282</td><td>106k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/TaRAK1XZYLBCthD8#fight=1" target="_blank">WCL</a></td></tr>
+    <tr><td>4</td><td>수도사몰라용-아즈샤라</td><td>280</td><td>105k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/aMbRG7Zc2dyj4XHk#fight=6" target="_blank">WCL</a></td></tr>
+    <tr><td>5</td><td>九龍妹-天空之牆</td><td>282</td><td>104k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/g7yjLQhAtP6nRW81#fight=4" target="_blank">WCL</a></td></tr>
+    <tr><td>6</td><td>Konfetka-Sargeras</td><td>279</td><td>103k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/fm6Cqd1y9pKGP4XT#fight=10" target="_blank">WCL</a></td></tr>
+    <tr><td>7</td><td>Fielaursenmo-Draenor</td><td>280</td><td>100k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/WRpHyD94fFj2b1Gw#fight=6" target="_blank">WCL</a></td></tr>
+    <tr><td>8</td><td>Huekrad-TarrenMill</td><td>277</td><td>100k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/xVGZhYrkPvMQXfyL#fight=1" target="_blank">WCL</a></td></tr>
+    <tr><td>9</td><td>Августейший-Гордунни</td><td>281</td><td>99k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/WkXdVHLf3KqN1nPc#fight=1" target="_blank">WCL</a></td></tr>
+    <tr><td>10</td><td>Маркиона-Гордунни</td><td>280</td><td>97k</td><td>0 deaths</td><td><a href="https://www.warcraftlogs.com/reports/JxDjvnyLZdNT7qAt#fight=13" target="_blank">WCL</a></td></tr>
+  </table>
+</div>
+<div style="text-align:center;padding:24px 0;font-size:11px;color:var(--text-dim)">
+  Generated by <a href="https://github.com">wcl-compare</a>
+</div>
+<script>
+(function() {
+  function openAndScroll(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var node = el.closest('details');
+    while (node) {
+      node.open = true;
+      node = node.parentElement ? node.parentElement.closest('details') : null;
+    }
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('.anchor-hash');
+    if (link) {
+      e.preventDefault();
+      var id = link.getAttribute('href').slice(1);
+      history.replaceState(null, '', '#' + id);
+      openAndScroll(id);
+    }
+  });
+  if (location.hash) openAndScroll(location.hash.slice(1));
+})();
+</script>
+</body>
+</html>
