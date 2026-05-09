@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Devourer DemonHunter - The Seat of the Triumvirate +10 | wcl-compare</title>
+<style>
+:root {
+    --bg: #0f0f1a;
+    --surface: #1a1a2e;
+    --surface-alt: #222244;
+    --surface-hover: #2a2a4a;
+    --border: #333355;
+    --text: #e0e0e0;
+    --text-muted: #8888aa;
+    --text-dim: #666688;
+    --accent: #6c63ff;
+    --accent-dim: #4a4499;
+    --good: #4caf50;
+    --good-dim: #2e7d32;
+    --warn: #ff9800;
+    --warn-dim: #e65100;
+    --bad: #f44336;
+    --bad-dim: #c62828;
+    --boss: #6c63ff;
+    --boss-dim: #3d3699;
+    --trash: #445566;
+    --trash-dim: #334455;
+    --bar-bg: #1a1a30;
+    --bar-user: #6c63ff;
+    --bar-cohort: #445566;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--text-muted);
+     border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.section { margin-bottom: 28px; }
+.muted { color: var(--text-muted); }
+.dim { color: var(--text-dim); }
+
+/* Header */
+.header-links { margin: 4px 0 8px; font-size: 13px; }
+.header-links a { color: var(--accent); text-decoration: none; }
+.header-links a:hover { text-decoration: underline; }
+.header-meta { color: var(--text-muted); margin-bottom: 16px; font-size: 13px; }
+.metric-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    min-width: 140px;
+    flex: 1;
+}
+.metric-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+                       color: var(--text-muted); margin-bottom: 2px; }
+.metric-card .value { font-size: 24px; font-weight: 700; }
+.metric-card .sub { font-size: 12px; color: var(--text-muted); }
+.val-good { color: var(--good); }
+.val-warn { color: var(--warn); }
+.val-bad { color: var(--bad); }
+.val-neutral { color: var(--text); }
+
+/* Timeline */
+.timeline-wrap { position: relative; margin-bottom: 4px; }
+.timeline { display: flex; height: 28px; border-radius: 6px; overflow: hidden;
+            gap: 1px; background: var(--bg); }
+.seg {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1px; color: transparent;
+    position: relative; cursor: default;
+    min-width: 2px;
+}
+.seg.boss { background: var(--boss); }
+.seg.trash { background: var(--trash); }
+.seg.boss:hover { background: var(--boss-dim); }
+.seg.trash:hover { background: var(--trash-dim); }
+.timeline-labels { display: flex; position: relative; height: 20px; margin-bottom: 2px; }
+.timeline-lbl {
+    position: absolute; font-size: 10px; font-weight: 600; color: var(--text-muted);
+    white-space: nowrap; transform: translateX(-50%);
+    top: 2px;
+}
+.timeline-lbl.boss-lbl { color: var(--accent); }
+.timeline-legend { display: flex; gap: 16px; font-size: 11px; color: var(--text-muted);
+                    margin-bottom: 8px; }
+.legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+              margin-right: 4px; vertical-align: middle; }
+.death-markers { position: relative; height: 12px; margin-bottom: 2px; }
+.death-dot {
+    position: absolute; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--bad); top: 2px; transform: translateX(-4px);
+}
+
+/* Bars */
+.bar-row { margin-bottom: 12px; }
+.bar-label { font-size: 13px; margin-bottom: 4px; font-weight: 600; }
+.bar-bg { background: var(--bar-bg); border-radius: 4px; height: 24px; position: relative;
+           overflow: hidden; margin-bottom: 2px; }
+.bar { height: 100%; border-radius: 4px; transition: width 0.3s; min-width: 1px;
+       display: flex; align-items: center; padding-left: 8px;
+       font-size: 11px; font-weight: 600; color: #fff; }
+.bar.user { background: var(--bar-user); }
+.bar.cohort { background: var(--bar-cohort); opacity: 0.7; }
+.bar-inline-label { font-size: 11px; color: var(--text-muted); margin-left: 4px; }
+
+/* Finding cards */
+.finding-group { margin-bottom: 16px; }
+.finding-group-title { font-size: 13px; font-weight: 600; margin-bottom: 6px;
+                        text-transform: uppercase; letter-spacing: 0.5px; }
+.finding-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.finding-card .name { flex: 1; font-size: 13px; }
+.finding-card .vals { font-size: 12px; color: var(--text-muted); text-align: right;
+                       white-space: nowrap; }
+.merge-breakdown { width: 100%; font-size: 0.85em; color: var(--text-dim);
+                    padding-left: 18px; margin-top: -2px; }
+.severity-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.severity-critical { background: var(--bad); }
+.severity-warning { background: var(--warn); }
+.severity-strong { background: var(--good); }
+.severity-info { background: var(--text-dim); }
+
+/* Pull comparison */
+.pull-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.pull-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    flex: 1;
+    min-width: 120px;
+}
+.pull-stat .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+                     color: var(--text-muted); }
+.pull-stat .value { font-size: 18px; font-weight: 700; }
+.pull-stat .vs { font-size: 12px; color: var(--text-muted); }
+.phase-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.phase-table th { text-align: left; color: var(--text-muted); font-weight: 500;
+                   padding: 6px 8px; border-bottom: 1px solid var(--border);
+                   font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.phase-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.phase-table tr:last-child td { border-bottom: none; }
+
+/* Death cards */
+.death-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+.death-card .title { font-weight: 600; margin-bottom: 6px; }
+.death-card .killing-blow { color: var(--bad); font-weight: 600; }
+.death-card .downtime { color: var(--warn); font-size: 12px; margin-top: 4px; }
+.hit-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; font-size: 12px; }
+.hit-bar .bar-bg { flex: 1; height: 14px; }
+.hit-bar .amount { width: 50px; text-align: right; color: var(--text-muted); font-size: 11px; }
+
+/* Cohort table */
+.cohort-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.cohort-table th { text-align: left; color: var(--text-muted); font-weight: 500;
+                    padding: 6px 8px; border-bottom: 1px solid var(--border);
+                    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.cohort-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.cohort-table tr:last-child td { border-bottom: none; }
+.cohort-table tr:hover td { background: var(--surface-hover); }
+
+/* Details/summary */
+details { margin-top: 8px; }
+details summary {
+    cursor: pointer; color: var(--text-muted); font-size: 12px;
+    padding: 4px 0; user-select: none;
+}
+details summary:hover { color: var(--text); }
+details[open] summary { margin-bottom: 8px; }
+
+/* Collapsible subsections */
+details.subsection { margin-top: 0; margin-bottom: 16px; }
+details.subsection > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+details.subsection > summary::-webkit-details-marker { display: none; }
+details.subsection > summary::marker { display: none; content: ''; }
+details.subsection > summary > h3 { display: inline; margin-bottom: 0; cursor: pointer; }
+details.subsection > summary::before {
+    content: '▾ ';
+    font-size: 10px;
+    color: var(--text-dim);
+}
+details.subsection:not([open]) > summary::before {
+    content: '▸ ';
+}
+details.subsection[open] > summary { margin-bottom: 8px; }
+
+/* Anchor links */
+.anchor-hash {
+    color: var(--text-dim);
+    font-size: 0.8em;
+    opacity: 0;
+    transition: opacity 0.15s;
+    margin-left: 6px;
+    text-decoration: none;
+}
+h2:hover .anchor-hash, h3:hover .anchor-hash,
+summary:hover .anchor-hash { opacity: 1; }
+.anchor-hash:hover { color: var(--accent); text-decoration: none; }
+
+/* GCD / cooldown compact cards */
+.stat-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+.stat-row .label { font-size: 13px; }
+.stat-row .value { font-size: 13px; font-weight: 600; }
+.stat-row .dmg-detail { width: 100%; font-size: 11px; color: var(--text-muted);
+    margin-top: 2px; text-align: right; }
+
+/* Tooltips */
+.finding-card[data-tip] {
+    cursor: help;
+    position: relative;
+}
+.finding-card[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 4px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: max(300px, 100%);
+    max-width: min(440px, 90vw);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.finding-card[data-tip]:hover::after { opacity: 1; pointer-events: auto; }
+.tip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dotted var(--text-dim);
+}
+.tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 6px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: max(300px, 100%);
+    max-width: min(440px, 90vw);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.tip:hover::after { opacity: 1; pointer-events: auto; }
+h3 .tip-icon {
+    display: inline-block;
+    width: 16px; height: 16px; line-height: 16px;
+    text-align: center;
+    border-radius: 50%;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-left: 6px;
+    cursor: help;
+    vertical-align: middle;
+    position: relative;
+}
+h3 .tip-icon::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 6px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: 380px;
+    max-width: 90vw;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+h3 .tip-icon:hover::after { opacity: 1; pointer-events: auto; }
+
+/* CD alignment timeline (Gantt chart) */
+.cd-timeline { margin-top: 16px; }
+.cd-timeline-axis {
+    display: flex; position: relative; height: 20px; margin-left: 180px;
+    border-bottom: 1px solid var(--border);
+}
+.cd-timeline-tick {
+    position: absolute; font-size: 10px; color: var(--text-dim);
+    transform: translateX(-50%); top: 2px;
+}
+.cd-timeline-group-hdr {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-muted); margin: 10px 0 4px;
+}
+.cd-timeline-row {
+    display: flex; align-items: center; height: 22px; margin-bottom: 2px;
+}
+.cd-timeline-label {
+    width: 180px; flex-shrink: 0; font-size: 11px; color: var(--text-muted);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    padding-right: 8px;
+}
+.cd-timeline-track {
+    flex: 1; position: relative; height: 16px;
+    background: var(--bar-bg); border-radius: 3px;
+}
+.cd-timeline-bar {
+    position: absolute; height: 100%; border-radius: 2px;
+    min-width: 2px; cursor: default;
+}
+.cd-timeline-bar.aug-buff { background: var(--accent); opacity: 0.85; }
+.cd-timeline-bar.aug-debuff { background: var(--warn); opacity: 0.85; }
+.cd-timeline-bar.team-cd { background: var(--good); opacity: 0.85; }
+.cd-timeline-bar.breath { background: #e8b931; opacity: 0.9; }
+.cd-timeline-marker {
+    position: absolute; top: 0; width: 1px; height: 100%;
+    background: var(--border); opacity: 0.3; pointer-events: none;
+}
+
+</style>
+</head>
+<body>
+<div class="section">
+  <h1>Devourer DemonHunter</h1>
+  <div class="header-links"><a href="https://www.warcraftlogs.com/reports/QVqW1BmHjX482ykG#fight=1" target="_blank">WCL Report</a> &middot; <a href="https://www.warcraftlogs.com/character/eu/burninglegion/sulnaru" target="_blank">Sulnaru-BurningLegion</a></div>
+  <div class="header-meta">
+    The Seat of the Triumvirate +10 &middot;
+    Cohort: 10 players
+    (ilvl 276&ndash;282)
+  </div>
+  <div class="metric-cards">
+    <div class="metric-card">
+      <div class="label">DPS</div>
+      <div class="value val-bad">75k</div>
+      <div class="sub">cohort 178k</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Parse</div>
+      <div class="value val-bad">0%</div>
+      <div class="sub">&nbsp;</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Deaths</div>
+      <div class="value val-good">0</div>
+      <div class="sub">cohort 0</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Active Time</div>
+      <div class="value">85%</div>
+      <div class="sub">cohort 86%</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="fight-timeline">Fight Timeline <a href="#fight-timeline" class="anchor-hash">#</a></h2>
+  <div class="timeline-wrap">
+    <div class="timeline">
+    <div class="seg trash" style="flex-basis:8.1%" title="Trash pull 1 — 1m15s — 155k DPS"></div>
+    <div class="seg boss" style="flex-basis:12.9%" title="Zuraal the Ascended — 2m1s — 43k DPS"></div>
+    <div class="seg trash" style="flex-basis:8.8%" title="Trash pull 2 — 1m23s — 104k DPS"></div>
+    <div class="seg trash" style="flex-basis:3.5%" title="Trash pull 3 — 33.0s — 50k DPS"></div>
+    <div class="seg trash" style="flex-basis:10.2%" title="Trash pull 4 — 1m35s — 96k DPS"></div>
+    <div class="seg boss" style="flex-basis:10.4%" title="Saprish — 1m37s — 137k DPS"></div>
+    <div class="seg trash" style="flex-basis:4.9%" title="Trash pull 5 — 45.7s — 83k DPS"></div>
+    <div class="seg trash" style="flex-basis:8.6%" title="Trash pull 6 — 1m20s — 120k DPS"></div>
+    <div class="seg trash" style="flex-basis:7.6%" title="Trash pull 7 — 1m11s — 117k DPS"></div>
+    <div class="seg boss" style="flex-basis:13.5%" title="Viceroy Nezhar — 2m7s — 45k DPS"></div>
+    <div class="seg boss" style="flex-basis:11.5%" title="L&#x27;ura — 1m48s — 59k DPS"></div>
+    </div>
+    <div class="timeline-labels">
+    <span class="timeline-lbl boss-lbl" style="left:14.5%">Zuraal the Ascended (1:33)</span>
+    <span class="timeline-lbl boss-lbl" style="left:48.7%">Saprish (8:14)</span>
+    <span class="timeline-lbl boss-lbl" style="left:81.7%">Viceroy Nezhar (13:46)</span>
+    <span class="timeline-lbl boss-lbl" style="left:94.2%">L&#x27;ura (16:47)</span>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-bottom:4px">
+    <span>0:14</span>
+    <span>9:25</span>
+    <span>18:35</span>
+  </div>
+  <div class="timeline-legend">
+    <span><span class="legend-dot" style="background:var(--boss)"></span>Boss</span>
+    <span><span class="legend-dot" style="background:var(--trash)"></span>Trash</span>
+    
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="pull-comparison">Pull Comparison <a href="#pull-comparison" class="anchor-hash">#</a></h2>
+  <div class="pull-stats">
+    <div class="pull-stat">
+      <div class="label">Trash Pulls</div>
+      <div class="value">7</div>
+      <div class="vs">cohort 6</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Avg Pull Duration</div>
+      <div class="value">1m9s</div>
+      <div class="vs">cohort 1m8s</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Trash Time</div>
+      <div class="value">8m3s</div>
+      <div class="vs">cohort 6m54s</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Time Split</div>
+      <div class="value">52% / 48%</div>
+      <div class="vs">trash / boss (cohort 52%)</div>
+    </div>
+  </div>
+
+  <table class="phase-table">
+    <tr><th>Phase</th><th>Your Pulls</th><th>Cohort Pulls</th><th>Your Time</th><th>Cohort Time</th></tr>
+    <tr><td>Before Zuraal the Ascended</td><td>1</td><td>1</td><td class="val-neutral">1m15s</td><td>1m23s</td></tr>
+    <tr><td>Zuraal the Ascended -&gt; Saprish</td><td>3</td><td>3</td><td class="val-neutral">3m31s</td><td>3m18s</td></tr>
+    <tr><td>Saprish -&gt; Viceroy Nezhar</td><td>3</td><td>2</td><td class="val-warn">3m17s</td><td>2m33s</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2 id="per-segment-dps">Per-Segment DPS <a href="#per-segment-dps" class="anchor-hash">#</a></h2>
+    <div class="bar-row">
+      <div class="bar-label">Zuraal the Ascended</div>
+      <div class="bar-bg"><div class="bar user" style="width:13.6%">You: 43k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:37.5%">Cohort: 120k</div></div>
+      <details>
+        <summary>Rotation detail (19 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">109.5s / 120.5s active (91%) <span class="muted">(cohort 98%)</span></span></div>
+<div class="stat-row"><span class="label">Void Ray</span><span class="value val-bad">5.5/min <span class="muted">cohort 7.1/min</span></span><div class="dmg-detail">total 321k &middot; avg hit 3k (cohort 2k)</div></div>
+<div class="stat-row"><span class="label">Collapsing Star</span><span class="value val-bad">2.0/min <span class="muted">cohort 3.5/min</span></span><div class="dmg-detail">total 1.0M &middot; avg hit 251k (cohort 301k)</div></div>
+<div class="stat-row"><span class="label">Soul Immolation</span><span class="value val-good">2.0/min <span class="muted">cohort 1.5/min</span></span></div>
+<div class="stat-row"><span class="label">Voidblade</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Vengeful Retreat</span><span class="value val-neutral">1.0/min <span class="muted">cohort 0.0/min</span></span><div class="dmg-detail">total 243 &middot; avg hit 243</div></div>
+<div class="stat-row"><span class="label">Consume/Devour</span><span class="value val-bad">14.4/min <span class="muted">cohort 25.4/min</span></span><div class="dmg-detail">total 877k &middot; avg hit 30k</div></div>
+<div class="stat-row merge-breakdown">Devour: 6.5/min <span class="muted">(coh 17.7)</span> &nbsp;|&nbsp; Consume: 8.0/min <span class="muted">(coh 7.9)</span></div>
+<div class="stat-row"><span class="label">Cull/Reap/Eradicate</span><span class="value val-neutral">2.5/min <span class="muted">cohort 0.0/min</span></span><div class="dmg-detail">total 390k &middot; avg hit 78k</div></div>
+<div class="stat-row merge-breakdown">Cull: 1.0/min <span class="muted">(coh 0.0)</span> &nbsp;|&nbsp; Reap: 1.5/min <span class="muted">(coh 0.0)</span> &nbsp;|&nbsp; Eradicate: 0.0/min <span class="muted">(coh 0.0)</span></div>
+<div class="stat-row"><span class="label">Void Metamorphosis</span><span class="value val-neutral">99% uptime <span class="muted">cohort 99%</span></span></div>
+<div class="stat-row"><span class="label">Collapsing Star</span><span class="value val-bad">45% uptime <span class="muted">cohort 63%</span></span></div>
+<div class="stat-row"><span class="label">Eradicate</span><span class="value val-neutral">8% uptime <span class="muted">cohort 13%</span></span></div>
+<div class="stat-row"><span class="label">Moment of Craving</span><span class="value val-neutral">8% uptime <span class="muted">cohort 13%</span></span></div>
+<div class="stat-row"><span class="label">Soul Immolation</span><span class="value val-neutral">17% uptime <span class="muted">cohort 13%</span></span></div>
+<div class="stat-row"><span class="label">Voidfall</span><span class="value val-warn">78% uptime <span class="muted">cohort 88%</span></span></div>
+<div class="stat-row"><span class="label">Void Ray</span><span class="value val-neutral">21% uptime <span class="muted">cohort 25%</span></span></div>
+<div class="stat-row"><span class="label">Dark Matter</span><span class="value val-neutral">6% uptime <span class="muted">cohort 7%</span></span></div>
+<div class="stat-row"><span class="label">Fury at cap</span><span class="value val-neutral">3% <span class="muted">cohort 6%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Saprish</div>
+      <div class="bar-bg"><div class="bar user" style="width:42.8%">You: 137k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:76.1%">Cohort: 243k</div></div>
+      <details>
+        <summary>Rotation detail (19 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-warn">91.1s / 96.9s active (94%) <span class="muted">(cohort 96%)</span></span></div>
+<div class="stat-row"><span class="label">Void Ray</span><span class="value val-bad">5.6/min <span class="muted">cohort 6.7/min</span></span><div class="dmg-detail">total 1.1M &middot; avg hit 4k (cohort 3k)</div></div>
+<div class="stat-row"><span class="label">Collapsing Star</span><span class="value val-bad">1.9/min <span class="muted">cohort 4.1/min</span></span><div class="dmg-detail">total 1.9M &middot; avg hit 212k (cohort 305k)</div></div>
+<div class="stat-row"><span class="label">Soul Immolation</span><span class="value val-good">2.5/min <span class="muted">cohort 1.7/min</span></span></div>
+<div class="stat-row"><span class="label">Voidblade</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Vengeful Retreat</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Consume/Devour</span><span class="value val-bad">16.1/min <span class="muted">cohort 25.9/min</span></span><div class="dmg-detail">total 1.0M &middot; avg hit 39k</div></div>
+<div class="stat-row merge-breakdown">Devour: 10.5/min <span class="muted">(coh 17.3)</span> &nbsp;|&nbsp; Consume: 5.6/min <span class="muted">(coh 7.3)</span></div>
+<div class="stat-row"><span class="label">Cull/Reap/Eradicate</span><span class="value val-good">2.5/min <span class="muted">cohort 0.5/min</span></span><div class="dmg-detail">total 518k &middot; avg hit 130k</div></div>
+<div class="stat-row merge-breakdown">Cull: 1.9/min <span class="muted">(coh 0.0)</span> &nbsp;|&nbsp; Reap: 0.6/min <span class="muted">(coh 0.0)</span> &nbsp;|&nbsp; Eradicate: 0.0/min <span class="muted">(coh 0.0)</span></div>
+<div class="stat-row"><span class="label">Void Metamorphosis</span><span class="value val-neutral">98% uptime <span class="muted">cohort 100%</span></span></div>
+<div class="stat-row"><span class="label">Collapsing Star</span><span class="value val-neutral">62% uptime <span class="muted">cohort 62%</span></span></div>
+<div class="stat-row"><span class="label">Eradicate</span><span class="value val-warn">5% uptime <span class="muted">cohort 17%</span></span></div>
+<div class="stat-row"><span class="label">Moment of Craving</span><span class="value val-warn">5% uptime <span class="muted">cohort 17%</span></span></div>
+<div class="stat-row"><span class="label">Soul Immolation</span><span class="value val-good">21% uptime <span class="muted">cohort 14%</span></span></div>
+<div class="stat-row"><span class="label">Voidfall</span><span class="value val-neutral">80% uptime <span class="muted">cohort 83%</span></span></div>
+<div class="stat-row"><span class="label">Void Ray</span><span class="value val-neutral">24% uptime <span class="muted">cohort 24%</span></span></div>
+<div class="stat-row"><span class="label">Dark Matter</span><span class="value val-neutral">4% uptime <span class="muted">cohort 5%</span></span></div>
+<div class="stat-row"><span class="label">Fury at cap</span><span class="value val-neutral">3% <span class="muted">cohort 6%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Viceroy Nezhar</div>
+      <div class="bar-bg"><div class="bar user" style="width:14.0%">You: 45k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:31.7%">Cohort: 101k</div></div>
+      <details>
+        <summary>Rotation detail (19 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">106.7s / 126.5s active (84%) <span class="muted">(cohort 96%)</span></span></div>
+<div class="stat-row"><span class="label">Void Ray</span><span class="value val-warn">6.2/min <span class="muted">cohort 6.7/min</span></span><div class="dmg-detail">total 673k &middot; avg hit 3k (cohort 3k)</div></div>
+<div class="stat-row"><span class="label">Collapsing Star</span><span class="value val-bad">1.9/min <span class="muted">cohort 2.8/min</span></span><div class="dmg-detail">total 1.1M &middot; avg hit 274k (cohort 410k)</div></div>
+<div class="stat-row"><span class="label">Soul Immolation</span><span class="value val-good">1.9/min <span class="muted">cohort 1.6/min</span></span></div>
+<div class="stat-row"><span class="label">Voidblade</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Vengeful Retreat</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Consume/Devour</span><span class="value val-bad">12.3/min <span class="muted">cohort 25.2/min</span></span><div class="dmg-detail">total 834k &middot; avg hit 32k</div></div>
+<div class="stat-row merge-breakdown">Devour: 4.3/min <span class="muted">(coh 16.2)</span> &nbsp;|&nbsp; Consume: 8.1/min <span class="muted">(coh 8.1)</span></div>
+<div class="stat-row"><span class="label">Cull/Reap/Eradicate</span><span class="value val-good">1.9/min <span class="muted">cohort 0.3/min</span></span><div class="dmg-detail">total 365k &middot; avg hit 91k</div></div>
+<div class="stat-row merge-breakdown">Cull: 0.5/min <span class="muted">(coh 0.0)</span> &nbsp;|&nbsp; Reap: 1.4/min <span class="muted">(coh 0.0)</span> &nbsp;|&nbsp; Eradicate: 0.0/min <span class="muted">(coh 0.0)</span></div>
+<div class="stat-row"><span class="label">Void Metamorphosis</span><span class="value val-neutral">99% uptime <span class="muted">cohort 98%</span></span></div>
+<div class="stat-row"><span class="label">Collapsing Star</span><span class="value val-bad">39% uptime <span class="muted">cohort 57%</span></span></div>
+<div class="stat-row"><span class="label">Eradicate</span><span class="value val-neutral">11% uptime <span class="muted">cohort 13%</span></span></div>
+<div class="stat-row"><span class="label">Moment of Craving</span><span class="value val-neutral">11% uptime <span class="muted">cohort 13%</span></span></div>
+<div class="stat-row"><span class="label">Soul Immolation</span><span class="value val-neutral">16% uptime <span class="muted">cohort 13%</span></span></div>
+<div class="stat-row"><span class="label">Voidfall</span><span class="value val-neutral">80% uptime <span class="muted">cohort 84%</span></span></div>
+<div class="stat-row"><span class="label">Void Ray</span><span class="value val-neutral">22% uptime <span class="muted">cohort 24%</span></span></div>
+<div class="stat-row"><span class="label">Dark Matter</span><span class="value val-good">13% uptime <span class="muted">cohort 6%</span></span></div>
+<div class="stat-row"><span class="label">Fury at cap</span><span class="value val-good">1% <span class="muted">cohort 6%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">L&#x27;ura</div>
+      <div class="bar-bg"><div class="bar user" style="width:18.6%">You: 59k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:45.1%">Cohort: 144k</div></div>
+      <details>
+        <summary>Rotation detail (19 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-warn">100.5s / 107.8s active (93%) <span class="muted">(cohort 97%)</span></span></div>
+<div class="stat-row"><span class="label">Void Ray</span><span class="value val-bad">5.6/min <span class="muted">cohort 7.5/min</span></span><div class="dmg-detail">total 664k &middot; avg hit 7k (cohort 3k)</div></div>
+<div class="stat-row"><span class="label">Collapsing Star</span><span class="value val-bad">2.2/min <span class="muted">cohort 3.0/min</span></span><div class="dmg-detail">total 1.1M &middot; avg hit 269k (cohort 750k)</div></div>
+<div class="stat-row"><span class="label">Soul Immolation</span><span class="value val-good">2.8/min <span class="muted">cohort 1.4/min</span></span></div>
+<div class="stat-row"><span class="label">Voidblade</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Vengeful Retreat</span><span class="value val-neutral">0.6/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Consume/Devour</span><span class="value val-bad">17.3/min <span class="muted">cohort 26.6/min</span></span><div class="dmg-detail">total 1.1M &middot; avg hit 35k</div></div>
+<div class="stat-row merge-breakdown">Devour: 6.1/min <span class="muted">(coh 16.3)</span> &nbsp;|&nbsp; Consume: 11.1/min <span class="muted">(coh 10.2)</span></div>
+<div class="stat-row"><span class="label">Cull/Reap/Eradicate</span><span class="value val-neutral">2.2/min <span class="muted">cohort 0.0/min</span></span><div class="dmg-detail">total 464k &middot; avg hit 116k</div></div>
+<div class="stat-row merge-breakdown">Cull: 1.1/min <span class="muted">(coh 0.0)</span> &nbsp;|&nbsp; Reap: 1.1/min <span class="muted">(coh 0.0)</span> &nbsp;|&nbsp; Eradicate: 0.0/min <span class="muted">(coh 0.0)</span></div>
+<div class="stat-row"><span class="label">Void Metamorphosis</span><span class="value val-neutral">97% uptime <span class="muted">cohort 99%</span></span></div>
+<div class="stat-row"><span class="label">Collapsing Star</span><span class="value val-neutral">46% uptime <span class="muted">cohort 49%</span></span></div>
+<div class="stat-row"><span class="label">Eradicate</span><span class="value val-warn">12% uptime <span class="muted">cohort 19%</span></span></div>
+<div class="stat-row"><span class="label">Moment of Craving</span><span class="value val-warn">8% uptime <span class="muted">cohort 17%</span></span></div>
+<div class="stat-row"><span class="label">Soul Immolation</span><span class="value val-good">23% uptime <span class="muted">cohort 12%</span></span></div>
+<div class="stat-row"><span class="label">Voidfall</span><span class="value val-warn">78% uptime <span class="muted">cohort 85%</span></span></div>
+<div class="stat-row"><span class="label">Void Ray</span><span class="value val-warn">19% uptime <span class="muted">cohort 24%</span></span></div>
+<div class="stat-row"><span class="label">Dark Matter</span><span class="value val-good">12% uptime <span class="muted">cohort 5%</span></span></div>
+<div class="stat-row"><span class="label">Fury at cap</span><span class="value val-neutral">3% <span class="muted">cohort 6%</span></span></div>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Trash (overall)</div>
+      <div class="bar-bg"><div class="bar user" style="width:34.2%">You: 109k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:85.2%">Cohort: 272k</div></div>
+      <details>
+        <summary>Rotation detail (19 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-warn">446.2s / 482.8s active (92%) <span class="muted">(cohort 95%)</span></span></div>
+<div class="stat-row"><span class="label">Void Ray</span><span class="value val-bad">5.8/min <span class="muted">cohort 6.9/min</span></span><div class="dmg-detail">total 6.0M &middot; avg hit 2k (cohort 2k)</div></div>
+<div class="stat-row"><span class="label">Collapsing Star</span><span class="value val-bad">1.9/min <span class="muted">cohort 3.1/min</span></span><div class="dmg-detail">total 8.0M &middot; avg hit 166k (cohort 206k)</div></div>
+<div class="stat-row"><span class="label">Soul Immolation</span><span class="value val-good">2.2/min <span class="muted">cohort 1.5/min</span></span></div>
+<div class="stat-row"><span class="label">Voidblade</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Vengeful Retreat</span><span class="value val-good">1.2/min <span class="muted">cohort 0.3/min</span></span><div class="dmg-detail">total 0 &middot; avg hit 0 (cohort 147)</div></div>
+<div class="stat-row"><span class="label">Consume/Devour</span><span class="value val-bad">13.3/min <span class="muted">cohort 23.7/min</span></span><div class="dmg-detail">total 3.2M &middot; avg hit 29k</div></div>
+<div class="stat-row merge-breakdown">Devour: 4.1/min <span class="muted">(coh 14.6)</span> &nbsp;|&nbsp; Consume: 9.2/min <span class="muted">(coh 9.0)</span></div>
+<div class="stat-row"><span class="label">Cull/Reap/Eradicate</span><span class="value val-good">2.0/min <span class="muted">cohort 0.3/min</span></span><div class="dmg-detail">total 1.4M &middot; avg hit 87k</div></div>
+<div class="stat-row merge-breakdown">Cull: 0.7/min <span class="muted">(coh 0.1)</span> &nbsp;|&nbsp; Reap: 1.2/min <span class="muted">(coh 0.1)</span> &nbsp;|&nbsp; Eradicate: 0.0/min <span class="muted">(coh 0.0)</span></div>
+<div class="stat-row"><span class="label">Void Metamorphosis</span><span class="value val-neutral">96% uptime <span class="muted">cohort 99%</span></span></div>
+<div class="stat-row"><span class="label">Collapsing Star</span><span class="value val-bad">37% uptime <span class="muted">cohort 54%</span></span></div>
+<div class="stat-row"><span class="label">Eradicate</span><span class="value val-neutral">16% uptime <span class="muted">cohort 19%</span></span></div>
+<div class="stat-row"><span class="label">Moment of Craving</span><span class="value val-warn">13% uptime <span class="muted">cohort 19%</span></span></div>
+<div class="stat-row"><span class="label">Soul Immolation</span><span class="value val-neutral">18% uptime <span class="muted">cohort 14%</span></span></div>
+<div class="stat-row"><span class="label">Voidfall</span><span class="value val-warn">77% uptime <span class="muted">cohort 83%</span></span></div>
+<div class="stat-row"><span class="label">Void Ray</span><span class="value val-neutral">23% uptime <span class="muted">cohort 24%</span></span></div>
+<div class="stat-row"><span class="label">Dark Matter</span><span class="value val-neutral">7% uptime <span class="muted">cohort 7%</span></span></div>
+<div class="stat-row"><span class="label">Fury at cap</span><span class="value val-neutral">3% <span class="muted">cohort 6%</span></span></div>
+      </details>
+    </div>
+
+  <details>
+    <summary>Per-trash-pull DPS (7 pulls)</summary>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 1</div>
+        <div class="bar-bg"><div class="bar user" style="width:48.4%">155k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 2</div>
+        <div class="bar-bg"><div class="bar user" style="width:32.5%">104k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 3</div>
+        <div class="bar-bg"><div class="bar user" style="width:15.6%">50k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 4</div>
+        <div class="bar-bg"><div class="bar user" style="width:30.1%">96k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 5</div>
+        <div class="bar-bg"><div class="bar user" style="width:25.9%">83k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 6</div>
+        <div class="bar-bg"><div class="bar user" style="width:37.5%">120k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 7</div>
+        <div class="bar-bg"><div class="bar user" style="width:36.6%">117k</div></div>
+      </div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="rotation">Rotation <a href="#rotation" class="anchor-hash">#</a></h2>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--text)">Active DPS</div>
+<div class="finding-card" data-tip="DPS counting only time you were alive and in combat. Removes death downtime so you can see your actual rotation quality separately from survivability.
+If your overall DPS is low but Active DPS is close to cohort, deaths are the main problem, not your rotation."><div class="severity-dot severity-critical"></div><div class="name">Active DPS</div><div class="vals">88k <span class="muted">cohort 206k</span> <span class="val-bad">-57%</span></div></div>
+  </div>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--warn)">Improvements</div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Consume/Devour casts/min</div><div class="vals">14.0/min <span class="muted">cohort 24.6/min</span> <span class="val-bad">-43%</span></div><div class="merge-breakdown">Devour: 5.3/min <span class="muted">(coh 15.2/min)</span> &nbsp;|&nbsp; Consume: 8.7/min <span class="muted">(coh 9.4/min)</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Collapsing Star casts/min</div><div class="vals">1.9/min <span class="muted">cohort 3.1/min</span> <span class="val-bad">-38%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Dark Matter uptime</div><div class="vals">8% <span class="muted">cohort 7%</span> <span class="val-good">+18%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Void Ray casts/min</div><div class="vals">6.0/min <span class="muted">cohort 7.1/min</span> <span class="val-bad">-16%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Collapsing Star uptime</div><div class="vals">50% <span class="muted">cohort 60%</span> <span class="val-bad">-16%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Voidfall uptime</div><div class="vals">76% <span class="muted">cohort 70%</span> <span class="val-good">+8%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-warning"></div><div class="name">Void Metamorphosis uptime</div><div class="vals">61% <span class="muted">cohort 61%</span> <span class="val-neutral">+1%</span></div></div>
+  </div>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--good)">Strong Points</div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Cull/Reap/Eradicate casts/min</div><div class="vals">2.1/min <span class="muted">cohort 0.3/min</span> <span class="val-good">+684%</span></div><div class="merge-breakdown">Cull: 0.9/min <span class="muted">(coh 0.1/min)</span> &nbsp;|&nbsp; Reap: 1.2/min <span class="muted">(coh 0.1/min)</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Vengeful Retreat casts/min</div><div class="vals">0.8/min <span class="muted">cohort 0.2/min</span> <span class="val-good">+386%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-strong"></div><div class="name">Soul Immolation uptime</div><div class="vals">20% <span class="muted">cohort 14%</span> <span class="val-good">+44%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Soul Immolation casts/min</div><div class="vals">2.4/min <span class="muted">cohort 1.7/min</span> <span class="val-good">+43%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-strong"></div><div class="name">Void Ray uptime</div><div class="vals">22% <span class="muted">cohort 24%</span> <span class="val-warn">-7%</span></div></div>
+  </div>
+  <details>
+    <summary>On par (3 metrics)</summary>
+    <div class="finding-group">
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-info"></div><div class="name">Moment of Craving uptime</div><div class="vals">12% <span class="muted">cohort 19%</span> <span class="val-bad">-35%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-info"></div><div class="name">Eradicate uptime</div><div class="vals">22% <span class="muted">cohort 23%</span> <span class="val-neutral">-1%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-info"></div><div class="name">Voidblade casts/min</div><div class="vals">0.0/min <span class="muted">cohort 0.0/min</span> <span class="val-neutral">+0%</span></div></div>
+    </div>
+  </details>
+  <details>
+    <summary>Damage distribution (5 metrics, varies with pull size)</summary>
+    <div class="finding-group">
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-critical"></div><div class="name">Devour damage %</div><div class="vals">5% <span class="muted">cohort 8%</span> <span class="val-bad">-40%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-critical"></div><div class="name">Collapsing Star damage %</div><div class="vals">18% <span class="muted">cohort 28%</span> <span class="val-bad">-34%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-warning"></div><div class="name">Voidfall Meteor damage %</div><div class="vals">10% <span class="muted">cohort 11%</span> <span class="val-neutral">-4%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-strong"></div><div class="name">Void Ray damage %</div><div class="vals">26% <span class="muted">cohort 22%</span> <span class="val-good">+22%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-strong"></div><div class="name">Eradicate damage %</div><div class="vals">30% <span class="muted">cohort 27%</span> <span class="val-good">+13%</span></div></div>
+    </div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="details">Details <a href="#details" class="anchor-hash">#</a></h2>
+  <details class="subsection" open><summary><h3 id="gcd-efficiency">GCD Efficiency<span class="tip-icon" data-tip="Counts moments where you weren&#x27;t pressing any button during combat. Each wasted GCD is ~1.5s of doing nothing.
+Common causes: running without instant casts, hesitating on what to press next, or being dead.">?</span> <a href="#gcd-efficiency" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Wasted GCDs</span>
+    <span class="value val-warn">13 (14.6s idle)</span>
+  </div>
+
+  <div class="stat-row">
+    <span class="label">Cohort</span>
+    <span class="value">6 (best 3)</span>
+  </div>
+<div class="stat-row"><span class="label">Rate</span><span class="value">0.8/min (cohort 0.4/min, best 0.2/min)</span></div>
+  <div class="stat-row">
+    <span class="label">Effective GCD</span>
+    <span class="value">1.28s (haste 17.3%)</span>
+  </div>
+<div class="stat-row"><span class="label">Worst segment</span><span class="value">Viceroy Nezhar (4 wasted)</span></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="cooldown-hold-times">Cooldown Hold Times<span class="tip-icon" data-tip="Time between a cooldown becoming available and you pressing it. Lower is better — a 10s hold on a 30s CD means the ability sat ready for 10 seconds while you could have been using it.
+Check the &#x27;worst&#x27; timestamp to find where you held the longest.">?</span> <a href="#cooldown-hold-times" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row"><span class="label">Collapsing Star (CD: 5s)</span><span class="value val-bad">avg 31.8s hold <span class="muted">cohort 17.4s</span></span></div>
+<div class="stat-row"><span class="label">Soul Immolation (CD: 60s)</span><span class="value val-good">avg 0.1s hold <span class="muted">cohort 5.2s</span></span></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="buff-uptime-gaps">Buff Uptime Gaps<span class="tip-icon" data-tip="Shows gaps where a maintained buff fell off during combat. These are buffs you should keep active near-permanently (like Ebon Might) — every gap is lost throughput.
+Cooldown-based buffs (Breath of Eons, Fury of the Aspects) are not shown here since their gaps are just the CD running.">?</span> <a href="#buff-uptime-gaps" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row"><span class="label">Collapsing Star</span><span class="value val-bad">23 gaps, 9m17s total <span class="muted">cohort 18</span></span></div>
+<div class="stat-row"><span class="label">Soul Immolation</span><span class="value val-bad">43 gaps, 12m42s total <span class="muted">cohort 31</span></span></div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="survivability">Survivability <a href="#survivability" class="anchor-hash">#</a></h2>
+  <details class="subsection" open><summary><h3 id="damage-taken">Damage Taken <a href="#damage-taken" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Total damage taken</span>
+    <span class="value">14.3M (13k DTPS)</span>
+  </div>
+  <div style="margin-top:8px">
+<div class="hit-bar"><span style="width:180px;font-size:12px">Void Expulsion</span><div class="bar-bg"><div class="bar user" style="width:100%"></div></div><span class="amount">1.6M (10.8%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Pulsing Void</span><div class="bar-bg"><div class="bar user" style="width:96%"></div></div><span class="amount">1.5M (10.4%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Dirge of Despair</span><div class="bar-bg"><div class="bar user" style="width:75%"></div></div><span class="amount">1.2M (8.1%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Chains of Subjugation</span><div class="bar-bg"><div class="bar user" style="width:74%"></div></div><span class="amount">1.2M (8.0%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Eruption</span><div class="bar-bg"><div class="bar user" style="width:61%"></div></div><span class="amount">944k (6.6%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Dark Expulsion</span><div class="bar-bg"><div class="bar user" style="width:43%"></div></div><span class="amount">662k (4.6%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Umbral Bolt</span><div class="bar-bg"><div class="bar user" style="width:42%"></div></div><span class="amount">652k (4.5%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Overload</span><div class="bar-bg"><div class="bar user" style="width:40%"></div></div><span class="amount">626k (4.4%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Void Storm</span><div class="bar-bg"><div class="bar user" style="width:39%"></div></div><span class="amount">603k (4.2%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Shadow Pounce</span><div class="bar-bg"><div class="bar user" style="width:38%"></div></div><span class="amount">591k (4.1%)</span></div>
+  </div>
+  </details>
+  <details class="subsection" open><summary><h3 id="damage-spikes">Damage Spikes <a href="#damage-spikes" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Spikes detected</span>
+    <span class="value">8</span>
+  </div>
+<div class="stat-row"><span class="label">Undefended spikes</span><span class="value val-bad">8 of 8</span></div>
+  <details>
+    <summary>Spike details (8 spikes)</summary>
+<div class="death-card"><div class="title">Spike #1 at 0:54 — Trash pull 1</div><div style="font-size:13px">221k in 4.0s (55k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Chains of Subjugation (147k), Pulsing Void (74k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Blur, Darkness</span></div><div style="font-size:12px;margin-top:2px">Self (149k): <span style="color:var(--accent);font-size:11px">Leech (134k), Consume Soul (15k)</span></div><div style="font-size:12px">External (141k): <span style="color:var(--good);font-size:11px">Chain Heal (60k), Healing Tide (42k), Healing Stream Totem (20k), Earthliving Weapon (9k), Brought to Light (6k), Lightbearer (3k)</span></div></div>
+<div class="death-card"><div class="title">Spike #2 at 1:20 — Trash pull 1</div><div style="font-size:13px">234k in 4.5s (52k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Chains of Subjugation (154k), Umbral Bolt (80k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Blur, Darkness</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Riptide (from Eziogshaman)</span></div><div style="font-size:12px;margin-top:2px">Self (47k): <span style="color:var(--accent);font-size:11px">Leech (42k), Consume Soul (5k)</span></div><div style="font-size:12px">External (189k): <span style="color:var(--good);font-size:11px">Chain Heal (88k), Riptide (40k), Stormstream Totem (21k), Earthliving Weapon (16k), Restorative Mists (12k), Brought to Light (9k), Lightbearer (4k)</span></div></div>
+<div class="death-card"><div class="title">Spike #3 at 3:20 — Zuraal the Ascended</div><div style="font-size:13px">624k in 8.0s (78k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Dark Expulsion (466k), Crashing Void (158k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Blur, Darkness</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Riptide (from Eziogshaman)</span></div><div style="font-size:12px;margin-top:2px">Self (177k): <span style="color:var(--accent);font-size:11px">Leech (138k), Consume Soul (38k)</span></div><div style="font-size:12px">External (497k): <span style="color:var(--good);font-size:11px">Healing Tide (229k), Chain Heal (142k), Riptide (42k), Restorative Mists (22k), Healing Stream Totem (21k), Earthliving Weapon (14k), Healing Rain (12k), Lightbearer (12k), Brought to Light (3k)</span></div></div>
+<div class="death-card"><div class="title">Spike #4 at 5:35 — Between pulls</div><div style="font-size:13px">266k in 5.5s (48k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Void Slam (215k), Pulsing Void (52k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Blur, Darkness</span></div><div style="font-size:12px;margin-top:2px">Self (44k): <span style="color:var(--accent);font-size:11px">Soul Immolation (38k), Consume Soul (5k), Leech (1k)</span></div><div style="font-size:12px">External (133k): <span style="color:var(--good);font-size:11px">Stormswell (52k), Chain Heal (49k), Stormstream Totem (29k), Earthliving Weapon (3k), Lightbearer (115)</span></div></div>
+<div class="death-card"><div class="title">Spike #5 at 6:20 — Between pulls</div><div style="font-size:13px">202k in 5.5s (37k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Void Slam (202k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Darkness</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Blur</span></div><div style="font-size:12px;margin-top:2px">Self (0): <span style="color:var(--text-dim);font-size:11px">none</span></div><div style="font-size:12px">External (16k): <span style="color:var(--good);font-size:11px">Earthliving Weapon (16k)</span></div></div>
+<div class="death-card"><div class="title">Spike #6 at 8:16 — Saprish</div><div style="font-size:13px">207k in 3.0s (69k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (149k), Shadow Pounce (57k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Blur, Darkness</span></div><div style="font-size:12px;margin-top:2px">Self (214k): <span style="color:var(--accent);font-size:11px">Soul Immolation (94k), Leech (84k), Consume Soul (36k)</span></div><div style="font-size:12px">External (25k): <span style="color:var(--good);font-size:11px">Healing Rain (12k), Earthliving Weapon (7k), Lightbearer (3k), Riptide (3k)</span></div></div>
+<div class="death-card"><div class="title">Spike #7 at 8:53 — Saprish</div><div style="font-size:13px">336k in 5.5s (61k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Shadow Pounce (200k), Overload (136k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Darkness</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Blur</span></div><div style="font-size:12px;margin-top:2px">Self (76k): <span style="color:var(--accent);font-size:11px">Leech (42k), Consume Soul (34k)</span></div><div style="font-size:12px">External (355k): <span style="color:var(--good);font-size:11px">Unleash Life (141k), Stormstream Totem (52k), Healing Stream Totem (45k), Chain Heal (37k), Healing Rain (35k), Earthliving Weapon (34k), Riptide (7k), Lightbearer (4k)</span></div></div>
+<div class="death-card"><div class="title">Spike #8 at 17:48 — L&#x27;ura</div><div style="font-size:13px">205k in 3.0s (68k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Discordant Beam (116k), Dirge of Despair (89k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Darkness</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Blur</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Elemental Resistance (from Eziogshaman)</span></div><div style="font-size:12px;margin-top:2px">Self (179k): <span style="color:var(--accent);font-size:11px">Soul Immolation (75k), Leech (64k), Consume Soul (39k)</span></div><div style="font-size:12px">External (43k): <span style="color:var(--good);font-size:11px">Healing Tide (20k), Stormstream Totem (12k), Earthliving Weapon (7k), Lightbearer (2k), Riptide (2k)</span></div></div>
+  </details>
+  </details>
+  <details class="subsection" open><summary><h3 id="defensive-usage">Defensive Usage <a href="#defensive-usage" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Blur</span><span class="value val-warn">9/18 uses (50%)</span><div style="font-size:11px;color:var(--text-muted)">0 during spikes, 9 outside</div></div>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Darkness</span><span class="value val-bad">0/44 uses (0%)</span></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="healing-received">Healing Received <a href="#healing-received" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Effective healing</span>
+    <span class="value">14.4M</span>
+  </div>
+  <div class="stat-row">
+    <span class="label">Overheal</span>
+    <span class="value val-bad">57%</span>
+  </div>
+  <div class="stat-row">
+    <span class="label">Self-healing</span>
+    <span class="value">6.9M (48.0%)</span>
+  </div>
+  <details open style="margin-left:16px;margin-bottom:8px">
+    <summary style="cursor:pointer;color:var(--text-muted);font-size:12px;user-select:none">
+      Self-healing breakdown (4 abilities)</summary>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Leech <span class="muted">(283 casts)</span></span><div class="bar-bg"><div class="bar" style="width:100%;background:var(--accent)"></div></div><span class="amount">3.5M <span class="muted">(39% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Consume Soul <span class="muted">(1435 casts)</span></span><div class="bar-bg"><div class="bar" style="width:59%;background:var(--accent)"></div></div><span class="amount">2.0M <span class="muted">(73% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Soul Immolation <span class="muted">(228 casts)</span></span><div class="bar-bg"><div class="bar" style="width:37%;background:var(--accent)"></div></div><span class="amount">1.3M <span class="muted">(71% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">First In, Last Out <span class="muted">(31 casts)</span></span><div class="bar-bg"><div class="bar" style="width:4%;background:var(--accent)"></div></div><span class="amount">139k</span></div>
+  </details>
+  <div class="stat-row">
+    <span class="label">External healing</span>
+    <span class="value">7.5M (52.0%)</span>
+  </div>
+  <details>
+    <summary>Top sources (10)</summary>
+    <div style="margin-top:8px">
+<div class="hit-bar"><span style="width:180px;font-size:12px">Leech <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:100%;background:var(--good)"></div></div><span class="amount">3.5M (24.1%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Consume Soul <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:59%;background:var(--good)"></div></div><span class="amount">2.0M (14.2%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Chain Heal <span class="muted">(Eziogshaman)</span></span><div class="bar-bg"><div class="bar" style="width:57%;background:var(--good)"></div></div><span class="amount">2.0M (13.7%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Soul Immolation <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:37%;background:var(--good)"></div></div><span class="amount">1.3M (8.8%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Healing Stream Totem <span class="muted">(Healing Stream Totem)</span></span><div class="bar-bg"><div class="bar" style="width:33%;background:var(--good)"></div></div><span class="amount">1.1M (7.8%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Stormstream Totem <span class="muted">(Stormstream Totem)</span></span><div class="bar-bg"><div class="bar" style="width:25%;background:var(--good)"></div></div><span class="amount">863k (6.0%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Healing Tide <span class="muted">(Healing Tide Totem)</span></span><div class="bar-bg"><div class="bar" style="width:18%;background:var(--good)"></div></div><span class="amount">607k (4.2%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Earthliving Weapon <span class="muted">(Eziogshaman)</span></span><div class="bar-bg"><div class="bar" style="width:16%;background:var(--good)"></div></div><span class="amount">571k (4.0%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Healing Rain <span class="muted">(Eziogshaman)</span></span><div class="bar-bg"><div class="bar" style="width:12%;background:var(--good)"></div></div><span class="amount">416k (2.9%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Riptide <span class="muted">(Eziogshaman)</span></span><div class="bar-bg"><div class="bar" style="width:12%;background:var(--good)"></div></div><span class="amount">416k (2.9%)</span></div>
+    </div>
+  </details>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="consumables">Consumables <a href="#consumables" class="anchor-hash">#</a></h2>
+  <table style="width:100%;border-collapse:collapse">
+    <thead>
+      <tr style="border-bottom:1px solid var(--border);font-size:11px;
+                 text-transform:uppercase;color:var(--text-muted)">
+        <th style="text-align:left;padding:6px 12px">Potion</th>
+        <th style="text-align:center;padding:6px 8px">Uses</th>
+        <th style="text-align:center;padding:6px 8px">Uptime</th>
+        <th style="text-align:center;padding:6px 8px">Cohort Uses</th>
+        <th style="text-align:center;padding:6px 8px">Cohort Uptime</th>
+        <th style="text-align:center;padding:6px 8px">Best Uses</th>
+        <th style="text-align:center;padding:6px 8px">Best Uptime</th>
+        <th style="text-align:center;padding:6px 8px">Sync With</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="border-left:3px solid var(--bad);padding-left:12px">Potion of Recklessness</td>
+      <td style="text-align:center"><span style="color:var(--bad)">0/4</span></td>
+      <td style="text-align:center">0%</td>
+      <td style="text-align:center;color:var(--text-muted)">3</td>
+      <td style="text-align:center;color:var(--text-muted)">9%</td>
+      <td style="text-align:center;color:var(--text-muted)">4</td>
+      <td style="text-align:center;color:var(--text-muted)">12%</td>
+      <td style="text-align:center;color:var(--text-muted)">Void Metamorphosis</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <h2 id="fury-usage">Fury Usage <a href="#fury-usage" class="anchor-hash">#</a></h2>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;
+              padding:12px 16px;margin-bottom:20px;border-left:3px solid var(--good)">
+    <span style="font-size:13px;line-height:1.5">Fury usage looks similar to top players</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+    <div>
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;
+                  color:var(--text-muted);margin-bottom:10px">
+        Time at max Fury (wasted regeneration)
+      </div>
+      <div style="margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+          <span>You</span><span style="font-weight:600">3%</span>
+        </div>
+        <div class="bar-bg" style="height:18px">
+          <div class="bar" style="width:46.2%;background:var(--bar-user)"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;color:var(--text-muted)">
+          <span>Cohort</span><span>6%</span>
+        </div>
+        <div class="bar-bg" style="height:18px">
+          <div class="bar cohort" style="width:100.0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;
+                  color:var(--text-muted);margin-bottom:10px">
+        Time at zero Fury (starved)
+      </div>
+      <div style="margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+          <span>You</span><span style="font-weight:600">1%</span>
+        </div>
+        <div class="bar-bg" style="height:18px">
+          <div class="bar" style="width:57.9%;background:var(--bar-user)"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;color:var(--text-muted)">
+          <span>Cohort</span><span>0%</span>
+        </div>
+        <div class="bar-bg" style="height:18px">
+          <div class="bar cohort" style="width:40.1%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;display:flex;gap:24px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;
+                padding:10px 16px;flex:1">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;
+                  color:var(--text-muted)">Avg Fury</div>
+      <div style="font-size:20px;font-weight:700;margin-top:2px">73.7
+        <span style="font-size:14px;color:var(--text-muted)">/ 120</span>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted)">cohort 84.8</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;
+                padding:10px 16px;flex:1">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;
+                  color:var(--text-muted)">Data points</div>
+      <div style="font-size:20px;font-weight:700;margin-top:2px">5354</div>
+      <div style="font-size:12px;color:var(--text-muted)">samples across fight</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="soul-cycle-analysis">Soul Cycle Analysis <a href="#soul-cycle-analysis" class="anchor-hash">#</a></h2>
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-bottom:20px;border-left:3px solid var(--bad)"><span style="font-size:13px;line-height:1.5"><strong>13 complete, 1 incomplete</strong> cycles &mdash; Meta uptime <strong>42%</strong> (cohort median 48%)</span></div>
+<table style="width:auto;border-collapse:collapse;margin-bottom:16px"><thead><tr><th style="text-align:left;padding:4px 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:1px solid var(--border)">Metric</th><th style="text-align:right;padding:4px 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:1px solid var(--border)">You</th><th style="text-align:right;padding:4px 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:1px solid var(--border)">Cohort</th></tr></thead><tbody>
+<tr><td style="padding:4px 8px;font-size:12px">Collection time</td><td style="padding:4px 8px;text-align:right;font-size:12px;color:var(--bad)">46.1s</td><td style="padding:4px 8px;text-align:right;font-size:12px;color:var(--text-muted)">39.7s</td></tr>
+<tr><td style="padding:4px 8px;font-size:12px">Meta duration</td><td style="padding:4px 8px;text-align:right;font-size:12px;color:var(--bad)">36.2s</td><td style="padding:4px 8px;text-align:right;font-size:12px;color:var(--text-muted)">43.6s</td></tr>
+<tr><td style="padding:4px 8px;font-size:12px">Stars per Meta</td><td style="padding:4px 8px;text-align:right;font-size:12px;color:var(--bad)">2.2</td><td style="padding:4px 8px;text-align:right;font-size:12px;color:var(--text-muted)">3.7</td></tr>
+<tr><td style="padding:4px 8px;font-size:12px">Meta uptime</td><td style="padding:4px 8px;text-align:right;font-size:12px;color:var(--bad)">42%</td><td style="padding:4px 8px;text-align:right;font-size:12px;color:var(--text-muted)">48%</td></tr>
+<tr><td style="padding:4px 8px;font-size:12px">Avg Fury at Meta entry</td><td style="padding:4px 8px;text-align:right;font-size:12px">18</td><td style="padding:4px 8px;text-align:right;font-size:12px;color:var(--text-dim)">&mdash;</td></tr>
+<tr><td style="padding:4px 8px;font-size:12px">Avg Fury at Meta exit</td><td style="padding:4px 8px;text-align:right;font-size:12px">16</td><td style="padding:4px 8px;text-align:right;font-size:12px;color:var(--text-dim)">&mdash;</td></tr>
+</tbody></table>
+<details style="margin-top:4px"><summary style="cursor:pointer;font-size:12px;color:var(--text-muted);padding:4px 0">All 14 cycles</summary><table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px"><thead><tr><th style="text-align:left;padding:6px 8px;border-bottom:1px solid var(--border)">Cycle</th><th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--border)">Collection</th><th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--border)">Souls</th><th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--border)">Meta Duration</th><th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--border)">Stars</th><th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--border)">Fury In</th><th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--border)">Fury Out</th></tr></thead><tbody><tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 1</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">33.2s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">35.9s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">2</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">120</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 2</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">47.5s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">28.0s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">2</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 3</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">41.5s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">43.0s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">2</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 4</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">61.7s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">36.4s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">3</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">32</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 5</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">82.3s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">29.6s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">3</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">120</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 6</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">49.7s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">35.5s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">2</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">120</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 7</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">36.4s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">42.2s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">2</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 8</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">38.2s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">35.8s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">2</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 9</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">40.2s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">36.7s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">2</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 10</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">44.7s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">39.7s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">3</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 11</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">31.7s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">33.7s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">2</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">62</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 12</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">44.7s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">36.5s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">1</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 13</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">48.0s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">37.0s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">3</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">0</td></tr>
+<tr><td style="padding:5px 8px;border-bottom:1px solid var(--border)">Cycle 14 *</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">45.8s</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">50</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">&mdash;</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">&mdash;</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">&mdash;</td><td style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)">&mdash;</td></tr></tbody></table></details>
+</div>
+
+<div class="section">
+  <h2 id="cohort">Cohort <a href="#cohort" class="anchor-hash">#</a></h2>
+  <table class="cohort-table">
+    <tr><th>#</th><th>Player</th><th>ilvl</th><th>DPS</th><th>Deaths</th><th>Date</th><th>Log</th></tr>
+    <tr><td>1</td><td>Deimortus-Illidan</td><td>282</td><td>187k</td><td>0 deaths</td><td>2026-05-02</td><td><a href="https://www.warcraftlogs.com/reports/MD1CQxZaytT7638A#fight=5" target="_blank">WCL</a></td></tr>
+    <tr><td>2</td><td>Homietron-Draenor</td><td>281</td><td>180k</td><td>0 deaths</td><td>2026-04-26</td><td><a href="https://www.warcraftlogs.com/reports/qkRDyx8f3YB72z4d#fight=38" target="_blank">WCL</a></td></tr>
+    <tr><td>3</td><td>Nonsensè-Kazzak</td><td>276</td><td>179k</td><td>0 deaths</td><td>2026-05-05</td><td><a href="https://www.warcraftlogs.com/reports/RPh1XaV9HZjqfG87#fight=3" target="_blank">WCL</a></td></tr>
+    <tr><td>4</td><td>Эсдикид-Ревущийфьорд</td><td>280</td><td>178k</td><td>0 deaths</td><td>2026-04-30</td><td><a href="https://www.warcraftlogs.com/reports/GLCJyz8V3qaPTHYb#fight=1" target="_blank">WCL</a></td></tr>
+    <tr><td>5</td><td>Pomarodh-Stormrage</td><td>281</td><td>178k</td><td>0 deaths</td><td>2026-05-04</td><td><a href="https://www.warcraftlogs.com/reports/PcNk1KCDp7W2xX4q#fight=2" target="_blank">WCL</a></td></tr>
+    <tr><td>6</td><td>Kurodh-Hyjal</td><td>281</td><td>178k</td><td>0 deaths</td><td>2026-05-02</td><td><a href="https://www.warcraftlogs.com/reports/hLXfqT3KWwBy9Jvk#fight=3" target="_blank">WCL</a></td></tr>
+    <tr><td>7</td><td>Nepalu-Blackhand</td><td>282</td><td>176k</td><td>0 deaths</td><td>2026-04-28</td><td><a href="https://www.warcraftlogs.com/reports/BXdY1cJrwkN92vfW#fight=5" target="_blank">WCL</a></td></tr>
+    <tr><td>8</td><td>Ewan-TwistingNether</td><td>278</td><td>176k</td><td>0 deaths</td><td>2026-05-01</td><td><a href="https://www.warcraftlogs.com/reports/yZqHhz3fgprKTGx2#fight=16" target="_blank">WCL</a></td></tr>
+    <tr><td>9</td><td>Boundas-Stormscale</td><td>280</td><td>176k</td><td>0 deaths</td><td>2026-05-05</td><td><a href="https://www.warcraftlogs.com/reports/4LyCN1kGFchqgXJf#fight=4" target="_blank">WCL</a></td></tr>
+    <tr><td>10</td><td>Kuplindmert-Hyjal</td><td>280</td><td>174k</td><td>0 deaths</td><td>2026-04-29</td><td><a href="https://www.warcraftlogs.com/reports/rL4PpBtvJx1WRKVZ#fight=1" target="_blank">WCL</a></td></tr>
+  </table>
+</div>
+<div style="text-align:center;padding:24px 0;font-size:11px;color:var(--text-dim)">
+  Generated by <a href="https://github.com">wcl-compare</a>
+</div>
+<script>
+(function() {
+  function openAndScroll(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var node = el.closest('details');
+    while (node) {
+      node.open = true;
+      node = node.parentElement ? node.parentElement.closest('details') : null;
+    }
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('.anchor-hash');
+    if (link) {
+      e.preventDefault();
+      var id = link.getAttribute('href').slice(1);
+      history.replaceState(null, '', '#' + id);
+      openAndScroll(id);
+    }
+  });
+  if (location.hash) openAndScroll(location.hash.slice(1));
+})();
+</script>
+</body>
+</html>
