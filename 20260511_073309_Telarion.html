@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guardian Druid - Maisara Caverns +15 | wcl-compare</title>
+<style>
+:root {
+    --bg: #0f0f1a;
+    --surface: #1a1a2e;
+    --surface-alt: #222244;
+    --surface-hover: #2a2a4a;
+    --border: #333355;
+    --text: #e0e0e0;
+    --text-muted: #8888aa;
+    --text-dim: #666688;
+    --accent: #6c63ff;
+    --accent-dim: #4a4499;
+    --good: #4caf50;
+    --good-dim: #2e7d32;
+    --warn: #ff9800;
+    --warn-dim: #e65100;
+    --bad: #f44336;
+    --bad-dim: #c62828;
+    --boss: #6c63ff;
+    --boss-dim: #3d3699;
+    --trash: #445566;
+    --trash-dim: #334455;
+    --bar-bg: #1a1a30;
+    --bar-user: #6c63ff;
+    --bar-cohort: #445566;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--text-muted);
+     border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.section { margin-bottom: 28px; }
+.muted { color: var(--text-muted); }
+.dim { color: var(--text-dim); }
+
+/* Header */
+.header-links { margin: 4px 0 8px; font-size: 13px; }
+.header-links a { color: var(--accent); text-decoration: none; }
+.header-links a:hover { text-decoration: underline; }
+.header-meta { color: var(--text-muted); margin-bottom: 16px; font-size: 13px; }
+.metric-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    min-width: 140px;
+    flex: 1;
+}
+.metric-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+                       color: var(--text-muted); margin-bottom: 2px; }
+.metric-card .value { font-size: 24px; font-weight: 700; }
+.metric-card .sub { font-size: 12px; color: var(--text-muted); }
+.val-good { color: var(--good); }
+.val-warn { color: var(--warn); }
+.val-bad { color: var(--bad); }
+.val-neutral { color: var(--text); }
+
+/* Timeline */
+.timeline-wrap { position: relative; margin-bottom: 4px; }
+.timeline { display: flex; height: 28px; border-radius: 6px; overflow: hidden;
+            gap: 1px; background: var(--bg); }
+.seg {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1px; color: transparent;
+    position: relative; cursor: default;
+    min-width: 2px;
+}
+.seg.boss { background: var(--boss); }
+.seg.trash { background: var(--trash); }
+.seg.boss:hover { background: var(--boss-dim); }
+.seg.trash:hover { background: var(--trash-dim); }
+.timeline-labels { display: flex; position: relative; height: 20px; margin-bottom: 2px; }
+.timeline-lbl {
+    position: absolute; font-size: 10px; font-weight: 600; color: var(--text-muted);
+    white-space: nowrap; transform: translateX(-50%);
+    top: 2px;
+}
+.timeline-lbl.boss-lbl { color: var(--accent); }
+.timeline-legend { display: flex; gap: 16px; font-size: 11px; color: var(--text-muted);
+                    margin-bottom: 8px; }
+.legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+              margin-right: 4px; vertical-align: middle; }
+.death-markers { position: relative; height: 12px; margin-bottom: 2px; }
+.death-dot {
+    position: absolute; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--bad); top: 2px; transform: translateX(-4px);
+}
+
+/* Bars */
+.bar-row { margin-bottom: 12px; }
+.bar-label { font-size: 13px; margin-bottom: 4px; font-weight: 600; }
+.bar-bg { background: var(--bar-bg); border-radius: 4px; height: 24px; position: relative;
+           overflow: hidden; margin-bottom: 2px; }
+.bar { height: 100%; border-radius: 4px; transition: width 0.3s; min-width: 1px;
+       display: flex; align-items: center; padding-left: 8px;
+       font-size: 11px; font-weight: 600; color: #fff; }
+.bar.user { background: var(--bar-user); }
+.bar.cohort { background: var(--bar-cohort); opacity: 0.7; }
+.bar-inline-label { font-size: 11px; color: var(--text-muted); margin-left: 4px; }
+
+/* Finding cards */
+.finding-group { margin-bottom: 16px; }
+.finding-group-title { font-size: 13px; font-weight: 600; margin-bottom: 6px;
+                        text-transform: uppercase; letter-spacing: 0.5px; }
+.finding-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.finding-card .name { flex: 1; font-size: 13px; }
+.finding-card .vals { font-size: 12px; color: var(--text-muted); text-align: right;
+                       white-space: nowrap; }
+.merge-breakdown { width: 100%; font-size: 0.85em; color: var(--text-dim);
+                    padding-left: 18px; margin-top: -2px; }
+.severity-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.severity-critical { background: var(--bad); }
+.severity-warning { background: var(--warn); }
+.severity-strong { background: var(--good); }
+.severity-info { background: var(--text-dim); }
+
+/* Pull comparison */
+.pull-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.pull-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    flex: 1;
+    min-width: 120px;
+}
+.pull-stat .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+                     color: var(--text-muted); }
+.pull-stat .value { font-size: 18px; font-weight: 700; }
+.pull-stat .vs { font-size: 12px; color: var(--text-muted); }
+.phase-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.phase-table th { text-align: left; color: var(--text-muted); font-weight: 500;
+                   padding: 6px 8px; border-bottom: 1px solid var(--border);
+                   font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.phase-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.phase-table tr:last-child td { border-bottom: none; }
+
+/* Death cards */
+.death-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+.death-card .title { font-weight: 600; margin-bottom: 6px; }
+.death-card .killing-blow { color: var(--bad); font-weight: 600; }
+.death-card .downtime { color: var(--warn); font-size: 12px; margin-top: 4px; }
+.hit-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; font-size: 12px; }
+.hit-bar .bar-bg { flex: 1; height: 14px; }
+.hit-bar .amount { width: 50px; text-align: right; color: var(--text-muted); font-size: 11px; }
+
+/* Cohort table */
+.cohort-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.cohort-table th { text-align: left; color: var(--text-muted); font-weight: 500;
+                    padding: 6px 8px; border-bottom: 1px solid var(--border);
+                    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.cohort-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.cohort-table tr:last-child td { border-bottom: none; }
+.cohort-table tr:hover td { background: var(--surface-hover); }
+
+/* Details/summary */
+details { margin-top: 8px; }
+details summary {
+    cursor: pointer; color: var(--text-muted); font-size: 12px;
+    padding: 4px 0; user-select: none;
+}
+details summary:hover { color: var(--text); }
+details[open] summary { margin-bottom: 8px; }
+
+/* Collapsible subsections */
+details.subsection { margin-top: 0; margin-bottom: 16px; }
+details.subsection > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+details.subsection > summary::-webkit-details-marker { display: none; }
+details.subsection > summary::marker { display: none; content: ''; }
+details.subsection > summary > h3 { display: inline; margin-bottom: 0; cursor: pointer; }
+details.subsection > summary::before {
+    content: '▾ ';
+    font-size: 10px;
+    color: var(--text-dim);
+}
+details.subsection:not([open]) > summary::before {
+    content: '▸ ';
+}
+details.subsection[open] > summary { margin-bottom: 8px; }
+
+/* Anchor links */
+.anchor-hash {
+    color: var(--text-dim);
+    font-size: 0.8em;
+    opacity: 0;
+    transition: opacity 0.15s;
+    margin-left: 6px;
+    text-decoration: none;
+}
+h2:hover .anchor-hash, h3:hover .anchor-hash,
+summary:hover .anchor-hash { opacity: 1; }
+.anchor-hash:hover { color: var(--accent); text-decoration: none; }
+
+/* GCD / cooldown compact cards */
+.stat-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+.stat-row .label { font-size: 13px; }
+.stat-row .value { font-size: 13px; font-weight: 600; }
+.stat-row .dmg-detail { width: 100%; font-size: 11px; color: var(--text-muted);
+    margin-top: 2px; text-align: right; }
+
+/* GCD gap timeline table */
+.gap-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
+.gap-table th { color: var(--text-muted); font-weight: 600; text-align: left;
+    padding: 3px 8px; border-bottom: 1px solid var(--border); }
+.gap-table td { padding: 3px 8px; border-bottom: 1px solid var(--border); }
+.gap-table tr:last-child td { border-bottom: none; }
+.gap-micro td.gap-dur { color: var(--text-muted); }
+.gap-notable td.gap-dur { color: var(--warn); font-weight: 600; }
+.gap-long td.gap-dur { color: var(--bad); font-weight: 600; }
+
+/* Tooltips */
+.finding-card[data-tip] {
+    cursor: help;
+    position: relative;
+}
+.finding-card[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 4px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: max(300px, 100%);
+    max-width: min(440px, 90vw);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.finding-card[data-tip]:hover::after { opacity: 1; pointer-events: auto; }
+.tip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dotted var(--text-dim);
+}
+.tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 6px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: max(300px, 100%);
+    max-width: min(440px, 90vw);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.tip:hover::after { opacity: 1; pointer-events: auto; }
+h3 .tip-icon {
+    display: inline-block;
+    width: 16px; height: 16px; line-height: 16px;
+    text-align: center;
+    border-radius: 50%;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-left: 6px;
+    cursor: help;
+    vertical-align: middle;
+    position: relative;
+}
+h3 .tip-icon::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 6px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: 380px;
+    max-width: 90vw;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+h3 .tip-icon:hover::after { opacity: 1; pointer-events: auto; }
+
+/* CD alignment timeline (Gantt chart) */
+.cd-timeline { margin-top: 16px; }
+.cd-timeline-axis {
+    display: flex; position: relative; height: 20px; margin-left: 180px;
+    border-bottom: 1px solid var(--border);
+}
+.cd-timeline-tick {
+    position: absolute; font-size: 10px; color: var(--text-dim);
+    transform: translateX(-50%); top: 2px;
+}
+.cd-timeline-group-hdr {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-muted); margin: 10px 0 4px;
+}
+.cd-timeline-row {
+    display: flex; align-items: center; height: 22px; margin-bottom: 2px;
+}
+.cd-timeline-label {
+    width: 180px; flex-shrink: 0; font-size: 11px; color: var(--text-muted);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    padding-right: 8px;
+}
+.cd-timeline-track {
+    flex: 1; position: relative; height: 16px;
+    background: var(--bar-bg); border-radius: 3px;
+}
+.cd-timeline-bar {
+    position: absolute; height: 100%; border-radius: 2px;
+    min-width: 2px; cursor: default;
+}
+.cd-timeline-bar.aug-buff { background: var(--accent); opacity: 0.85; }
+.cd-timeline-bar.aug-debuff { background: var(--warn); opacity: 0.85; }
+.cd-timeline-bar.team-cd { background: var(--good); opacity: 0.85; }
+.cd-timeline-bar.breath { background: #e8b931; opacity: 0.9; }
+.cd-timeline-marker {
+    position: absolute; top: 0; width: 1px; height: 100%;
+    background: var(--border); opacity: 0.3; pointer-events: none;
+}
+
+</style>
+</head>
+<body>
+<div class="section">
+  <h1>Guardian Druid</h1>
+  <div class="header-links"><a href="https://www.warcraftlogs.com/reports/84prknVAN1WYbXty#fight=1" target="_blank">WCL Report</a> &middot; <a href="https://www.warcraftlogs.com/character/eu/burninglegion/telarion" target="_blank">Telarion-BurningLegion</a></div>
+  <div class="header-meta">
+    Maisara Caverns +15 &middot;
+    Cohort: 10 players
+    (ilvl 279&ndash;284)
+  </div>
+  <div class="metric-cards">
+    <div class="metric-card">
+      <div class="label">DPS</div>
+      <div class="value val-bad">68k</div>
+      <div class="sub">cohort 122k</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Parse</div>
+      <div class="value val-bad">0%</div>
+      <div class="sub">&nbsp;</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Deaths</div>
+      <div class="value val-good">0</div>
+      <div class="sub">cohort 0</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Active Time</div>
+      <div class="value">89%</div>
+      <div class="sub">cohort 91%</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="fight-timeline">Fight Timeline <a href="#fight-timeline" class="anchor-hash">#</a></h2>
+  <div class="timeline-wrap">
+    <div class="timeline">
+    <div class="seg trash" style="flex-basis:5.1%" title="Trash pull 1 — 1m20s — 219k DPS"></div>
+    <div class="seg trash" style="flex-basis:4.6%" title="Trash pull 2 — 1m13s — 115k DPS"></div>
+    <div class="seg trash" style="flex-basis:13.1%" title="Trash pull 3 — 3m25s — 85k DPS"></div>
+    <div class="seg trash" style="flex-basis:5.9%" title="Trash pull 4 — 1m32s — 122k DPS"></div>
+    <div class="seg trash" style="flex-basis:1.6%" title="Trash pull 5 — 24.7s — 31k DPS"></div>
+    <div class="seg boss" style="flex-basis:13.0%" title="Muro&#x27;jin and Nekraxx — 3m24s — 54k DPS"></div>
+    <div class="seg trash" style="flex-basis:12.1%" title="Trash pull 6 — 3m10s — 77k DPS"></div>
+    <div class="seg trash" style="flex-basis:6.1%" title="Trash pull 7 — 1m36s — 76k DPS"></div>
+    <div class="seg trash" style="flex-basis:6.2%" title="Trash pull 8 — 1m37s — 92k DPS"></div>
+    <div class="seg boss" style="flex-basis:11.4%" title="Vordaza — 2m58s — 27k DPS"></div>
+    <div class="seg trash" style="flex-basis:8.2%" title="Trash pull 9 — 2m9s — 55k DPS"></div>
+    <div class="seg trash" style="flex-basis:1.5%" title="Trash pull 10 — 23.2s — 22k DPS"></div>
+    <div class="seg boss" style="flex-basis:11.2%" title="Rak&#x27;tul, Vessel of Souls — 2m55s — 37k DPS"></div>
+    </div>
+    <div class="timeline-labels">
+    <span class="timeline-lbl boss-lbl" style="left:36.8%">Muro&#x27;jin and Nekraxx (9:38)</span>
+    <span class="timeline-lbl boss-lbl" style="left:73.4%">Vordaza (20:25)</span>
+    <span class="timeline-lbl boss-lbl" style="left:94.4%">Rak&#x27;tul, Vessel of Souls (26:37)</span>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-bottom:4px">
+    <span>0:12</span>
+    <span>14:52</span>
+    <span>29:32</span>
+  </div>
+  <div class="timeline-legend">
+    <span><span class="legend-dot" style="background:var(--boss)"></span>Boss</span>
+    <span><span class="legend-dot" style="background:var(--trash)"></span>Trash</span>
+    
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="pull-comparison">Pull Comparison <a href="#pull-comparison" class="anchor-hash">#</a></h2>
+  <div class="pull-stats">
+    <div class="pull-stat">
+      <div class="label">Trash Pulls</div>
+      <div class="value">10</div>
+      <div class="vs">cohort 8</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Avg Pull Duration</div>
+      <div class="value">1m41s</div>
+      <div class="vs">cohort 1m50s</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Trash Time</div>
+      <div class="value">16m50s</div>
+      <div class="vs">cohort 13m17s</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Time Split</div>
+      <div class="value">64% / 36%</div>
+      <div class="vs">trash / boss (cohort 64%)</div>
+    </div>
+  </div>
+
+  <table class="phase-table">
+    <tr><th>Phase</th><th>Your Pulls</th><th>Cohort Pulls</th><th>Your Time</th><th>Cohort Time</th></tr>
+    <tr><td>Before Muro&#x27;jin and Nekraxx</td><td>5</td><td>3</td><td class="val-warn">7m54s</td><td>5m53s</td></tr>
+    <tr><td>Muro&#x27;jin and Nekraxx -&gt; Vordaza</td><td>3</td><td>2</td><td class="val-warn">6m23s</td><td>5m11s</td></tr>
+    <tr><td>Vordaza -&gt; Rak&#x27;tul, Vessel of Souls</td><td>2</td><td>2</td><td class="val-warn">2m32s</td><td>1m57s</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2 id="per-segment-dps">Per-Segment DPS <a href="#per-segment-dps" class="anchor-hash">#</a></h2>
+    <div class="bar-row">
+      <div class="bar-label">Muro&#x27;jin and Nekraxx</div>
+      <div class="bar-bg"><div class="bar user" style="width:24.5%">You: 54k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:35.0%">Cohort: 77k</div></div>
+      <details>
+        <summary>Rotation detail (29 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">178.9s / 204.0s active (88%) <span class="muted">(cohort 96%)</span> &mdash; 20 idle GCDs</span></div>
+<div class="stat-row"><span class="label">Moonfire</span><span class="value val-bad">13.8/min <span class="muted">cohort 25.8/min</span></span><div class="dmg-detail">total 2.8M &middot; avg hit 7k (cohort 8k)</div></div>
+<div class="stat-row"><span class="label">Ironfur</span><span class="value val-warn">14.1/min <span class="muted">cohort 16.2/min</span></span></div>
+<div class="stat-row"><span class="label">Thrash</span><span class="value val-bad">10.9/min <span class="muted">cohort 14.1/min</span></span><div class="dmg-detail">total 3.8M &middot; avg hit 15k (cohort 21k)</div></div>
+<div class="stat-row"><span class="label">Lunar Beam</span><span class="value val-bad">4.7/min <span class="muted">cohort 6.6/min</span></span><div class="dmg-detail">total 1.6M &middot; avg hit 8k (cohort 9k)</div></div>
+<div class="stat-row"><span class="label">Sundering Roar</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.8/min</span></span><div class="dmg-detail">total 0 &middot; avg hit 0 (cohort 16k)</div></div>
+<div class="stat-row"><span class="label">Incarnation: Guardian of Ursoc</span><span class="value val-good">0.6/min <span class="muted">cohort 0.4/min</span></span></div>
+<div class="stat-row"><span class="label">Mangle</span><span class="value val-good">12.6/min <span class="muted">cohort 2.1/min</span></span><div class="dmg-detail">total 736k &middot; avg hit 13k (cohort 15k)</div></div>
+<div class="stat-row"><span class="label">Rake</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Bear Form</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Cat Form</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.2/min</span></span></div>
+<div class="stat-row"><span class="label">Swipe</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Maul</span><span class="value val-neutral">2.9/min <span class="muted">cohort 0.0/min</span></span><div class="dmg-detail">total 214k &middot; avg hit 12k</div></div>
+<div class="stat-row"><span class="label">Ferocious Bite</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Rip</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Shred</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Heart of the Wild</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Convoke the Spirits</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Berserk</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Bristling Fur</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Bear Form</span><span class="value val-neutral">100% uptime <span class="muted">cohort 99%</span></span></div>
+<div class="stat-row"><span class="label">Ironfur</span><span class="value val-neutral">92% uptime <span class="muted">cohort 97%</span></span></div>
+<div class="stat-row"><span class="label">Lunar Beam</span><span class="value val-bad">41% uptime <span class="muted">cohort 61%</span></span></div>
+<div class="stat-row"><span class="label">Galactic Guardian</span><span class="value val-good">26% uptime <span class="muted">cohort 17%</span></span></div>
+<div class="stat-row"><span class="label">Incarnation: Guardian of Ursoc</span><span class="value val-good">29% uptime <span class="muted">cohort 21%</span></span></div>
+<div class="stat-row"><span class="label">Sundering Roar</span><span class="value val-bad">0% uptime <span class="muted">cohort 16%</span></span></div>
+<div class="stat-row"><span class="label">Cat Form</span><span class="value val-neutral">0% uptime <span class="muted">cohort 0%</span></span></div>
+<div class="stat-row"><span class="label">Feline Potential</span><span class="value val-neutral">0% uptime <span class="muted">cohort 0%</span></span></div>
+<div class="stat-row"><span class="label">Ravage</span><span class="value val-neutral">0% uptime <span class="muted">cohort 0%</span></span></div>
+
+      <details>
+        <summary>GCD gaps &mdash; 26 gaps &middot; 24.9s idle</summary>
+        <table class="gap-table">
+          <thead><tr><th>Time</th><th>Previous</th><th>Gap</th><th>Next</th></tr></thead>
+          <tbody>
+<tr class="gap-micro"><td>9:38.5</td><td><span class="muted">segment start</span></td><td class="gap-dur">1.2s (1.0 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>9:43.9</td><td>Ironfur</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>9:57.0</td><td>Mangle</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>10:21.8</td><td>Ironfur</td><td class="gap-dur">0.6s (0.4 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>10:23.6</td><td>Moonfire</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>10:29.6</td><td>Moonfire</td><td class="gap-dur">0.9s (0.8 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>10:31.8</td><td>Moonfire</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>10:35.5</td><td>Lunar Beam</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>10:36.8</td><td>Ironfur</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>10:44.4</td><td>Ironfur</td><td class="gap-dur">0.8s (0.6 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>10:48.8</td><td>Mangle</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>10:51.2</td><td>Thrash</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>10:54.0</td><td>Moonfire</td><td class="gap-dur">1.2s (0.9 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>10:59.3</td><td>Ironfur</td><td class="gap-dur">1.4s (1.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>11:04.3</td><td>Thrash</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-long"><td>11:07.4</td><td>Moonfire</td><td class="gap-dur">8.8s (7.1 GCDs)</td><td>Rebirth</td></tr>
+<tr class="gap-micro"><td>11:20.1</td><td>Ironfur</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Lunar Beam</td></tr>
+<tr class="gap-micro"><td>11:23.1</td><td>Moonfire</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Maul</td></tr>
+<tr class="gap-micro"><td>11:35.0</td><td>Moonfire</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>11:50.0</td><td>Moonfire</td><td class="gap-dur">0.7s (0.6 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>11:55.3</td><td>Moonfire</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Maul</td></tr>
+<tr class="gap-micro"><td>12:00.5</td><td>Moonfire</td><td class="gap-dur">0.6s (0.4 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>12:08.3</td><td>Lunar Beam</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>12:20.8</td><td>Ironfur</td><td class="gap-dur">0.2s (0.1 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>12:24.4</td><td>Moonfire</td><td class="gap-dur">1.3s (1.1 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>12:29.4</td><td>Thrash</td><td class="gap-dur">1.6s (1.3 GCDs)</td><td>Lunar Beam</td></tr>
+          </tbody>
+        </table>
+      </details>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Vordaza</div>
+      <div class="bar-bg"><div class="bar user" style="width:12.4%">You: 27k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:27.5%">Cohort: 60k</div></div>
+      <details>
+        <summary>Rotation detail (29 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">145.7s / 178.2s active (82%) <span class="muted">(cohort 95%)</span> &mdash; 26 idle GCDs</span></div>
+<div class="stat-row"><span class="label">Moonfire</span><span class="value val-bad">14.8/min <span class="muted">cohort 25.1/min</span></span><div class="dmg-detail">total 1.1M &middot; avg hit 4k (cohort 6k)</div></div>
+<div class="stat-row"><span class="label">Ironfur</span><span class="value val-bad">9.1/min <span class="muted">cohort 14.8/min</span></span></div>
+<div class="stat-row"><span class="label">Thrash</span><span class="value val-bad">9.8/min <span class="muted">cohort 13.1/min</span></span><div class="dmg-detail">total 1.5M &middot; avg hit 12k (cohort 17k)</div></div>
+<div class="stat-row"><span class="label">Lunar Beam</span><span class="value val-bad">4.0/min <span class="muted">cohort 5.0/min</span></span><div class="dmg-detail">total 835k &middot; avg hit 7k (cohort 7k)</div></div>
+<div class="stat-row"><span class="label">Sundering Roar</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.8/min</span></span><div class="dmg-detail">total 0 &middot; avg hit 0 (cohort 11k)</div></div>
+<div class="stat-row"><span class="label">Incarnation: Guardian of Ursoc</span><span class="value val-bad">0.3/min <span class="muted">cohort 0.4/min</span></span></div>
+<div class="stat-row"><span class="label">Mangle</span><span class="value val-good">10.4/min <span class="muted">cohort 2.6/min</span></span><div class="dmg-detail">total 323k &middot; avg hit 10k (cohort 10k)</div></div>
+<div class="stat-row"><span class="label">Rake</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Bear Form</span><span class="value val-neutral">0.3/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Cat Form</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Swipe</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Maul</span><span class="value val-neutral">2.7/min <span class="muted">cohort 0.0/min</span></span><div class="dmg-detail">total 127k &middot; avg hit 8k</div></div>
+<div class="stat-row"><span class="label">Ferocious Bite</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Rip</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Shred</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Heart of the Wild</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Convoke the Spirits</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Berserk</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Bristling Fur</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Bear Form</span><span class="value val-neutral">99% uptime <span class="muted">cohort 100%</span></span></div>
+<div class="stat-row"><span class="label">Ironfur</span><span class="value val-bad">81% uptime <span class="muted">cohort 98%</span></span></div>
+<div class="stat-row"><span class="label">Lunar Beam</span><span class="value val-warn">39% uptime <span class="muted">cohort 48%</span></span></div>
+<div class="stat-row"><span class="label">Galactic Guardian</span><span class="value val-good">23% uptime <span class="muted">cohort 17%</span></span></div>
+<div class="stat-row"><span class="label">Incarnation: Guardian of Ursoc</span><span class="value val-warn">17% uptime <span class="muted">cohort 22%</span></span></div>
+<div class="stat-row"><span class="label">Sundering Roar</span><span class="value val-bad">0% uptime <span class="muted">cohort 17%</span></span></div>
+<div class="stat-row"><span class="label">Cat Form</span><span class="value val-neutral">1% uptime <span class="muted">cohort 0%</span></span></div>
+<div class="stat-row"><span class="label">Feline Potential</span><span class="value val-neutral">0% uptime <span class="muted">cohort 0%</span></span></div>
+<div class="stat-row"><span class="label">Ravage</span><span class="value val-neutral">0% uptime <span class="muted">cohort 0%</span></span></div>
+
+      <details>
+        <summary>GCD gaps &mdash; 36 gaps &middot; 32.4s idle</summary>
+        <table class="gap-table">
+          <thead><tr><th>Time</th><th>Previous</th><th>Gap</th><th>Next</th></tr></thead>
+          <tbody>
+<tr class="gap-micro"><td>20:25.2</td><td><span class="muted">segment start</span></td><td class="gap-dur">2.4s (2.0 GCDs)</td><td>Lunar Beam</td></tr>
+<tr class="gap-micro"><td>20:30.7</td><td>Ironfur</td><td class="gap-dur">0.8s (0.7 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>20:36.3</td><td>Moonfire</td><td class="gap-dur">1.2s (0.9 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>20:41.0</td><td>Moonfire</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>21:00.4</td><td>Thrash</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Stampeding Roar</td></tr>
+<tr class="gap-micro"><td>21:04.3</td><td>Moonfire</td><td class="gap-dur">1.3s (1.1 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>21:08.1</td><td>Moonfire</td><td class="gap-dur">0.2s (0.1 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>21:11.9</td><td>Maul</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>21:17.4</td><td>Lunar Beam</td><td class="gap-dur">0.8s (0.6 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>21:22.0</td><td>Ironfur</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>21:25.8</td><td>Mangle</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>21:28.4</td><td>Moonfire</td><td class="gap-dur">1.2s (1.0 GCDs)</td><td>Dash</td></tr>
+<tr class="gap-micro"><td>21:30.8</td><td>Dash</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Bear Form</td></tr>
+<tr class="gap-micro"><td>21:33.0</td><td>Bear Form</td><td class="gap-dur">1.5s (1.2 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>21:38.8</td><td>Ironfur</td><td class="gap-dur">0.7s (0.6 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>21:40.7</td><td>Moonfire</td><td class="gap-dur">1.8s (1.4 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>21:43.7</td><td>Moonfire</td><td class="gap-dur">0.4s (0.4 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-notable"><td>21:45.4</td><td>Moonfire</td><td class="gap-dur">2.6s (2.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>21:59.4</td><td>Mangle</td><td class="gap-dur">0.8s (0.7 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>22:02.7</td><td>Ironfur</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>22:23.8</td><td>Moonfire</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Lunar Beam</td></tr>
+<tr class="gap-micro"><td>22:27.7</td><td>Thrash</td><td class="gap-dur">1.2s (1.0 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>22:31.3</td><td>Maul</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>22:35.5</td><td>Mangle</td><td class="gap-dur">1.2s (0.9 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>22:41.5</td><td>Moonfire</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Maul</td></tr>
+<tr class="gap-micro"><td>22:45.2</td><td>Moonfire</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>22:46.7</td><td>Moonfire</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-notable"><td>22:48.3</td><td>Mangle</td><td class="gap-dur">2.9s (2.4 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>22:52.5</td><td>Moonfire</td><td class="gap-dur">2.3s (1.8 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>22:56.2</td><td>Ironfur</td><td class="gap-dur">0.7s (0.5 GCDs)</td><td>Lunar Beam</td></tr>
+<tr class="gap-micro"><td>22:59.3</td><td>Mangle</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>23:08.5</td><td>Ironfur</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>23:14.8</td><td>Thrash</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>23:16.3</td><td>Moonfire</td><td class="gap-dur">0.7s (0.5 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>23:19.3</td><td>Thrash</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>23:22.8</td><td>Maul</td><td class="gap-dur">0.2s (0.1 GCDs)</td><td>Mangle</td></tr>
+          </tbody>
+        </table>
+      </details>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Rak&#x27;tul, Vessel of Souls</div>
+      <div class="bar-bg"><div class="bar user" style="width:17.0%">You: 37k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:33.4%">Cohort: 73k</div></div>
+      <details>
+        <summary>Rotation detail (29 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">133.7s / 174.9s active (76%) <span class="muted">(cohort 82%)</span> &mdash; 34 idle GCDs</span></div>
+<div class="stat-row"><span class="label">Moonfire</span><span class="value val-bad">18.2/min <span class="muted">cohort 21.7/min</span></span><div class="dmg-detail">total 1.8M &middot; avg hit 8k (cohort 10k)</div></div>
+<div class="stat-row"><span class="label">Ironfur</span><span class="value val-neutral">10.3/min <span class="muted">cohort 10.4/min</span></span></div>
+<div class="stat-row"><span class="label">Thrash</span><span class="value val-bad">9.3/min <span class="muted">cohort 11.9/min</span></span><div class="dmg-detail">total 2.1M &middot; avg hit 17k (cohort 31k)</div></div>
+<div class="stat-row"><span class="label">Lunar Beam</span><span class="value val-bad">4.1/min <span class="muted">cohort 5.2/min</span></span><div class="dmg-detail">total 1.1M &middot; avg hit 9k (cohort 11k)</div></div>
+<div class="stat-row"><span class="label">Sundering Roar</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.6/min</span></span><div class="dmg-detail">total 0 &middot; avg hit 0 (cohort 27k)</div></div>
+<div class="stat-row"><span class="label">Incarnation: Guardian of Ursoc</span><span class="value val-bad">0.3/min <span class="muted">cohort 0.5/min</span></span></div>
+<div class="stat-row"><span class="label">Mangle</span><span class="value val-good">9.6/min <span class="muted">cohort 2.1/min</span></span><div class="dmg-detail">total 462k &middot; avg hit 16k (cohort 22k)</div></div>
+<div class="stat-row"><span class="label">Rake</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.2/min</span></span><div class="dmg-detail">total 0 &middot; avg hit 0 (cohort 6k)</div></div>
+<div class="stat-row"><span class="label">Bear Form</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.5/min</span></span></div>
+<div class="stat-row"><span class="label">Cat Form</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.3/min</span></span></div>
+<div class="stat-row"><span class="label">Swipe</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Maul</span><span class="value val-neutral">1.0/min <span class="muted">cohort 0.0/min</span></span><div class="dmg-detail">total 113k &middot; avg hit 19k</div></div>
+<div class="stat-row"><span class="label">Ferocious Bite</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Rip</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Shred</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Heart of the Wild</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Convoke the Spirits</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Berserk</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Bristling Fur</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Bear Form</span><span class="value val-good">100% uptime <span class="muted">cohort 94%</span></span></div>
+<div class="stat-row"><span class="label">Ironfur</span><span class="value val-neutral">76% uptime <span class="muted">cohort 78%</span></span></div>
+<div class="stat-row"><span class="label">Lunar Beam</span><span class="value val-warn">33% uptime <span class="muted">cohort 48%</span></span></div>
+<div class="stat-row"><span class="label">Galactic Guardian</span><span class="value val-good">20% uptime <span class="muted">cohort 14%</span></span></div>
+<div class="stat-row"><span class="label">Incarnation: Guardian of Ursoc</span><span class="value val-neutral">17% uptime <span class="muted">cohort 18%</span></span></div>
+<div class="stat-row"><span class="label">Sundering Roar</span><span class="value val-warn">0% uptime <span class="muted">cohort 12%</span></span></div>
+<div class="stat-row"><span class="label">Cat Form</span><span class="value val-warn">0% uptime <span class="muted">cohort 6%</span></span></div>
+<div class="stat-row"><span class="label">Feline Potential</span><span class="value val-neutral">0% uptime <span class="muted">cohort 0%</span></span></div>
+<div class="stat-row"><span class="label">Ravage</span><span class="value val-neutral">0% uptime <span class="muted">cohort 0%</span></span></div>
+
+      <details>
+        <summary>GCD gaps &mdash; 20 gaps &middot; 41.2s idle</summary>
+        <table class="gap-table">
+          <thead><tr><th>Time</th><th>Previous</th><th>Gap</th><th>Next</th></tr></thead>
+          <tbody>
+<tr class="gap-micro"><td>26:37.5</td><td><span class="muted">segment start</span></td><td class="gap-dur">1.2s (1.0 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>26:41.1</td><td>Thrash</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>26:44.7</td><td>Moonfire</td><td class="gap-dur">1.3s (1.1 GCDs)</td><td>Wild Charge</td></tr>
+<tr class="gap-micro"><td>26:50.2</td><td>Moonfire</td><td class="gap-dur">0.9s (0.7 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>27:00.5</td><td>Moonfire</td><td class="gap-dur">2.0s (1.6 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>27:11.0</td><td>Moonfire</td><td class="gap-dur">2.2s (1.8 GCDs)</td><td>Wild Charge</td></tr>
+<tr class="gap-micro"><td>27:38.2</td><td>Moonfire</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Wild Charge</td></tr>
+<tr class="gap-micro"><td>27:44.2</td><td>Moonfire</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>27:48.1</td><td>Lunar Beam</td><td class="gap-dur">1.2s (1.0 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-long"><td>27:51.6</td><td>Mangle</td><td class="gap-dur">14.5s (11.8 GCDs)</td><td>Incapacitating Roar</td></tr>
+<tr class="gap-long"><td>28:07.3</td><td>Incapacitating Roar</td><td class="gap-dur">3.8s (3.1 GCDs)</td><td>Stampeding Roar</td></tr>
+<tr class="gap-long"><td>28:12.4</td><td>Stampeding Roar</td><td class="gap-dur">6.8s (5.5 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>28:25.2</td><td>Mangle</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>28:45.0</td><td>Moonfire</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>28:46.5</td><td>Moonfire</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>28:48.3</td><td>Moonfire</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>29:19.2</td><td>Ironfur</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>29:20.8</td><td>Thrash</td><td class="gap-dur">0.9s (0.7 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>29:26.7</td><td>Moonfire</td><td class="gap-dur">2.0s (1.7 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>29:30.0</td><td>Moonfire</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Thrash</td></tr>
+          </tbody>
+        </table>
+      </details>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Trash (overall)</div>
+      <div class="bar-bg"><div class="bar user" style="width:42.4%">You: 93k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:72.9%">Cohort: 160k</div></div>
+      <details>
+        <summary>Rotation detail (29 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">857.9s / 1009.9s active (85%) <span class="muted">(cohort 90%)</span> &mdash; 124 idle GCDs</span></div>
+<div class="stat-row"><span class="label">Moonfire</span><span class="value val-bad">16.3/min <span class="muted">cohort 24.0/min</span></span><div class="dmg-detail">total 24.3M &middot; avg hit 6k (cohort 7k)</div></div>
+<div class="stat-row"><span class="label">Ironfur</span><span class="value val-bad">17.9/min <span class="muted">cohort 21.6/min</span></span></div>
+<div class="stat-row"><span class="label">Thrash</span><span class="value val-bad">10.8/min <span class="muted">cohort 13.6/min</span></span><div class="dmg-detail">total 42.7M &middot; avg hit 13k (cohort 19k)</div></div>
+<div class="stat-row"><span class="label">Lunar Beam</span><span class="value val-bad">3.8/min <span class="muted">cohort 4.8/min</span></span><div class="dmg-detail">total 9.8M &middot; avg hit 7k (cohort 8k)</div></div>
+<div class="stat-row"><span class="label">Sundering Roar</span><span class="value val-bad">0.0/min <span class="muted">cohort 0.8/min</span></span><div class="dmg-detail">total 0 &middot; avg hit 0 (cohort 13k)</div></div>
+<div class="stat-row"><span class="label">Incarnation: Guardian of Ursoc</span><span class="value val-bad">0.3/min <span class="muted">cohort 0.5/min</span></span></div>
+<div class="stat-row"><span class="label">Mangle</span><span class="value val-good">9.9/min <span class="muted">cohort 2.4/min</span></span><div class="dmg-detail">total 2.7M &middot; avg hit 12k (cohort 13k)</div></div>
+<div class="stat-row"><span class="label">Rake</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Bear Form</span><span class="value val-bad">0.1/min <span class="muted">cohort 0.1/min</span></span></div>
+<div class="stat-row"><span class="label">Cat Form</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Swipe</span><span class="value val-neutral">0.7/min <span class="muted">cohort 0.0/min</span></span><div class="dmg-detail">total 194k &middot; avg hit 3k (cohort 3k)</div></div>
+<div class="stat-row"><span class="label">Maul</span><span class="value val-neutral">1.7/min <span class="muted">cohort 0.0/min</span></span><div class="dmg-detail">total 672k &middot; avg hit 13k (cohort 14k)</div></div>
+<div class="stat-row"><span class="label">Ferocious Bite</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Rip</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Shred</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Heart of the Wild</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Convoke the Spirits</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Berserk</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Bristling Fur</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Bear Form</span><span class="value val-good">99% uptime <span class="muted">cohort 94%</span></span></div>
+<div class="stat-row"><span class="label">Ironfur</span><span class="value val-warn">87% uptime <span class="muted">cohort 92%</span></span></div>
+<div class="stat-row"><span class="label">Lunar Beam</span><span class="value val-warn">36% uptime <span class="muted">cohort 46%</span></span></div>
+<div class="stat-row"><span class="label">Galactic Guardian</span><span class="value val-neutral">33% uptime <span class="muted">cohort 30%</span></span></div>
+<div class="stat-row"><span class="label">Incarnation: Guardian of Ursoc</span><span class="value val-warn">15% uptime <span class="muted">cohort 23%</span></span></div>
+<div class="stat-row"><span class="label">Sundering Roar</span><span class="value val-bad">0% uptime <span class="muted">cohort 16%</span></span></div>
+<div class="stat-row"><span class="label">Cat Form</span><span class="value val-neutral">0% uptime <span class="muted">cohort 0%</span></span></div>
+<div class="stat-row"><span class="label">Feline Potential</span><span class="value val-neutral">0% uptime <span class="muted">cohort 0%</span></span></div>
+<div class="stat-row"><span class="label">Ravage</span><span class="value val-neutral">0% uptime <span class="muted">cohort 0%</span></span></div>
+
+      <details>
+        <summary>GCD gaps &mdash; 156 gaps &middot; 150.8s idle</summary>
+        <table class="gap-table">
+          <thead><tr><th>Time</th><th>Previous</th><th>Gap</th><th>Next</th></tr></thead>
+          <tbody>
+<tr class="gap-micro"><td>0:12.1</td><td><span class="muted">segment start</span></td><td class="gap-dur">1.2s (1.0 GCDs)</td><td>Swipe</td></tr>
+<tr class="gap-micro"><td>0:14.7</td><td>Ironfur</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>0:24.1</td><td>Mangle</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>0:45.1</td><td>Ironfur</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>1:19.1</td><td>Incapacitating Roar</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>1:20.5</td><td>Thrash</td><td class="gap-dur">0.2s (0.1 GCDs)</td><td>Maul</td></tr>
+<tr class="gap-micro"><td>1:21.9</td><td>Maul</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>1:25.4</td><td>Lunar Beam</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>1:54.5</td><td>Moonfire</td><td class="gap-dur">1.6s (1.3 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>1:57.2</td><td>Thrash</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>2:09.3</td><td>Moonfire</td><td class="gap-dur">1.4s (1.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>2:14.4</td><td>Thrash</td><td class="gap-dur">0.4s (0.4 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>2:24.0</td><td>Ironfur</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>2:33.3</td><td>Thrash</td><td class="gap-dur">1.2s (1.0 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>2:50.5</td><td>Maul</td><td class="gap-dur">0.9s (0.7 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>2:58.5</td><td>Ironfur</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>3:19.4</td><td><span class="muted">segment start</span></td><td class="gap-dur">1.3s (1.1 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>3:23.8</td><td>Ironfur</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Swipe</td></tr>
+<tr class="gap-micro"><td>3:29.5</td><td>Moonfire</td><td class="gap-dur">0.8s (0.6 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>3:33.6</td><td>Swipe</td><td class="gap-dur">1.3s (1.0 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>3:36.1</td><td>Moonfire</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Lunar Beam</td></tr>
+<tr class="gap-micro"><td>3:39.6</td><td>Ironfur</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>3:43.5</td><td>Maul</td><td class="gap-dur">0.9s (0.8 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>3:56.0</td><td>Thrash</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>4:06.7</td><td>Ironfur</td><td class="gap-dur">1.8s (1.4 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>4:09.7</td><td>Thrash</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>4:15.4</td><td>Maul</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>4:17.2</td><td>Mangle</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>4:21.7</td><td>Mangle</td><td class="gap-dur">1.6s (1.3 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>4:27.0</td><td>Maul</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>4:39.7</td><td>Moonfire</td><td class="gap-dur">1.3s (1.1 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>4:46.4</td><td>Moonfire</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>4:48.2</td><td>Mangle</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>4:52.2</td><td>Moonfire</td><td class="gap-dur">2.2s (1.8 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-long"><td>4:56.9</td><td>Moonfire</td><td class="gap-dur">4.1s (3.3 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>5:06.9</td><td>Moonfire</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Swipe</td></tr>
+<tr class="gap-micro"><td>5:12.2</td><td>Moonfire</td><td class="gap-dur">0.7s (0.6 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>5:16.1</td><td>Ironfur</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>5:28.6</td><td>Incapacitating Roar</td><td class="gap-dur">1.3s (1.1 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>5:31.2</td><td>Mangle</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>5:41.1</td><td>Moonfire</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>6:18.0</td><td>Mangle</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>6:21.0</td><td>Moonfire</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Maul</td></tr>
+<tr class="gap-micro"><td>6:30.9</td><td>Ironfur</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>6:32.7</td><td>Thrash</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>6:34.9</td><td>Moonfire</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>6:37.8</td><td>Thrash</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>7:04.9</td><td>Moonfire</td><td class="gap-dur">1.6s (1.3 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-long"><td>7:19.8</td><td>Maul</td><td class="gap-dur">5.4s (4.4 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>7:27.9</td><td>Ironfur</td><td class="gap-dur">0.8s (0.6 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-notable"><td>7:34.8</td><td>Ironfur</td><td class="gap-dur">2.7s (2.2 GCDs)</td><td>Incarnation: Guardian of Ursoc</td></tr>
+<tr class="gap-micro"><td>7:48.0</td><td>Thrash</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Maul</td></tr>
+<tr class="gap-micro"><td>8:00.6</td><td>Moonfire</td><td class="gap-dur">0.7s (0.6 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>8:09.1</td><td>Thrash</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>8:14.8</td><td>Lunar Beam</td><td class="gap-dur">0.7s (0.5 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>8:23.3</td><td>Thrash</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>8:29.8</td><td>Thrash</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>8:47.3</td><td><span class="muted">segment start</span></td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-notable"><td>8:55.0</td><td>Mangle</td><td class="gap-dur">3.0s (2.5 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>9:01.8</td><td>Moonfire</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Lunar Beam</td></tr>
+<tr class="gap-micro"><td>9:03.6</td><td>Lunar Beam</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>9:07.1</td><td>Thrash</td><td class="gap-dur">0.4s (0.4 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>9:08.8</td><td>Moonfire</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>13:35.9</td><td><span class="muted">segment start</span></td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>13:45.8</td><td>Moonfire</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>13:47.2</td><td>Moonfire</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>13:51.4</td><td>Ironfur</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>13:56.0</td><td>Ironfur</td><td class="gap-dur">1.7s (1.4 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>14:01.6</td><td>Ironfur</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>14:05.7</td><td>Mangle</td><td class="gap-dur">0.4s (0.4 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>14:10.6</td><td>Moonfire</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Maul</td></tr>
+<tr class="gap-micro"><td>14:18.2</td><td>Ironfur</td><td class="gap-dur">1.3s (1.1 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>14:29.8</td><td>Moonfire</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-long"><td>14:33.1</td><td>Thrash</td><td class="gap-dur">5.5s (4.5 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>14:45.9</td><td>Moonfire</td><td class="gap-dur">0.7s (0.5 GCDs)</td><td>Lunar Beam</td></tr>
+<tr class="gap-micro"><td>15:00.8</td><td>Mangle</td><td class="gap-dur">2.4s (1.9 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>15:07.8</td><td>Mangle</td><td class="gap-dur">0.4s (0.4 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>15:09.5</td><td>Ironfur</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>15:25.5</td><td>Moonfire</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>15:26.8</td><td>Moonfire</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>15:30.4</td><td>Incapacitating Roar</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>15:33.2</td><td>Typhoon</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>15:34.9</td><td>Moonfire</td><td class="gap-dur">0.8s (0.7 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>15:36.9</td><td>Thrash</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>15:40.3</td><td>Mangle</td><td class="gap-dur">0.7s (0.6 GCDs)</td><td>Lunar Beam</td></tr>
+<tr class="gap-micro"><td>15:42.2</td><td>Lunar Beam</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>15:46.7</td><td>Moonfire</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>15:51.7</td><td>Moonfire</td><td class="gap-dur">0.7s (0.5 GCDs)</td><td>Maul</td></tr>
+<tr class="gap-micro"><td>15:57.1</td><td>Moonfire</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>16:01.6</td><td>Moonfire</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>16:03.4</td><td>Moonfire</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Wild Charge</td></tr>
+<tr class="gap-micro"><td>16:05.7</td><td>Wild Charge</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>16:09.7</td><td>Ironfur</td><td class="gap-dur">1.2s (1.0 GCDs)</td><td>Maul</td></tr>
+<tr class="gap-micro"><td>16:21.6</td><td>Moonfire</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>16:24.5</td><td>Ironfur</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>16:45.8</td><td>Moonfire</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Typhoon</td></tr>
+<tr class="gap-micro"><td>17:03.5</td><td><span class="muted">segment start</span></td><td class="gap-dur">2.0s (1.6 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>17:06.7</td><td>Thrash</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Swipe</td></tr>
+<tr class="gap-micro"><td>17:15.6</td><td>Moonfire</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>17:17.0</td><td>Thrash</td><td class="gap-dur">0.8s (0.7 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>17:21.8</td><td>Ironfur</td><td class="gap-dur">0.2s (0.1 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>17:32.7</td><td>Ironfur</td><td class="gap-dur">2.2s (1.8 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>17:40.7</td><td>Thrash</td><td class="gap-dur">1.9s (1.6 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>17:44.4</td><td>Ironfur</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>17:46.2</td><td>Mangle</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>17:51.3</td><td>Thrash</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>17:53.9</td><td>Maul</td><td class="gap-dur">0.8s (0.6 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>18:06.1</td><td>Ironfur</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>18:09.2</td><td>Moonfire</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>18:14.4</td><td>Lunar Beam</td><td class="gap-dur">0.7s (0.6 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>18:18.6</td><td>Moonfire</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Typhoon</td></tr>
+<tr class="gap-micro"><td>18:22.7</td><td>Moonfire</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>18:31.4</td><td>Maul</td><td class="gap-dur">0.2s (0.1 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>18:32.8</td><td>Moonfire</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>18:35.1</td><td>Thrash</td><td class="gap-dur">1.2s (1.0 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>18:37.5</td><td>Moonfire</td><td class="gap-dur">2.3s (1.9 GCDs)</td><td><span class="muted">segment end</span></td></tr>
+<tr class="gap-micro"><td>18:48.4</td><td><span class="muted">segment start</span></td><td class="gap-dur">1.2s (1.0 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>18:52.1</td><td>Thrash</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>18:54.9</td><td>Moonfire</td><td class="gap-dur">0.8s (0.7 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>18:57.0</td><td>Thrash</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Ironfur</td></tr>
+<tr class="gap-micro"><td>18:59.3</td><td>Wild Charge</td><td class="gap-dur">1.3s (1.0 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-long"><td>19:06.6</td><td>Moonfire</td><td class="gap-dur">6.5s (5.3 GCDs)</td><td>Wild Charge</td></tr>
+<tr class="gap-micro"><td>19:15.1</td><td>Thrash</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>19:32.7</td><td>Ironfur</td><td class="gap-dur">2.1s (1.7 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>19:41.9</td><td>Thrash</td><td class="gap-dur">0.9s (0.7 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>19:44.2</td><td>Ironfur</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>19:52.5</td><td>Thrash</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>19:59.3</td><td>Moonfire</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Typhoon</td></tr>
+<tr class="gap-micro"><td>20:03.5</td><td>Moonfire</td><td class="gap-dur">0.2s (0.1 GCDs)</td><td>Maul</td></tr>
+<tr class="gap-micro"><td>20:08.4</td><td>Thrash</td><td class="gap-dur">2.1s (1.7 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>20:15.1</td><td>Moonfire</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>20:17.1</td><td>Ironfur</td><td class="gap-dur">1.4s (1.2 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>20:24.5</td><td>Moonfire</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td><span class="muted">segment end</span></td></tr>
+<tr class="gap-micro"><td>23:44.6</td><td><span class="muted">segment start</span></td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>23:46.0</td><td>Thrash</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>23:48.7</td><td>Moonfire</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Lunar Beam</td></tr>
+<tr class="gap-micro"><td>23:58.3</td><td>Ironfur</td><td class="gap-dur">1.6s (1.3 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>24:03.6</td><td>Thrash</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>24:06.5</td><td>Moonfire</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>24:12.1</td><td>Moonfire</td><td class="gap-dur">1.3s (1.1 GCDs)</td><td>Emberwing Heatwave</td></tr>
+<tr class="gap-micro"><td>24:17.9</td><td>Moonfire</td><td class="gap-dur">0.7s (0.6 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>24:19.8</td><td>Moonfire</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>24:27.8</td><td>Moonfire</td><td class="gap-dur">0.8s (0.7 GCDs)</td><td>Typhoon</td></tr>
+<tr class="gap-micro"><td>24:36.9</td><td>Thrash</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>24:53.8</td><td>Thrash</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-notable"><td>24:55.6</td><td>Moonfire</td><td class="gap-dur">3.6s (2.9 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>25:00.4</td><td>Moonfire</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-micro"><td>25:07.4</td><td>Moonfire</td><td class="gap-dur">1.2s (1.0 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>25:12.2</td><td>Lunar Beam</td><td class="gap-dur">0.7s (0.6 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>25:14.1</td><td>Moonfire</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>25:27.5</td><td>Moonfire</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>25:33.8</td><td>Thrash</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Mangle</td></tr>
+<tr class="gap-micro"><td>25:49.0</td><td>Moonfire</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Thrash</td></tr>
+<tr class="gap-long"><td>26:07.5</td><td><span class="muted">segment start</span></td><td class="gap-dur">7.2s (5.9 GCDs)</td><td>Bear Form</td></tr>
+<tr class="gap-micro"><td>26:15.9</td><td>Bear Form</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Moonfire</td></tr>
+<tr class="gap-micro"><td>26:23.1</td><td>Moonfire</td><td class="gap-dur">1.9s (1.5 GCDs)</td><td>Mangle</td></tr>
+          </tbody>
+        </table>
+      </details>
+      </details>
+    </div>
+
+  <details>
+    <summary>Per-trash-pull DPS (10 pulls)</summary>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 1</div>
+        <div class="bar-bg"><div class="bar user" style="width:100.0%">219k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 2</div>
+        <div class="bar-bg"><div class="bar user" style="width:52.4%">115k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 3</div>
+        <div class="bar-bg"><div class="bar user" style="width:38.7%">85k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 4</div>
+        <div class="bar-bg"><div class="bar user" style="width:55.6%">122k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 5</div>
+        <div class="bar-bg"><div class="bar user" style="width:14.1%">31k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 6</div>
+        <div class="bar-bg"><div class="bar user" style="width:35.3%">77k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 7</div>
+        <div class="bar-bg"><div class="bar user" style="width:34.8%">76k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 8</div>
+        <div class="bar-bg"><div class="bar user" style="width:41.9%">92k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 9</div>
+        <div class="bar-bg"><div class="bar user" style="width:25.1%">55k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 10</div>
+        <div class="bar-bg"><div class="bar user" style="width:9.9%">22k</div></div>
+      </div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="rotation">Rotation <a href="#rotation" class="anchor-hash">#</a></h2>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--text)">Active DPS</div>
+<div class="finding-card" data-tip="DPS counting only time you were alive and in combat. Removes death downtime so you can see your actual rotation quality separately from survivability.
+If your overall DPS is low but Active DPS is close to cohort, deaths are the main problem, not your rotation."><div class="severity-dot severity-critical"></div><div class="name">Active DPS</div><div class="vals">76k <span class="muted">cohort 134k</span> <span class="val-bad">-43%</span></div></div>
+  </div>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--warn)">Improvements</div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Sundering Roar casts/min</div><div class="vals">0.0/min <span class="muted">cohort 0.8/min</span> <span class="val-bad">-100%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-warning"></div><div class="name">Cat Form casts/min</div><div class="vals">0.0/min <span class="muted">cohort 0.1/min</span> <span class="val-bad">-46%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Moonfire casts/min</div><div class="vals">16.1/min <span class="muted">cohort 22.9/min</span> <span class="val-bad">-30%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-warning"></div><div class="name">Cat Form uptime</div><div class="vals">1% <span class="muted">cohort 1%</span> <span class="val-bad">-27%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Incarnation: Guardian of Ursoc casts/min</div><div class="vals">0.3/min <span class="muted">cohort 0.4/min</span> <span class="val-bad">-24%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Thrash casts/min</div><div class="vals">10.6/min <span class="muted">cohort 13.4/min</span> <span class="val-bad">-21%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Galactic Guardian uptime</div><div class="vals">33% <span class="muted">cohort 27%</span> <span class="val-good">+19%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Lunar Beam casts/min</div><div class="vals">2.0/min <span class="muted">cohort 2.5/min</span> <span class="val-bad">-18%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Ironfur casts/min</div><div class="vals">15.5/min <span class="muted">cohort 18.9/min</span> <span class="val-bad">-18%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-warning"></div><div class="name">Bear Form casts/min</div><div class="vals">0.3/min <span class="muted">cohort 0.4/min</span> <span class="val-warn">-9%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Ironfur uptime</div><div class="vals">87% <span class="muted">cohort 94%</span> <span class="val-warn">-7%</span></div></div>
+  </div>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--good)">Strong Points</div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Mangle casts/min</div><div class="vals">10.2/min <span class="muted">cohort 3.2/min</span> <span class="val-good">+221%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-strong"></div><div class="name">Sundering Roar uptime</div><div class="vals">0% <span class="muted">cohort 16%</span> <span class="val-bad">-100%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-strong"></div><div class="name">Incarnation: Guardian of Ursoc uptime</div><div class="vals">19% <span class="muted">cohort 24%</span> <span class="val-bad">-23%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-strong"></div><div class="name">Lunar Beam uptime</div><div class="vals">38% <span class="muted">cohort 47%</span> <span class="val-bad">-19%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Swipe casts/min</div><div class="vals">0.5/min <span class="muted">cohort 0.0/min</span> <span class="val-neutral">+0%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Maul casts/min</div><div class="vals">2.0/min <span class="muted">cohort 0.0/min</span> <span class="val-neutral">+0%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Ferocious Bite casts/min</div><div class="vals">0.0/min <span class="muted">cohort 0.0/min</span> <span class="val-neutral">+0%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Convoke the Spirits casts/min</div><div class="vals">0.0/min <span class="muted">cohort 0.0/min</span> <span class="val-neutral">+0%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Berserk casts/min</div><div class="vals">0.0/min <span class="muted">cohort 0.0/min</span> <span class="val-neutral">+0%</span></div></div>
+  </div>
+  <details>
+    <summary>On par (2 metrics)</summary>
+    <div class="finding-group">
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-info"></div><div class="name">Bear Form uptime</div><div class="vals">104% <span class="muted">cohort 102%</span> <span class="val-neutral">+2%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-info"></div><div class="name">Rake casts/min</div><div class="vals">0.0/min <span class="muted">cohort 0.0/min</span> <span class="val-neutral">+0%</span></div></div>
+    </div>
+  </details>
+  <details>
+    <summary>Damage distribution (5 metrics, varies with pull size)</summary>
+    <div class="finding-group">
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-warning"></div><div class="name">Sundering Roar damage %</div><div class="vals">0% <span class="muted">cohort 3%</span> <span class="val-bad">-100%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-critical"></div><div class="name">Thrash damage %</div><div class="vals">46% <span class="muted">cohort 51%</span> <span class="val-warn">-11%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-strong"></div><div class="name">Moonfire damage %</div><div class="vals">26% <span class="muted">cohort 21%</span> <span class="val-good">+22%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-strong"></div><div class="name">Lunar Beam damage %</div><div class="vals">12% <span class="muted">cohort 10%</span> <span class="val-good">+14%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-strong"></div><div class="name">Mangle damage %</div><div class="vals">4% <span class="muted">cohort 0%</span> <span class="val-neutral">+0%</span></div></div>
+    </div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="details">Details <a href="#details" class="anchor-hash">#</a></h2>
+  <details class="subsection" open><summary><h3 id="gcd-efficiency">GCD Efficiency<span class="tip-icon" data-tip="Counts moments where you weren&#x27;t pressing any button during combat. Each wasted GCD is ~1.5s of doing nothing.
+Common causes: running without instant casts, hesitating on what to press next, or being dead.">?</span> <a href="#gcd-efficiency" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Idle GCDs</span>
+    <span class="value val-bad">204 (4m11s)</span>
+  </div>
+
+  <div class="stat-row">
+    <span class="label">Cohort</span>
+    <span class="value">96 (best 73)</span>
+  </div>
+<div class="stat-row"><span class="label">Rate (alive)</span><span class="value">7.8/min (cohort 4.7/min, best 3.6/min)</span></div>
+  <div class="stat-row">
+    <span class="label">Effective GCD</span>
+    <span class="value">1.23s (haste 22.0%)</span>
+  </div>
+<div class="stat-row"><span class="label">Worst segment</span><span class="value">Trash (overall) (124 idle GCDs)</span></div>
+<div class="stat-row"><span class="label">Gap pattern</span><span class="value"></span></div>
+<div class="stat-row"><span class="label">&nbsp;&nbsp;Micro (1-2 GCDs)</span><span class="value">37 gaps, 63.4s</span></div>
+<div class="stat-row"><span class="label">&nbsp;&nbsp;Notable (2-3 GCDs)</span><span class="value">5 gaps, 14.9s</span></div>
+<div class="stat-row"><span class="label">&nbsp;&nbsp;Long (3+ GCDs)</span><span class="value">9 gaps, 62.6s</span></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="cooldown-hold-times">Cooldown Hold Times<span class="tip-icon" data-tip="Time between a cooldown becoming available and you pressing it. Lower is better — a 10s hold on a 30s CD means the ability sat ready for 10 seconds while you could have been using it.
+Check the &#x27;worst&#x27; timestamp to find where you held the longest.">?</span> <a href="#cooldown-hold-times" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row"><span class="label">Moonfire (CD: 5s)</span><span class="value val-warn">avg 1.0s hold <span class="muted">cohort 0.4s</span></span></div>
+<div class="stat-row"><span class="label">Thrash (CD: 6s)</span><span class="value val-warn">avg 1.4s hold <span class="muted">cohort 0.8s</span></span></div>
+<div class="stat-row"><span class="label">Lunar Beam (CD: 60s)</span><span class="value val-neutral">avg 0.3s hold <span class="muted">cohort 0.0s</span></span></div>
+<div class="stat-row"><span class="label">Incarnation: Guardian of Ursoc (CD: 180s)</span><span class="value val-bad">avg 45.7s hold <span class="muted">cohort 1.3s</span></span></div>
+<div class="stat-row"><span class="label">Mangle (CD: 6s)</span><span class="value val-good">avg 1.8s hold <span class="muted">cohort 6.0s</span></span></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="buff-uptime-gaps">Buff Uptime Gaps<span class="tip-icon" data-tip="Shows gaps where a maintained buff fell off during combat. These are buffs you should keep active near-permanently (like Ebon Might) — every gap is lost throughput.
+Cooldown-based buffs (Breath of Eons, Fury of the Aspects) are not shown here since their gaps are just the CD running.">?</span> <a href="#buff-uptime-gaps" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row"><span class="label">Bear Form</span><span class="value val-neutral">3 gaps, 1m31s total <span class="muted">cohort 5</span></span></div>
+<div class="stat-row"><span class="label">Ironfur</span><span class="value val-bad">43 gaps, 5m2s total <span class="muted">cohort 22</span></span></div>
+<div class="stat-row"><span class="label">Cat Form</span><span class="value val-warn">14 gaps, 26m5s total <span class="muted">cohort 12</span></span></div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="survivability">Survivability <a href="#survivability" class="anchor-hash">#</a></h2>
+  <details class="subsection" open><summary><h3 id="damage-taken">Damage Taken <a href="#damage-taken" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Total damage taken</span>
+    <span class="value">106.2M (60k DTPS)</span>
+  </div>
+  <div style="margin-top:8px">
+<div class="hit-bar"><span style="width:180px;font-size:12px">Melee</span><div class="bar-bg"><div class="bar user" style="width:100%"></div></div><span class="amount">70.2M (66.1%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Rending Gore</span><div class="bar-bg"><div class="bar user" style="width:4%"></div></div><span class="amount">3.1M (2.9%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Open Wound</span><div class="bar-bg"><div class="bar user" style="width:4%"></div></div><span class="amount">2.7M (2.6%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Infected Pinions</span><div class="bar-bg"><div class="bar user" style="width:4%"></div></div><span class="amount">2.6M (2.4%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Spectral Strikes</span><div class="bar-bg"><div class="bar user" style="width:4%"></div></div><span class="amount">2.5M (2.3%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Spirit Rend</span><div class="bar-bg"><div class="bar user" style="width:3%"></div></div><span class="amount">2.3M (2.2%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Withering Miasma</span><div class="bar-bg"><div class="bar user" style="width:3%"></div></div><span class="amount">1.9M (1.7%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Searing Presence</span><div class="bar-bg"><div class="bar user" style="width:3%"></div></div><span class="amount">1.8M (1.7%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Crunch Armor</span><div class="bar-bg"><div class="bar user" style="width:3%"></div></div><span class="amount">1.8M (1.7%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Spiritbreaker</span><div class="bar-bg"><div class="bar user" style="width:2%"></div></div><span class="amount">1.7M (1.6%)</span></div>
+  </div>
+  </details>
+  <details class="subsection" open><summary><h3 id="damage-spikes">Damage Spikes <a href="#damage-spikes" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Spikes detected</span>
+    <span class="value">29</span>
+  </div>
+<div class="stat-row"><span class="label">Undefended spikes</span><span class="value val-bad">12 of 29</span></div>
+  <details>
+    <summary>Spike details (29 spikes)</summary>
+<div class="death-card"><div class="title">Spike #1 at 0:12 — Trash pull 1</div><div style="font-size:13px">677k in 3.0s (226k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (677k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Barkskin, Survival Instincts</span></div><div style="font-size:12px;margin-top:2px">Self (721k): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (378k), Natural Resilience (196k), Regrowth (40k), Rejuvenation (36k), Elune&#x27;s Favored (32k), Nature&#x27;s Guardian (17k), Ursoc&#x27;s Fury (15k), Brambles (4k), Leech (3k)</span></div><div style="font-size:12px">External (77k): <span style="color:var(--good);font-size:11px">Power Word: Shield (77k)</span></div></div>
+<div class="death-card"><div class="title">Spike #2 at 0:19 — Trash pull 1</div><div style="font-size:13px">733k in 3.5s (209k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (733k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Barkskin, Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Atonement (from Bastagram), Divine Aegis (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (627k): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (254k), Natural Resilience (102k), Regrowth (91k), Elune&#x27;s Favored (51k), Ursoc&#x27;s Fury (42k), Nature&#x27;s Guardian (38k), Rejuvenation (36k), Brambles (7k), Leech (6k)</span></div><div style="font-size:12px">External (132k): <span style="color:var(--good);font-size:11px">Penance (95k), Divine Aegis (19k), Atonement (13k), Penance (Contrition Crit) (4k), Penance (Contrition) (877)</span></div></div>
+<div class="death-card"><div class="title">Spike #3 at 0:33 — Trash pull 1</div><div style="font-size:13px">542k in 3.0s (181k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (437k), Crunch Armor (105k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Barkskin</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Visage (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (784k): <span style="color:var(--accent);font-size:11px">Ursoc&#x27;s Fury (556k), Elune&#x27;s Favored (104k), Nature&#x27;s Guardian (37k), Brambles (30k), Natural Resilience (29k), Lunar Beam (15k), Rejuvenation (11k), Leech (3k)</span></div><div style="font-size:12px">External (16k): <span style="color:var(--good);font-size:11px">Atonement (13k), Lightbearer (932), Penance (Contrition) (833), Piety (462), Shifting Sands (40)</span></div></div>
+<div class="death-card"><div class="title">Spike #4 at 0:42 — Trash pull 1</div><div style="font-size:13px">1.8M in 10.0s (179k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.4M), Crunch Armor (262k), Necrotic Wave (95k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin, Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Void Shield (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (1.7M): <span style="color:var(--accent);font-size:11px">Ursoc&#x27;s Fury (1.4M), Elune&#x27;s Favored (150k), Nature&#x27;s Guardian (64k), Brambles (57k), Leech (48k)</span></div><div style="font-size:12px">External (435k): <span style="color:var(--good);font-size:11px">Void Shield (310k), Atonement (42k), Piety (28k), Penance (Twinsight) (24k), Lightforged Blessing (24k), Ebon Might (3k), Fate Mirror (2k), Lightbearer (830), Prescience (578), Shifting Sands (215)</span></div></div>
+<div class="death-card"><div class="title">Spike #5 at 1:52 — Trash pull 2</div><div style="font-size:13px">645k in 3.0s (215k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (493k), Crunch Armor (153k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Frenzied Regeneration, Barkskin</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Void Shield (from Bastagram), Atonement (from Bastagram), Prayer of Mending (from Bastagram), Divine Aegis (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (708k): <span style="color:var(--accent);font-size:11px">Natural Resilience (163k), Frenzied Regeneration (141k), Matted Fur (126k), Regrowth (86k), Aessina&#x27;s Renewal (80k), Nature&#x27;s Guardian (38k), Ursoc&#x27;s Fury (33k), Rejuvenation (22k), Brambles (7k), Elune&#x27;s Favored (6k), Leech (6k)</span></div><div style="font-size:12px">External (267k): <span style="color:var(--good);font-size:11px">Void Shield (97k), Penance (74k), Divine Aegis (54k), Piety (17k), Atonement (15k), Prayer of Mending (8k), Penance (Contrition Crit) (2k)</span></div></div>
+<div class="death-card"><div class="title">Spike #6 at 2:14 — Trash pull 2</div><div style="font-size:13px">2.3M in 11.5s (203k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (997k), Rending Gore (733k), Crunch Armor (281k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin, Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Arcanoweave Insight (from Bastagram), Divine Aegis (from Bastagram), Visage (from Dzin), Prayer of Mending (from Bastagram), Void Shield (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (1.7M): <span style="color:var(--accent);font-size:11px">Nature&#x27;s Guardian (525k), Elune&#x27;s Favored (316k), Ursoc&#x27;s Fury (314k), Lunar Beam (143k), Aessina&#x27;s Renewal (101k), Boundless Moonlight (77k), Leech (40k), Natural Resilience (38k), Brambles (37k), After the Wildfire (32k), Rejuvenation (30k), Regrowth (1k)</span></div><div style="font-size:12px">External (1.0M): <span style="color:var(--good);font-size:11px">Shadow Mend (375k), Void Shield (214k), Atonement (181k), Piety (132k), Lightforged Blessing (42k), Penance (Twinsight) (25k), Divine Aegis (14k), Penance (Contrition) (6k), Lightbearer (6k), Ebon Might (5k), Penance (Contrition Crit) (3k), Prayer of Mending (3k), Shifting Sands (2k), Prescience (206)</span></div></div>
+<div class="death-card"><div class="title">Spike #7 at 3:36 — Trash pull 3</div><div style="font-size:13px">1.4M in 8.5s (167k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.4M)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin</span></div><div style="font-size:12px;margin-top:2px">Self (1.5M): <span style="color:var(--accent);font-size:11px">Ursoc&#x27;s Fury (345k), Natural Resilience (247k), Nature&#x27;s Guardian (243k), Elune&#x27;s Favored (143k), Lunar Beam (137k), Frenzied Regeneration (121k), Leech (96k), Boundless Moonlight (85k), Brambles (38k), Rejuvenation (21k), Regrowth (2k)</span></div><div style="font-size:12px">External (249k): <span style="color:var(--good);font-size:11px">Atonement (131k), Piety (36k), Penance (Twinsight) (33k), Divine Aegis (24k), Lightforged Blessing (13k), Lightbearer (4k), Prayer of Mending (3k), Ebon Might (2k), Penance (Contrition) (2k), Shifting Sands (693), Prescience (322)</span></div></div>
+<div class="death-card"><div class="title">Spike #8 at 5:25 — Trash pull 3</div><div style="font-size:13px">551k in 3.0s (184k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Crunch Armor (262k), Melee (219k), Necrotic Wave (48k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Frenzied Regeneration, Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (346k): <span style="color:var(--accent);font-size:11px">Aessina&#x27;s Renewal (107k), Ursoc&#x27;s Fury (86k), Elune&#x27;s Favored (85k), Nature&#x27;s Guardian (39k), Leech (20k), Brambles (9k), Fate Mirror (198)</span></div><div style="font-size:12px">External (317k): <span style="color:var(--good);font-size:11px">Shadow Mend (279k), Atonement (23k), Piety (14k), Lightbearer (468)</span></div></div>
+<div class="death-card"><div class="title">Spike #9 at 5:59 — Trash pull 3</div><div style="font-size:13px">578k in 3.0s (193k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (578k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Barkskin</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Frenzied Regeneration, Survival Instincts</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Black Attunement (from Dzin), Visage (from Dzin), Void Shield (from Bastagram), Prayer of Mending (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (567k): <span style="color:var(--accent);font-size:11px">Nature&#x27;s Guardian (127k), Lunar Beam (96k), Ursoc&#x27;s Fury (88k), Aessina&#x27;s Renewal (79k), Elune&#x27;s Favored (77k), Boundless Moonlight (33k), After the Wildfire (33k), Leech (21k), Brambles (13k)</span></div><div style="font-size:12px">External (325k): <span style="color:var(--good);font-size:11px">Void Shield (165k), Atonement (95k), Piety (24k), Lightbearer (14k), Penance (Contrition Crit) (13k), Prayer of Mending (8k), Lightforged Blessing (4k), Penance (Contrition) (2k)</span></div></div>
+<div class="death-card"><div class="title">Spike #10 at 7:02 — Between pulls</div><div style="font-size:13px">679k in 3.5s (194k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (517k), Shadow Bolt (161k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Barkskin, Survival Instincts</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Void Shield (from Bastagram), Black Attunement (from Dzin), Atonement (from Bastagram), Divine Aegis (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (571k): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (306k), Aessina&#x27;s Renewal (81k), Nature&#x27;s Guardian (47k), Natural Resilience (39k), Rejuvenation (30k), Elune&#x27;s Favored (30k), Ursoc&#x27;s Fury (20k), Regrowth (8k), Leech (6k), Brambles (5k)</span></div><div style="font-size:12px">External (350k): <span style="color:var(--good);font-size:11px">Penance (133k), Power Word: Shield (106k), Void Shield (54k), Divine Aegis (30k), Atonement (22k), Prayer of Mending (2k), Penance (Contrition) (2k), Penance (Contrition Crit) (2k)</span></div></div>
+<div class="death-card"><div class="title">Spike #11 at 7:08 — Trash pull 4</div><div style="font-size:13px">1.1M in 5.5s (199k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (981k), Throw Spear (72k), Rending Gore (43k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Frenzied Regeneration, Barkskin</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Pain Suppression (from Bastagram), Devotion Aura (from Unndin)</span></div><div style="font-size:12px;margin-top:2px">Self (1.1M): <span style="color:var(--accent);font-size:11px">Matted Fur (212k), Nature&#x27;s Guardian (171k), Frenzied Regeneration (146k), Elune&#x27;s Favored (124k), Lunar Beam (98k), After the Wildfire (74k), Ursoc&#x27;s Fury (64k), Regrowth (59k), Rejuvenation (44k), Leech (40k), Boundless Moonlight (30k), Brambles (18k), Natural Resilience (16k)</span></div><div style="font-size:12px">External (210k): <span style="color:var(--good);font-size:11px">Power Word: Shield (186k), Atonement (12k), Piety (6k), Prayer of Mending (2k), Penance (Contrition) (1k), Penance (Contrition Crit) (1k), Lightbearer (921)</span></div></div>
+<div class="death-card"><div class="title">Spike #12 at 7:21 — Trash pull 4</div><div style="font-size:13px">718k in 4.0s (179k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (445k), Rending Gore (162k), Deafening Roar (112k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Barkskin</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px">Self (946k): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (250k), Natural Resilience (233k), Regrowth (188k), Elune&#x27;s Favored (97k), Nature&#x27;s Guardian (71k), Rejuvenation (53k), Leech (25k), Ursoc&#x27;s Fury (18k), Brambles (12k)</span></div><div style="font-size:12px">External (70k): <span style="color:var(--good);font-size:11px">Atonement (39k), Lightforged Blessing (17k), Prayer of Mending (9k), Ebon Might (3k), Lightbearer (1k), Piety (998), Prescience (270)</span></div></div>
+<div class="death-card"><div class="title">Spike #13 at 7:28 — Trash pull 4</div><div style="font-size:13px">1.3M in 7.5s (179k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.1M), Searing Presence (164k), Sear (90k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Frenzied Regeneration, Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Visage (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (1.1M): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (336k), Elune&#x27;s Favored (176k), Ursoc&#x27;s Fury (156k), Matted Fur (139k), Natural Resilience (108k), Rejuvenation (64k), Leech (35k), Brambles (30k), Nature&#x27;s Guardian (29k), Regrowth (14k)</span></div><div style="font-size:12px">External (633): <span style="color:var(--good);font-size:11px">Lightbearer (404), Piety (198), Fate Mirror (16), Shifting Sands (15)</span></div></div>
+<div class="death-card"><div class="title">Spike #14 at 7:40 — Trash pull 4</div><div style="font-size:13px">2.6M in 14.0s (187k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (2.2M), Searing Presence (232k), Deafening Roar (174k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin, Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Bastagram), Void Shield (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (2.9M): <span style="color:var(--accent);font-size:11px">Elune&#x27;s Favored (953k), Ursoc&#x27;s Fury (829k), Nature&#x27;s Guardian (447k), Leech (240k), Lunar Beam (161k), Boundless Moonlight (138k), Brambles (65k), Aessina&#x27;s Renewal (41k), After the Wildfire (36k), Rejuvenation (16k)</span></div><div style="font-size:12px">External (403k): <span style="color:var(--good);font-size:11px">Void Shield (193k), Power Word: Radiance (77k), Atonement (67k), Lightforged Blessing (22k), Piety (9k), Lightbearer (9k), Prayer of Mending (9k), Penance (Contrition) (9k), Ebon Might (3k), Penance (Contrition Crit) (2k), Fate Mirror (2k), Shifting Sands (141)</span></div></div>
+<div class="death-card"><div class="title">Spike #15 at 7:56 — Trash pull 4</div><div style="font-size:13px">525k in 3.0s (175k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (470k), Searing Presence (56k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin, Frenzied Regeneration, Survival Instincts</span></div><div style="font-size:12px;margin-top:2px">Self (684k): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (216k), Ursoc&#x27;s Fury (173k), Elune&#x27;s Favored (139k), Nature&#x27;s Guardian (45k), Regrowth (39k), Leech (39k), Brambles (16k), After the Wildfire (10k), Rejuvenation (8k)</span></div><div style="font-size:12px">External (233k): <span style="color:var(--good);font-size:11px">Void Shield (140k), Atonement (67k), Lightforged Blessing (13k), Piety (9k), Penance (Contrition) (2k), Ebon Might (812), Shifting Sands (511), Lightbearer (432), Prescience (251)</span></div></div>
+<div class="death-card"><div class="title">Spike #16 at 8:01 — Trash pull 4</div><div style="font-size:13px">3.3M in 15.5s (213k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (1.9M), Rending Gore (1.0M), Searing Presence (284k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Frenzied Regeneration</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin, Survival Instincts</span></div><div style="font-size:12px;margin-top:2px">Self (2.8M): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (1.1M), Elune&#x27;s Favored (377k), Ursoc&#x27;s Fury (295k), Regrowth (245k), Nature&#x27;s Guardian (237k), Natural Resilience (159k), Rejuvenation (88k), Leech (74k), Lunar Beam (59k), After the Wildfire (45k), Brambles (42k), Boundless Moonlight (11k)</span></div><div style="font-size:12px">External (541k): <span style="color:var(--good);font-size:11px">Void Shield (294k), Atonement (178k), Lightforged Blessing (29k), Piety (15k), Penance (Contrition Crit) (10k), Lightbearer (8k), Prayer of Mending (4k), Penance (Contrition) (2k), Ebon Might (817), Prescience (496), Shifting Sands (168)</span></div></div>
+<div class="death-card"><div class="title">Spike #17 at 11:11 — Muro&#x27;jin and Nekraxx</div><div style="font-size:13px">740k in 5.5s (134k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Falling (512k), Flanking Spear (198k), Melee (30k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Survival Instincts, Frenzied Regeneration, Barkskin</span></div><div style="font-size:12px;margin-top:2px">Self (1.3M): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (591k), Natural Resilience (295k), Regrowth (120k), Elune&#x27;s Favored (49k), Rejuvenation (49k), Matted Fur (41k), After the Wildfire (38k), Nature&#x27;s Guardian (36k), Ursoc&#x27;s Fury (28k), Leech (8k), Brambles (2k)</span></div><div style="font-size:12px">External (0): <span style="color:var(--text-dim);font-size:11px">none</span></div></div>
+<div class="death-card"><div class="title">Spike #18 at 13:53 — Trash pull 6</div><div style="font-size:13px">1.2M in 7.5s (157k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (705k), Spirit Rend (176k), Grim Ward (124k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Frenzied Regeneration</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin, Survival Instincts</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Void Shield (from Bastagram), Zephyr (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (897k): <span style="color:var(--accent);font-size:11px">Ursoc&#x27;s Fury (315k), Elune&#x27;s Favored (223k), Nature&#x27;s Guardian (187k), Lunar Beam (88k), Leech (53k), Brambles (27k), Boundless Moonlight (3k)</span></div><div style="font-size:12px">External (421k): <span style="color:var(--good);font-size:11px">Void Shield (171k), Atonement (169k), Power Word: Radiance (35k), Lightforged Blessing (17k), Piety (14k), Lightbearer (6k), Penance (Contrition Crit) (5k), Penance (Contrition) (2k), Ebon Might (1k), Shifting Sands (806), Prescience (385), Fate Mirror (380)</span></div></div>
+<div class="death-card"><div class="title">Spike #19 at 16:06 — Trash pull 6</div><div style="font-size:13px">927k in 5.0s (185k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (675k), Spectral Strikes (124k), Cries of the Fallen (67k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Black Attunement (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (1.1M): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (436k), Nature&#x27;s Guardian (151k), Lunar Beam (109k), Natural Resilience (85k), Elune&#x27;s Favored (84k), Ursoc&#x27;s Fury (72k), Regrowth (51k), Rejuvenation (25k), Leech (25k), Boundless Moonlight (15k), Brambles (11k)</span></div><div style="font-size:12px">External (114k): <span style="color:var(--good);font-size:11px">Atonement (102k), Lightbearer (5k), Prescience (3k), Prayer of Mending (3k), Fate Mirror (1k)</span></div></div>
+<div class="death-card"><div class="title">Spike #20 at 17:17 — Trash pull 7</div><div style="font-size:13px">1.3M in 7.5s (179k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (819k), Shadowfrost Blast (273k), Dread Slash (84k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Barkskin, Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Prayer of Mending (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (1.7M): <span style="color:var(--accent);font-size:11px">Natural Resilience (528k), Frenzied Regeneration (300k), Regrowth (266k), Nature&#x27;s Guardian (158k), Ursoc&#x27;s Fury (126k), Aessina&#x27;s Renewal (100k), Elune&#x27;s Favored (70k), After the Wildfire (50k), Rejuvenation (44k), Lunar Beam (36k), Leech (29k), Brambles (20k), Boundless Moonlight (5k)</span></div><div style="font-size:12px">External (26k): <span style="color:var(--good);font-size:11px">Lightforged Blessing (11k), Prayer of Mending (7k), Atonement (6k), Lightbearer (1k), Ebon Might (802), Prescience (280), Piety (109)</span></div></div>
+<div class="death-card"><div class="title">Spike #21 at 17:40 — Trash pull 7</div><div style="font-size:13px">648k in 3.5s (185k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (448k), Grim Ward (73k), Spectral Strikes (67k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Frenzied Regeneration, Barkskin</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Divine Aegis (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (569k): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (183k), Natural Resilience (90k), Regrowth (77k), Elune&#x27;s Favored (69k), Nature&#x27;s Guardian (50k), Ursoc&#x27;s Fury (32k), Matted Fur (30k), Leech (15k), Brambles (13k), Rejuvenation (8k)</span></div><div style="font-size:12px">External (268k): <span style="color:var(--good);font-size:11px">Power Word: Radiance (98k), Void Shield (63k), Atonement (61k), Divine Aegis (30k), Prayer of Mending (5k), Piety (4k), Penance (Contrition Crit) (3k), Lightbearer (2k), Penance (Contrition) (1k)</span></div></div>
+<div class="death-card"><div class="title">Spike #22 at 17:59 — Trash pull 7</div><div style="font-size:13px">549k in 3.0s (183k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (228k), Dread Slash (126k), Grim Ward (69k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin, Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px">Self (371k): <span style="color:var(--accent);font-size:11px">Elune&#x27;s Favored (150k), Ursoc&#x27;s Fury (130k), Nature&#x27;s Guardian (40k), Leech (39k), Brambles (9k), Boundless Moonlight (3k)</span></div><div style="font-size:12px">External (85k): <span style="color:var(--good);font-size:11px">Atonement (40k), Piety (32k), Lightforged Blessing (7k), Penance (Contrition Crit) (2k), Penance (Contrition) (2k), Lightbearer (1k), Ebon Might (872), Prescience (264), Shifting Sands (28), Fate Mirror (18)</span></div></div>
+<div class="death-card"><div class="title">Spike #23 at 19:13 — Trash pull 8</div><div style="font-size:13px">579k in 3.0s (193k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (433k), Spectral Strikes (80k), Cries of the Fallen (66k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin, Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px">Self (388k): <span style="color:var(--accent);font-size:11px">Natural Resilience (189k), Ursoc&#x27;s Fury (76k), Nature&#x27;s Guardian (48k), Elune&#x27;s Favored (42k), Lunar Beam (15k), Leech (10k), Brambles (8k), Boundless Moonlight (1k)</span></div><div style="font-size:12px">External (308k): <span style="color:var(--good);font-size:11px">Void Shield (225k), Atonement (55k), Penance (16k), Piety (10k), Lightbearer (2k), Penance (Contrition) (784)</span></div></div>
+<div class="death-card"><div class="title">Spike #24 at 19:27 — Trash pull 8</div><div style="font-size:13px">552k in 3.0s (184k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (310k), Grim Ward (123k), Spectral Strikes (62k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin, Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Arcanoweave Insight (from Nathlock), Divine Aegis (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (488k): <span style="color:var(--accent);font-size:11px">Ursoc&#x27;s Fury (397k), Leech (27k), Nature&#x27;s Guardian (26k), Elune&#x27;s Favored (24k), Brambles (14k)</span></div><div style="font-size:12px">External (239k): <span style="color:var(--good);font-size:11px">Power Word: Radiance (81k), Penance (Twinsight) (50k), Atonement (48k), Divine Aegis (30k), Lightforged Blessing (16k), Piety (9k), Lightbearer (4k), Ebon Might (2k), Prescience (236)</span></div></div>
+<div class="death-card"><div class="title">Spike #25 at 19:33 — Trash pull 8</div><div style="font-size:13px">530k in 3.0s (177k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (480k), Dread Slash (50k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Frenzied Regeneration, Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin</span></div><div style="font-size:12px;margin-top:2px">Self (632k): <span style="color:var(--accent);font-size:11px">Ursoc&#x27;s Fury (395k), Elune&#x27;s Favored (142k), Leech (42k), Nature&#x27;s Guardian (41k), Brambles (13k)</span></div><div style="font-size:12px">External (122k): <span style="color:var(--good);font-size:11px">Atonement (77k), Piety (33k), Penance (Contrition Crit) (7k), Penance (Contrition) (4k), Lightbearer (1k)</span></div></div>
+<div class="death-card"><div class="title">Spike #26 at 19:39 — Trash pull 8</div><div style="font-size:13px">1.0M in 5.5s (191k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (642k), Shadowfrost Blast (239k), Dread Slash (108k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Frenzied Regeneration, Barkskin</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Void Shield (from Bastagram), Prayer of Mending (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (902k): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (226k), Ursoc&#x27;s Fury (205k), Matted Fur (134k), Elune&#x27;s Favored (131k), Nature&#x27;s Guardian (68k), Regrowth (46k), Leech (33k), Rejuvenation (20k), Natural Resilience (19k), Brambles (19k)</span></div><div style="font-size:12px">External (277k): <span style="color:var(--good);font-size:11px">Atonement (130k), Piety (69k), Void Shield (53k), Lightforged Blessing (12k), Lightbearer (6k), Penance (Contrition) (4k), Ebon Might (2k), Shifting Sands (696)</span></div></div>
+<div class="death-card"><div class="title">Spike #27 at 23:43 — Between pulls</div><div style="font-size:13px">939k in 5.0s (188k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (939k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin, Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Black Attunement (from Dzin)</span></div><div style="font-size:12px;margin-top:2px">Self (1.1M): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (355k), Natural Resilience (326k), Regrowth (160k), Ursoc&#x27;s Fury (109k), Elune&#x27;s Favored (78k), Rejuvenation (37k), Nature&#x27;s Guardian (27k), Brambles (10k), Leech (4k)</span></div><div style="font-size:12px">External (116k): <span style="color:var(--good);font-size:11px">Power Word: Radiance (62k), Divine Aegis (31k), Power Word: Shield (23k)</span></div></div>
+<div class="death-card"><div class="title">Spike #28 at 27:11 — Rak&#x27;tul, Vessel of Souls</div><div style="font-size:13px">827k in 5.0s (165k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Spiritbreaker (255k), Melee (228k), Spectral Decay (223k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Frenzied Regeneration</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin</span></div><div style="font-size:12px;margin-top:2px">Self (616k): <span style="color:var(--accent);font-size:11px">Frenzied Regeneration (282k), Aessina&#x27;s Renewal (82k), Natural Resilience (70k), Nature&#x27;s Guardian (60k), Rejuvenation (32k), Elune&#x27;s Favored (30k), Ursoc&#x27;s Fury (21k), Lunar Beam (15k), Regrowth (12k), Leech (9k), Brambles (3k)</span></div><div style="font-size:12px">External (152k): <span style="color:var(--good);font-size:11px">Atonement (48k), Power Word: Radiance (44k), Divine Aegis (44k), Piety (6k), Penance (Contrition Crit) (4k), Penance (Contrition) (3k), Fate Mirror (2k), Prescience (495), Lightbearer (357)</span></div></div>
+<div class="death-card"><div class="title">Spike #29 at 29:11 — Rak&#x27;tul, Vessel of Souls</div><div style="font-size:13px">536k in 3.5s (153k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Spiritbreaker (262k), Deathgorged Vessel (123k), Melee (76k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Frenzied Regeneration, Survival Instincts</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Barkskin</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Arcanoweave Insight (from Bastagram), Atonement (from Bastagram)</span></div><div style="font-size:12px;margin-top:2px">Self (421k): <span style="color:var(--accent);font-size:11px">Nature&#x27;s Guardian (143k), Elune&#x27;s Favored (103k), Lunar Beam (98k), Leech (29k), Ursoc&#x27;s Fury (28k), Boundless Moonlight (17k), Brambles (3k)</span></div><div style="font-size:12px">External (163k): <span style="color:var(--good);font-size:11px">Power Word: Radiance (120k), Atonement (23k), Lightbearer (12k), Lightforged Blessing (3k), Piety (2k), Penance (Contrition) (2k), Fate Mirror (1k), Ebon Might (406)</span></div></div>
+  </details>
+  </details>
+  <details class="subsection" open><summary><h3 id="defensive-usage">Defensive Usage <a href="#defensive-usage" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Barkskin</span><span class="value val-good">28/29 uses (97%)</span><div style="font-size:11px;color:var(--text-muted)">8 during spikes, 20 outside</div></div>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Frenzied Regeneration</span><span class="value val-good">41/49 uses (84%)</span><div style="font-size:11px;color:var(--text-muted)">15 during spikes, 26 outside</div></div>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Survival Instincts</span><span class="value val-bad">2/9 uses (22%)</span><div style="font-size:11px;color:var(--text-muted)">2 during spikes, 0 outside</div></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="healing-received">Healing Received <a href="#healing-received" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Effective healing</span>
+    <span class="value">107.2M</span>
+  </div>
+  <div class="stat-row">
+    <span class="label">Overheal</span>
+    <span class="value val-warn">36%</span>
+  </div>
+  <div class="stat-row">
+    <span class="label">Self-healing</span>
+    <span class="value">78.6M (73.4%)</span>
+  </div>
+  <details open style="margin-left:16px;margin-bottom:8px">
+    <summary style="cursor:pointer;color:var(--text-muted);font-size:12px;user-select:none">
+      Self-healing breakdown (16 abilities)</summary>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Ursoc&#x27;s Fury <span class="muted">(2108 casts)</span></span><div class="bar-bg"><div class="bar" style="width:100%;background:var(--accent)"></div></div><span class="amount">18.0M</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Elune&#x27;s Favored <span class="muted">(1531 casts)</span></span><div class="bar-bg"><div class="bar" style="width:62%;background:var(--accent)"></div></div><span class="amount">11.2M <span class="muted">(62% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Frenzied Regeneration <span class="muted">(205 casts)</span></span><div class="bar-bg"><div class="bar" style="width:57%;background:var(--accent)"></div></div><span class="amount">10.2M <span class="muted">(54% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Natural Resilience <span class="muted">(364 casts)</span></span><div class="bar-bg"><div class="bar" style="width:55%;background:var(--accent)"></div></div><span class="amount">9.9M</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Nature&#x27;s Guardian <span class="muted">(5212 casts)</span></span><div class="bar-bg"><div class="bar" style="width:50%;background:var(--accent)"></div></div><span class="amount">9.0M <span class="muted">(4% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Matted Fur <span class="muted">(157 casts)</span></span><div class="bar-bg"><div class="bar" style="width:22%;background:var(--accent)"></div></div><span class="amount">4.0M</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Lunar Beam <span class="muted">(567 casts)</span></span><div class="bar-bg"><div class="bar" style="width:21%;background:var(--accent)"></div></div><span class="amount">3.7M <span class="muted">(63% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Leech <span class="muted">(631 casts)</span></span><div class="bar-bg"><div class="bar" style="width:17%;background:var(--accent)"></div></div><span class="amount">3.0M <span class="muted">(6% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Regrowth <span class="muted">(226 casts)</span></span><div class="bar-bg"><div class="bar" style="width:15%;background:var(--accent)"></div></div><span class="amount">2.6M <span class="muted">(15% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Aessina&#x27;s Renewal <span class="muted">(28 casts)</span></span><div class="bar-bg"><div class="bar" style="width:10%;background:var(--accent)"></div></div><span class="amount">1.8M <span class="muted">(29% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Brambles <span class="muted">(2142 casts)</span></span><div class="bar-bg"><div class="bar" style="width:8%;background:var(--accent)"></div></div><span class="amount">1.5M</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Rejuvenation <span class="muted">(288 casts)</span></span><div class="bar-bg"><div class="bar" style="width:8%;background:var(--accent)"></div></div><span class="amount">1.4M <span class="muted">(57% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Boundless Moonlight <span class="muted">(526 casts)</span></span><div class="bar-bg"><div class="bar" style="width:6%;background:var(--accent)"></div></div><span class="amount">1.2M <span class="muted">(64% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">After the Wildfire <span class="muted">(63 casts)</span></span><div class="bar-bg"><div class="bar" style="width:6%;background:var(--accent)"></div></div><span class="amount">1.0M <span class="muted">(57% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Healthstone <span class="muted">(1 casts)</span></span><div class="bar-bg"><div class="bar" style="width:1%;background:var(--accent)"></div></div><span class="amount">208k</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Fate Mirror <span class="muted">(107 casts)</span></span><div class="bar-bg"><div class="bar" style="width:0%;background:var(--accent)"></div></div><span class="amount">12k <span class="muted">(82% oh)</span></span></div>
+  </details>
+  <div class="stat-row">
+    <span class="label">External healing</span>
+    <span class="value">28.5M (26.6%)</span>
+  </div>
+  <details>
+    <summary>Top sources (10)</summary>
+    <div style="margin-top:8px">
+<div class="hit-bar"><span style="width:180px;font-size:12px">Ursoc&#x27;s Fury <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:100%;background:var(--good)"></div></div><span class="amount">18.0M (16.8%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Elune&#x27;s Favored <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:62%;background:var(--good)"></div></div><span class="amount">11.2M (10.4%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Frenzied Regeneration <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:57%;background:var(--good)"></div></div><span class="amount">10.2M (9.6%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Natural Resilience <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:55%;background:var(--good)"></div></div><span class="amount">9.9M (9.3%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Nature&#x27;s Guardian <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:50%;background:var(--good)"></div></div><span class="amount">9.0M (8.4%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Void Shield <span class="muted">(Bastagram)</span></span><div class="bar-bg"><div class="bar" style="width:49%;background:var(--good)"></div></div><span class="amount">8.7M (8.2%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Atonement <span class="muted">(Bastagram)</span></span><div class="bar-bg"><div class="bar" style="width:34%;background:var(--good)"></div></div><span class="amount">6.2M (5.8%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Matted Fur <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:22%;background:var(--good)"></div></div><span class="amount">4.0M (3.7%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Lunar Beam <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:21%;background:var(--good)"></div></div><span class="amount">3.7M (3.5%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Leech <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:17%;background:var(--good)"></div></div><span class="amount">3.0M (2.8%)</span></div>
+    </div>
+  </details>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="cohort">Cohort <a href="#cohort" class="anchor-hash">#</a></h2>
+  <table class="cohort-table">
+    <tr><th>#</th><th>Player</th><th>ilvl</th><th>DPS</th><th>Deaths</th><th>Date</th><th>Log</th></tr>
+    <tr><td>1</td><td>Parapeta-Moonglade</td><td>281</td><td>128k</td><td>0 deaths</td><td>2026-05-09</td><td><a href="https://www.warcraftlogs.com/reports/v1yVHARpTNdb7JL6#fight=8" target="_blank">WCL</a></td></tr>
+    <tr><td>2</td><td>Vulzal-Rajaxx</td><td>283</td><td>123k</td><td>0 deaths</td><td>2026-05-08</td><td><a href="https://www.warcraftlogs.com/reports/JgBXpcYNFw1KVbmW#fight=7" target="_blank">WCL</a></td></tr>
+    <tr><td>3</td><td>一个时代-索拉丁</td><td>283</td><td>123k</td><td>0 deaths</td><td>2026-05-07</td><td><a href="https://www.warcraftlogs.com/reports/carxybRt42hf67HP#fight=5" target="_blank">WCL</a></td></tr>
+    <tr><td>4</td><td>Antidudu-Blackrock</td><td>281</td><td>123k</td><td>0 deaths</td><td>2026-05-10</td><td><a href="https://www.warcraftlogs.com/reports/JgD7TGVwHLzfAZnk#fight=6" target="_blank">WCL</a></td></tr>
+    <tr><td>5</td><td>头尖尖德-燃烧之刃</td><td>282</td><td>122k</td><td>0 deaths</td><td>2026-05-10</td><td><a href="https://www.warcraftlogs.com/reports/6ZLwPk7WXDvF4Hdz#fight=12" target="_blank">WCL</a></td></tr>
+    <tr><td>6</td><td>热情冷血動物-熊猫酒仙</td><td>279</td><td>121k</td><td>0 deaths</td><td>2026-05-07</td><td><a href="https://www.warcraftlogs.com/reports/WkJwtaq1LrmHZKc6#fight=2" target="_blank">WCL</a></td></tr>
+    <tr><td>7</td><td>Tummythug-Area52</td><td>280</td><td>121k</td><td>0 deaths</td><td>2026-05-05</td><td><a href="https://www.warcraftlogs.com/reports/kXV8qgKfpYPBrbRd#fight=9" target="_blank">WCL</a></td></tr>
+    <tr><td>8</td><td>变形柯鸡-丽丽（四川）</td><td>282</td><td>115k</td><td>0 deaths</td><td>2026-05-07</td><td><a href="https://www.warcraftlogs.com/reports/HGjncrtgRypMkFad#fight=2" target="_blank">WCL</a></td></tr>
+    <tr><td>9</td><td>Dexbear-Draenor</td><td>279</td><td>114k</td><td>0 deaths</td><td>2026-05-10</td><td><a href="https://www.warcraftlogs.com/reports/xtcHJNRnm8v7hCaj#fight=9" target="_blank">WCL</a></td></tr>
+    <tr><td>10</td><td>Snff-Cho&#x27;gall</td><td>284</td><td>114k</td><td>1 death</td><td>2026-05-10</td><td><a href="https://www.warcraftlogs.com/reports/ZDrnFzJyK71GtLYB#fight=4" target="_blank">WCL</a></td></tr>
+  </table>
+</div>
+<div style="text-align:center;padding:24px 0;font-size:11px;color:var(--text-dim)">
+  Generated by <a href="https://github.com">wcl-compare</a>
+</div>
+<script>
+(function() {
+  function openAndScroll(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var node = el.closest('details');
+    while (node) {
+      node.open = true;
+      node = node.parentElement ? node.parentElement.closest('details') : null;
+    }
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('.anchor-hash');
+    if (link) {
+      e.preventDefault();
+      var id = link.getAttribute('href').slice(1);
+      history.replaceState(null, '', '#' + id);
+      openAndScroll(id);
+    }
+  });
+  if (location.hash) openAndScroll(location.hash.slice(1));
+})();
+</script>
+</body>
+</html>
