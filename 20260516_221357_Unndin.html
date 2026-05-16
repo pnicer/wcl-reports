@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retribution Paladin - Algeth&#x27;ar Academy +12 | wcl-compare</title>
+<style>
+:root {
+    --bg: #0f0f1a;
+    --surface: #1a1a2e;
+    --surface-alt: #222244;
+    --surface-hover: #2a2a4a;
+    --border: #333355;
+    --text: #e0e0e0;
+    --text-muted: #8888aa;
+    --text-dim: #666688;
+    --accent: #6c63ff;
+    --accent-dim: #4a4499;
+    --good: #4caf50;
+    --good-dim: #2e7d32;
+    --warn: #ff9800;
+    --warn-dim: #e65100;
+    --bad: #f44336;
+    --bad-dim: #c62828;
+    --boss: #6c63ff;
+    --boss-dim: #3d3699;
+    --trash: #445566;
+    --trash-dim: #334455;
+    --bar-bg: #1a1a30;
+    --bar-user: #6c63ff;
+    --bar-cohort: #445566;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--text-muted);
+     border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.section { margin-bottom: 28px; }
+.muted { color: var(--text-muted); }
+.dim { color: var(--text-dim); }
+
+/* Header */
+.header-links { margin: 4px 0 8px; font-size: 13px; }
+.header-links a { color: var(--accent); text-decoration: none; }
+.header-links a:hover { text-decoration: underline; }
+.header-meta { color: var(--text-muted); margin-bottom: 16px; font-size: 13px; }
+.metric-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    min-width: 140px;
+    flex: 1;
+}
+.metric-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+                       color: var(--text-muted); margin-bottom: 2px; }
+.metric-card .value { font-size: 24px; font-weight: 700; }
+.metric-card .sub { font-size: 12px; color: var(--text-muted); }
+.val-good { color: var(--good); }
+.val-warn { color: var(--warn); }
+.val-bad { color: var(--bad); }
+.val-neutral { color: var(--text); }
+
+/* Timeline */
+.timeline-wrap { position: relative; margin-bottom: 4px; }
+.timeline { display: flex; height: 28px; border-radius: 6px; overflow: hidden;
+            gap: 1px; background: var(--bg); }
+.seg {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1px; color: transparent;
+    position: relative; cursor: default;
+    min-width: 2px;
+}
+.seg.boss { background: var(--boss); }
+.seg.trash { background: var(--trash); }
+.seg.boss:hover { background: var(--boss-dim); }
+.seg.trash:hover { background: var(--trash-dim); }
+.timeline-labels { display: flex; position: relative; height: 20px; margin-bottom: 2px; }
+.timeline-lbl {
+    position: absolute; font-size: 10px; font-weight: 600; color: var(--text-muted);
+    white-space: nowrap; transform: translateX(-50%);
+    top: 2px;
+}
+.timeline-lbl.boss-lbl { color: var(--accent); }
+.timeline-legend { display: flex; gap: 16px; font-size: 11px; color: var(--text-muted);
+                    margin-bottom: 8px; }
+.legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+              margin-right: 4px; vertical-align: middle; }
+.death-markers { position: relative; height: 12px; margin-bottom: 2px; }
+.death-dot {
+    position: absolute; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--bad); top: 2px; transform: translateX(-4px);
+}
+
+/* Bars */
+.bar-row { margin-bottom: 12px; }
+.bar-label { font-size: 13px; margin-bottom: 4px; font-weight: 600; }
+.bar-bg { background: var(--bar-bg); border-radius: 4px; height: 24px; position: relative;
+           overflow: hidden; margin-bottom: 2px; }
+.bar { height: 100%; border-radius: 4px; transition: width 0.3s; min-width: 1px;
+       display: flex; align-items: center; padding-left: 8px;
+       font-size: 11px; font-weight: 600; color: #fff; }
+.bar.user { background: var(--bar-user); }
+.bar.cohort { background: var(--bar-cohort); opacity: 0.7; }
+.bar-inline-label { font-size: 11px; color: var(--text-muted); margin-left: 4px; }
+
+/* Finding cards */
+.finding-group { margin-bottom: 16px; }
+.finding-group-title { font-size: 13px; font-weight: 600; margin-bottom: 6px;
+                        text-transform: uppercase; letter-spacing: 0.5px; }
+.finding-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.finding-card .name { flex: 1; font-size: 13px; }
+.finding-card .vals { font-size: 12px; color: var(--text-muted); text-align: right;
+                       white-space: nowrap; }
+.merge-breakdown { width: 100%; font-size: 0.85em; color: var(--text-dim);
+                    padding-left: 18px; margin-top: -2px; }
+.severity-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.severity-critical { background: var(--bad); }
+.severity-warning { background: var(--warn); }
+.severity-strong { background: var(--good); }
+.severity-info { background: var(--text-dim); }
+
+/* Pull comparison */
+.pull-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.pull-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    flex: 1;
+    min-width: 120px;
+}
+.pull-stat .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+                     color: var(--text-muted); }
+.pull-stat .value { font-size: 18px; font-weight: 700; }
+.pull-stat .vs { font-size: 12px; color: var(--text-muted); }
+.phase-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.phase-table th { text-align: left; color: var(--text-muted); font-weight: 500;
+                   padding: 6px 8px; border-bottom: 1px solid var(--border);
+                   font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.phase-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.phase-table tr:last-child td { border-bottom: none; }
+
+/* Death cards */
+.death-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+.death-card .title { font-weight: 600; margin-bottom: 6px; }
+.death-card .killing-blow { color: var(--bad); font-weight: 600; }
+.death-card .downtime { color: var(--warn); font-size: 12px; margin-top: 4px; }
+.hit-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; font-size: 12px; }
+.hit-bar .bar-bg { flex: 1; height: 14px; }
+.hit-bar .amount { width: 50px; text-align: right; color: var(--text-muted); font-size: 11px; }
+
+/* Cohort table */
+.cohort-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.cohort-table th { text-align: left; color: var(--text-muted); font-weight: 500;
+                    padding: 6px 8px; border-bottom: 1px solid var(--border);
+                    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.cohort-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.cohort-table tr:last-child td { border-bottom: none; }
+.cohort-table tr:hover td { background: var(--surface-hover); }
+
+/* Details/summary */
+details { margin-top: 8px; }
+details summary {
+    cursor: pointer; color: var(--text-muted); font-size: 12px;
+    padding: 4px 0; user-select: none;
+}
+details summary:hover { color: var(--text); }
+details[open] summary { margin-bottom: 8px; }
+
+/* Collapsible subsections */
+details.subsection { margin-top: 0; margin-bottom: 16px; }
+details.subsection > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+details.subsection > summary::-webkit-details-marker { display: none; }
+details.subsection > summary::marker { display: none; content: ''; }
+details.subsection > summary > h3 { display: inline; margin-bottom: 0; cursor: pointer; }
+details.subsection > summary::before {
+    content: '▾ ';
+    font-size: 10px;
+    color: var(--text-dim);
+}
+details.subsection:not([open]) > summary::before {
+    content: '▸ ';
+}
+details.subsection[open] > summary { margin-bottom: 8px; }
+
+/* Anchor links */
+.anchor-hash {
+    color: var(--text-dim);
+    font-size: 0.8em;
+    opacity: 0;
+    transition: opacity 0.15s;
+    margin-left: 6px;
+    text-decoration: none;
+}
+h2:hover .anchor-hash, h3:hover .anchor-hash,
+summary:hover .anchor-hash { opacity: 1; }
+.anchor-hash:hover { color: var(--accent); text-decoration: none; }
+
+/* GCD / cooldown compact cards */
+.stat-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+.stat-row .label { font-size: 13px; }
+.stat-row .value { font-size: 13px; font-weight: 600; }
+.stat-row .dmg-detail { width: 100%; font-size: 11px; color: var(--text-muted);
+    margin-top: 2px; text-align: right; }
+
+/* GCD gap timeline table */
+.gap-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
+.gap-table th { color: var(--text-muted); font-weight: 600; text-align: left;
+    padding: 3px 8px; border-bottom: 1px solid var(--border); }
+.gap-table td { padding: 3px 8px; border-bottom: 1px solid var(--border); }
+.gap-table tr:last-child td { border-bottom: none; }
+.gap-micro td.gap-dur { color: var(--text-muted); }
+.gap-notable td.gap-dur { color: var(--warn); font-weight: 600; }
+.gap-long td.gap-dur { color: var(--bad); font-weight: 600; }
+
+/* Tooltips */
+.finding-card[data-tip] {
+    cursor: help;
+    position: relative;
+}
+.finding-card[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 4px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: max(300px, 100%);
+    max-width: min(440px, 90vw);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.finding-card[data-tip]:hover::after { opacity: 1; pointer-events: auto; }
+.tip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dotted var(--text-dim);
+}
+.tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 6px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: max(300px, 100%);
+    max-width: min(440px, 90vw);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.tip:hover::after { opacity: 1; pointer-events: auto; }
+h3 .tip-icon {
+    display: inline-block;
+    width: 16px; height: 16px; line-height: 16px;
+    text-align: center;
+    border-radius: 50%;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-left: 6px;
+    cursor: help;
+    vertical-align: middle;
+    position: relative;
+}
+h3 .tip-icon::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 0; top: calc(100% + 6px);
+    background: #222240;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: pre-line;
+    width: 380px;
+    max-width: 90vw;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+h3 .tip-icon:hover::after { opacity: 1; pointer-events: auto; }
+
+/* CD alignment timeline (Gantt chart) */
+.cd-timeline { margin-top: 16px; }
+.cd-timeline-axis {
+    display: flex; position: relative; height: 20px; margin-left: 180px;
+    border-bottom: 1px solid var(--border);
+}
+.cd-timeline-tick {
+    position: absolute; font-size: 10px; color: var(--text-dim);
+    transform: translateX(-50%); top: 2px;
+}
+.cd-timeline-group-hdr {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-muted); margin: 10px 0 4px;
+}
+.cd-timeline-row {
+    display: flex; align-items: center; height: 22px; margin-bottom: 2px;
+}
+.cd-timeline-label {
+    width: 180px; flex-shrink: 0; font-size: 11px; color: var(--text-muted);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    padding-right: 8px;
+}
+.cd-timeline-track {
+    flex: 1; position: relative; height: 16px;
+    background: var(--bar-bg); border-radius: 3px;
+}
+.cd-timeline-bar {
+    position: absolute; height: 100%; border-radius: 2px;
+    min-width: 2px; cursor: default;
+}
+.cd-timeline-bar.aug-buff { background: var(--accent); opacity: 0.85; }
+.cd-timeline-bar.aug-debuff { background: var(--warn); opacity: 0.85; }
+.cd-timeline-bar.team-cd { background: var(--good); opacity: 0.85; }
+.cd-timeline-bar.breath { background: #e8b931; opacity: 0.9; }
+.cd-timeline-marker {
+    position: absolute; top: 0; width: 1px; height: 100%;
+    background: var(--border); opacity: 0.3; pointer-events: none;
+}
+
+</style>
+</head>
+<body>
+<div class="section">
+  <h1>Retribution Paladin</h1>
+  <div class="header-links"><a href="https://www.warcraftlogs.com/reports/hM1fWD7RAvrQgCyB#fight=8" target="_blank">WCL Report</a> &middot; <a href="https://www.warcraftlogs.com/character/eu/burninglegion/unndin" target="_blank">Unndin-BurningLegion</a></div>
+  <div class="header-meta">
+    Algeth&#x27;ar Academy +12 &middot;
+    Cohort: 10 players
+    (ilvl 282&ndash;286)
+  </div>
+  <div class="metric-cards">
+    <div class="metric-card">
+      <div class="label">DPS</div>
+      <div class="value val-bad">96k</div>
+      <div class="sub">cohort 166k</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Parse</div>
+      <div class="value val-bad">0%</div>
+      <div class="sub">&nbsp;</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Deaths</div>
+      <div class="value val-warn">1</div>
+      <div class="sub">cohort 0</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Active Time</div>
+      <div class="value">76%</div>
+      <div class="sub">cohort 82%</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="fight-timeline">Fight Timeline <a href="#fight-timeline" class="anchor-hash">#</a></h2>
+  <div class="death-markers"><div class="death-dot" style="left:69.4%" title="Death"></div></div>
+  <div class="timeline-wrap">
+    <div class="timeline">
+    <div class="seg trash" style="flex-basis:2.0%" title="Trash pull 1 — 23.2s — 186k DPS"></div>
+    <div class="seg boss" style="flex-basis:9.9%" title="Overgrown Ancient — 1m55s — 135k DPS"></div>
+    <div class="seg trash" style="flex-basis:4.3%" title="Trash pull 2 — 50.0s — 81k DPS"></div>
+    <div class="seg trash" style="flex-basis:8.4%" title="Trash pull 3 — 1m38s — 168k DPS"></div>
+    <div class="seg boss" style="flex-basis:15.3%" title="Crawth — 2m59s — 80k DPS"></div>
+    <div class="seg trash" style="flex-basis:9.9%" title="Trash pull 4 — 1m55s — 216k DPS"></div>
+    <div class="seg trash" style="flex-basis:1.4%" title="Trash pull 5 — 16.3s — 31k DPS"></div>
+    <div class="seg trash" style="flex-basis:2.0%" title="Trash pull 6 — 23.8s — 181k DPS"></div>
+    <div class="seg trash" style="flex-basis:3.4%" title="Trash pull 7 — 39.5s — 273k DPS"></div>
+    <div class="seg boss" style="flex-basis:12.3%" title="Vexamus — 2m24s — 60k DPS"></div>
+    <div class="seg trash" style="flex-basis:7.6%" title="Trash pull 8 — 1m29s — 226k DPS"></div>
+    <div class="seg trash" style="flex-basis:4.2%" title="Trash pull 9 — 49.4s — 124k DPS"></div>
+    <div class="seg trash" style="flex-basis:3.9%" title="Trash pull 10 — 45.0s — 88k DPS"></div>
+    <div class="seg boss" style="flex-basis:15.4%" title="Echo of Doragosa — 2m59s — 73k DPS"></div>
+    </div>
+    <div class="timeline-labels">
+    <span class="timeline-lbl boss-lbl" style="left:6.9%">Overgrown Ancient (2:51)</span>
+    <span class="timeline-lbl boss-lbl" style="left:32.2%">Crawth (8:15)</span>
+    <span class="timeline-lbl boss-lbl" style="left:62.8%">Vexamus (16:11)</span>
+    <span class="timeline-lbl boss-lbl" style="left:92.3%">Echo of Doragosa (22:37)</span>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-bottom:4px">
+    <span>2:09</span>
+    <span>13:53</span>
+    <span>25:36</span>
+  </div>
+  <div class="timeline-legend">
+    <span><span class="legend-dot" style="background:var(--boss)"></span>Boss</span>
+    <span><span class="legend-dot" style="background:var(--trash)"></span>Trash</span>
+    <span><span class='legend-dot' style='background:var(--bad)'></span>Death</span>
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="pull-comparison">Pull Comparison <a href="#pull-comparison" class="anchor-hash">#</a></h2>
+  <div class="pull-stats">
+    <div class="pull-stat">
+      <div class="label">Trash Pulls</div>
+      <div class="value">10</div>
+      <div class="vs">cohort 7</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Avg Pull Duration</div>
+      <div class="value">55.0s</div>
+      <div class="vs">cohort 1m5s</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Trash Time</div>
+      <div class="value">9m10s</div>
+      <div class="vs">cohort 7m22s</div>
+    </div>
+    <div class="pull-stat">
+      <div class="label">Time Split</div>
+      <div class="value">47% / 53%</div>
+      <div class="vs">trash / boss (cohort 47%)</div>
+    </div>
+  </div>
+
+  <table class="phase-table">
+    <tr><th>Phase</th><th>Your Pulls</th><th>Cohort Pulls</th><th>Your Time</th><th>Cohort Time</th></tr>
+    <tr><td>Before Overgrown Ancient</td><td>1</td><td>1</td><td class="val-good">23.2s</td><td>41.2s</td></tr>
+    <tr><td>Overgrown Ancient -&gt; Crawth</td><td>2</td><td>2</td><td class="val-neutral">2m28s</td><td>2m18s</td></tr>
+    <tr><td>Crawth -&gt; Vexamus</td><td>4</td><td>1</td><td class="val-warn">3m15s</td><td>2m29s</td></tr>
+    <tr><td>Vexamus -&gt; Echo of Doragosa</td><td>3</td><td>2</td><td class="val-warn">3m3s</td><td>2m10s</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2 id="per-segment-dps">Per-Segment DPS <a href="#per-segment-dps" class="anchor-hash">#</a></h2>
+    <div class="bar-row">
+      <div class="bar-label">Overgrown Ancient</div>
+      <div class="bar-bg"><div class="bar user" style="width:43.3%">You: 135k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:78.8%">Cohort: 245k</div></div>
+      <details>
+        <summary>Rotation detail (21 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-warn">106.3s / 115.2s active (92%) <span class="muted">(cohort 95%)</span> &mdash; 7 idle GCDs</span></div>
+<div class="stat-row"><span class="label">Wake of Ashes</span><span class="value val-warn">1.6/min <span class="muted">cohort 1.7/min</span></span><div class="dmg-detail">total 1.6M &middot; avg hit 11k (cohort 13k)</div></div>
+<div class="stat-row"><span class="label">Avenging Wrath</span><span class="value val-neutral">1.0/min <span class="muted">cohort 1.1/min</span></span></div>
+<div class="stat-row"><span class="label">Execution Sentence</span><span class="value val-neutral">1.0/min <span class="muted">cohort 1.1/min</span></span><div class="dmg-detail">total 1.8M &middot; avg hit 44k (cohort 76k)</div></div>
+<div class="stat-row"><span class="label">Divine Toll</span><span class="value val-warn">1.6/min <span class="muted">cohort 1.7/min</span></span></div>
+<div class="stat-row"><span class="label">Blade of Justice</span><span class="value val-neutral">8.3/min <span class="muted">cohort 8.7/min</span></span><div class="dmg-detail">total 503k &middot; avg hit 9k (cohort 12k)</div></div>
+<div class="stat-row"><span class="label">Hammer of Wrath</span><span class="value val-neutral">4.7/min <span class="muted">cohort 4.6/min</span></span><div class="dmg-detail">total 746k &middot; avg hit 32k (cohort 35k)</div></div>
+<div class="stat-row"><span class="label">Judgment</span><span class="value val-warn">5.7/min <span class="muted">cohort 6.1/min</span></span><div class="dmg-detail">total 276k &middot; avg hit 14k (cohort 15k)</div></div>
+<div class="stat-row"><span class="label">Templar Strike</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Crusader Strike</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Rebuke</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Avenging Wrath</span><span class="value val-neutral">42% uptime <span class="muted">cohort 40%</span></span></div>
+<div class="stat-row"><span class="label">Art of War</span><span class="value val-neutral">14% uptime <span class="muted">cohort 17%</span></span></div>
+<div class="stat-row"><span class="label">Execution Sentence</span><span class="value val-neutral">17% uptime <span class="muted">cohort 18%</span></span></div>
+<div class="stat-row"><span class="label">Undisputed Ruling</span><span class="value val-neutral">43% uptime <span class="muted">cohort 41%</span></span></div>
+<div class="stat-row"><span class="label">Hammer of Wrath</span><span class="value val-neutral">42% uptime <span class="muted">cohort 40%</span></span></div>
+<div class="stat-row"><span class="label">Divine Hammer</span><span class="value val-neutral">21% uptime <span class="muted">cohort 23%</span></span></div>
+<div class="stat-row"><span class="label">Empyrean Legacy</span><span class="value val-neutral">8% uptime <span class="muted">cohort 3%</span></span></div>
+<div class="stat-row"><span class="label">Divine Purpose</span><span class="value val-neutral">7% uptime <span class="muted">cohort 6%</span></span></div>
+<div class="stat-row"><span class="label">Holy Power at cap</span><span class="value val-good">14% <span class="muted">cohort 22%</span></span></div>
+<div class="stat-row"><span class="label">Free Divine Storms (Divine Purpose)</span><span class="value val-neutral">14% <span class="muted">cohort 12%</span></span></div>
+
+      <details>
+        <summary>GCD gaps &mdash; 13 gaps &middot; 8.8s idle</summary>
+        <table class="gap-table">
+          <thead><tr><th>Time</th><th>Previous</th><th>Gap</th><th>Next</th></tr></thead>
+          <tbody>
+<tr class="gap-micro"><td>2:51.0</td><td><span class="muted">segment start</span></td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>2:57.9</td><td>Final Verdict</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>2:59.4</td><td>Crusading Strikes</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>3:02.3</td><td>Final Verdict</td><td class="gap-dur">0.7s (0.6 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>3:09.5</td><td>Crusading Strikes</td><td class="gap-dur">1.2s (0.9 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>3:12.1</td><td>Crusading Strikes</td><td class="gap-dur">0.5s (0.3 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>3:14.7</td><td>Crusading Strikes</td><td class="gap-dur">1.3s (1.0 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>3:17.3</td><td>Crusading Strikes</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Avenging Wrath</td></tr>
+<tr class="gap-micro"><td>3:47.6</td><td>Final Verdict</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>3:49.3</td><td>Judgment</td><td class="gap-dur">0.7s (0.5 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>4:12.4</td><td>Judgment</td><td class="gap-dur">2.4s (1.8 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>4:17.1</td><td>Divine Storm</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>4:43.2</td><td>Hammer of Wrath</td><td class="gap-dur">0.2s (0.1 GCDs)</td><td>Crusading Strikes</td></tr>
+          </tbody>
+        </table>
+      </details>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Crawth</div>
+      <div class="bar-bg"><div class="bar user" style="width:25.6%">You: 80k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:33.1%">Cohort: 103k</div></div>
+      <details>
+        <summary>Rotation detail (20 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-neutral">165.9s / 179.0s active (93%) <span class="muted">(cohort 95%)</span> &mdash; 10 idle GCDs</span></div>
+<div class="stat-row"><span class="label">Wake of Ashes</span><span class="value val-neutral">2.0/min <span class="muted">cohort 2.0/min</span></span><div class="dmg-detail">total 399k &middot; avg hit 22k (cohort 23k)</div></div>
+<div class="stat-row"><span class="label">Avenging Wrath</span><span class="value val-neutral">1.0/min <span class="muted">cohort 1.0/min</span></span></div>
+<div class="stat-row"><span class="label">Execution Sentence</span><span class="value val-neutral">1.0/min <span class="muted">cohort 1.0/min</span></span><div class="dmg-detail">total 982k &middot; avg hit 164k (cohort 239k)</div></div>
+<div class="stat-row"><span class="label">Divine Toll</span><span class="value val-neutral">2.0/min <span class="muted">cohort 2.0/min</span></span></div>
+<div class="stat-row"><span class="label">Blade of Justice</span><span class="value val-warn">8.7/min <span class="muted">cohort 9.4/min</span></span><div class="dmg-detail">total 660k &middot; avg hit 25k (cohort 27k)</div></div>
+<div class="stat-row"><span class="label">Hammer of Wrath</span><span class="value val-warn">4.7/min <span class="muted">cohort 5.4/min</span></span><div class="dmg-detail">total 831k &middot; avg hit 36k (cohort 51k)</div></div>
+<div class="stat-row"><span class="label">Judgment</span><span class="value val-bad">5.0/min <span class="muted">cohort 6.0/min</span></span><div class="dmg-detail">total 420k &middot; avg hit 17k (cohort 19k)</div></div>
+<div class="stat-row"><span class="label">Templar Strike</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Crusader Strike</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Rebuke</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Avenging Wrath</span><span class="value val-neutral">40% uptime <span class="muted">cohort 40%</span></span></div>
+<div class="stat-row"><span class="label">Art of War</span><span class="value val-neutral">12% uptime <span class="muted">cohort 12%</span></span></div>
+<div class="stat-row"><span class="label">Execution Sentence</span><span class="value val-neutral">17% uptime <span class="muted">cohort 16%</span></span></div>
+<div class="stat-row"><span class="label">Undisputed Ruling</span><span class="value val-warn">45% uptime <span class="muted">cohort 54%</span></span></div>
+<div class="stat-row"><span class="label">Hammer of Wrath</span><span class="value val-neutral">40% uptime <span class="muted">cohort 40%</span></span></div>
+<div class="stat-row"><span class="label">Divine Hammer</span><span class="value val-neutral">27% uptime <span class="muted">cohort 26%</span></span></div>
+<div class="stat-row"><span class="label">Empyrean Legacy</span><span class="value val-neutral">3% uptime <span class="muted">cohort 4%</span></span></div>
+<div class="stat-row"><span class="label">Divine Purpose</span><span class="value val-good">12% uptime <span class="muted">cohort 6%</span></span></div>
+<div class="stat-row"><span class="label">Holy Power at cap</span><span class="value val-good">9% <span class="muted">cohort 22%</span></span></div>
+
+      <details>
+        <summary>GCD gaps &mdash; 14 gaps &middot; 13.0s idle</summary>
+        <table class="gap-table">
+          <thead><tr><th>Time</th><th>Previous</th><th>Gap</th><th>Next</th></tr></thead>
+          <tbody>
+<tr class="gap-micro"><td>8:15.8</td><td><span class="muted">segment start</span></td><td class="gap-dur">0.9s (0.7 GCDs)</td><td>Avenging Wrath</td></tr>
+<tr class="gap-micro"><td>8:33.9</td><td>Crusading Strikes</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>8:38.7</td><td>Final Verdict</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>8:45.6</td><td>Judgment</td><td class="gap-dur">0.9s (0.7 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>9:06.5</td><td>Final Verdict</td><td class="gap-dur">0.8s (0.6 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>9:10.3</td><td>Final Verdict</td><td class="gap-dur">1.9s (1.4 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>9:16.2</td><td>Judgment</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>9:18.1</td><td>Crusading Strikes</td><td class="gap-dur">0.6s (0.4 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>9:50.0</td><td>Crusading Strikes</td><td class="gap-dur">1.1s (0.8 GCDs)</td><td>Wake of Ashes</td></tr>
+<tr class="gap-micro"><td>9:59.5</td><td>Crusading Strikes</td><td class="gap-dur">0.8s (0.6 GCDs)</td><td>Final Verdict</td></tr>
+<tr class="gap-micro"><td>10:06.2</td><td>Crusading Strikes</td><td class="gap-dur">0.9s (0.7 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>10:19.8</td><td>Final Verdict</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>10:46.4</td><td>Blade of Justice</td><td class="gap-dur">2.2s (1.7 GCDs)</td><td>Final Verdict</td></tr>
+<tr class="gap-micro"><td>10:49.9</td><td>Final Verdict</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Judgment</td></tr>
+          </tbody>
+        </table>
+      </details>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Vexamus</div>
+      <div class="bar-bg"><div class="bar user" style="width:19.2%">You: 60k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:30.7%">Cohort: 96k</div></div>
+      <details>
+        <summary>Rotation detail (20 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">121.1s / 144.1s active (84%) <span class="muted">(cohort 95%)</span> &mdash; 17 idle GCDs</span></div>
+<div class="stat-row"><span class="label">Wake of Ashes</span><span class="value val-neutral">2.1/min <span class="muted">cohort 2.1/min</span></span><div class="dmg-detail">total 265k &middot; avg hit 18k (cohort 20k)</div></div>
+<div class="stat-row"><span class="label">Avenging Wrath</span><span class="value val-bad">0.8/min <span class="muted">cohort 1.0/min</span></span></div>
+<div class="stat-row"><span class="label">Execution Sentence</span><span class="value val-bad">0.8/min <span class="muted">cohort 1.0/min</span></span><div class="dmg-detail">total 545k &middot; avg hit 136k (cohort 177k)</div></div>
+<div class="stat-row"><span class="label">Divine Toll</span><span class="value val-bad">1.7/min <span class="muted">cohort 2.0/min</span></span></div>
+<div class="stat-row"><span class="label">Blade of Justice</span><span class="value val-warn">7.5/min <span class="muted">cohort 8.5/min</span></span><div class="dmg-detail">total 422k &middot; avg hit 23k (cohort 26k)</div></div>
+<div class="stat-row"><span class="label">Hammer of Wrath</span><span class="value val-bad">4.2/min <span class="muted">cohort 5.0/min</span></span><div class="dmg-detail">total 635k &middot; avg hit 40k (cohort 40k)</div></div>
+<div class="stat-row"><span class="label">Judgment</span><span class="value val-warn">5.8/min <span class="muted">cohort 6.5/min</span></span><div class="dmg-detail">total 303k &middot; avg hit 15k (cohort 19k)</div></div>
+<div class="stat-row"><span class="label">Templar Strike</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Crusader Strike</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Rebuke</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Avenging Wrath</span><span class="value val-warn">33% uptime <span class="muted">cohort 40%</span></span></div>
+<div class="stat-row"><span class="label">Art of War</span><span class="value val-neutral">15% uptime <span class="muted">cohort 15%</span></span></div>
+<div class="stat-row"><span class="label">Execution Sentence</span><span class="value val-neutral">14% uptime <span class="muted">cohort 17%</span></span></div>
+<div class="stat-row"><span class="label">Undisputed Ruling</span><span class="value val-warn">45% uptime <span class="muted">cohort 54%</span></span></div>
+<div class="stat-row"><span class="label">Hammer of Wrath</span><span class="value val-warn">33% uptime <span class="muted">cohort 40%</span></span></div>
+<div class="stat-row"><span class="label">Divine Hammer</span><span class="value val-neutral">22% uptime <span class="muted">cohort 26%</span></span></div>
+<div class="stat-row"><span class="label">Empyrean Legacy</span><span class="value val-neutral">3% uptime <span class="muted">cohort 3%</span></span></div>
+<div class="stat-row"><span class="label">Divine Purpose</span><span class="value val-neutral">5% uptime <span class="muted">cohort 7%</span></span></div>
+<div class="stat-row"><span class="label">Holy Power at cap</span><span class="value val-good">8% <span class="muted">cohort 22%</span></span></div>
+
+      <details>
+        <summary>GCD gaps &mdash; 14 gaps &middot; 22.8s idle</summary>
+        <table class="gap-table">
+          <thead><tr><th>Time</th><th>Previous</th><th>Gap</th><th>Next</th></tr></thead>
+          <tbody>
+<tr class="gap-micro"><td>16:11.3</td><td><span class="muted">segment start</span></td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-notable"><td>16:31.8</td><td>Judgment</td><td class="gap-dur">2.7s (2.0 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>16:41.1</td><td>Final Verdict</td><td class="gap-dur">1.2s (0.9 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>16:50.7</td><td>Final Verdict</td><td class="gap-dur">1.3s (1.0 GCDs)</td><td>Hammer of Wrath</td></tr>
+<tr class="gap-micro"><td>16:59.7</td><td>Crusading Strikes</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>17:05.5</td><td>Crusading Strikes</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Hammer of Wrath</td></tr>
+<tr class="gap-notable"><td>17:14.9</td><td>Crusading Strikes</td><td class="gap-dur">3.3s (2.5 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>17:28.6</td><td>Crusading Strikes</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>17:34.5</td><td>Final Verdict</td><td class="gap-dur">0.9s (0.7 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>17:39.0</td><td>Judgment</td><td class="gap-dur">1.5s (1.1 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>18:08.3</td><td>Final Verdict</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Hammer of Wrath</td></tr>
+<tr class="gap-micro"><td>18:10.0</td><td>Crusading Strikes</td><td class="gap-dur">0.7s (0.5 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>18:25.4</td><td>Crusading Strikes</td><td class="gap-dur">1.4s (1.1 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-long"><td>18:28.1</td><td>Crusading Strikes</td><td class="gap-dur">7.3s (5.5 GCDs)</td><td><span class="muted">segment end</span></td></tr>
+          </tbody>
+        </table>
+      </details>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Echo of Doragosa</div>
+      <div class="bar-bg"><div class="bar user" style="width:23.5%">You: 73k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:31.6%">Cohort: 98k</div></div>
+      <details>
+        <summary>Rotation detail (20 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-bad">157.2s / 179.3s active (88%) <span class="muted">(cohort 95%)</span> &mdash; 17 idle GCDs</span></div>
+<div class="stat-row"><span class="label">Wake of Ashes</span><span class="value val-bad">1.7/min <span class="muted">cohort 2.1/min</span></span><div class="dmg-detail">total 327k &middot; avg hit 22k (cohort 22k)</div></div>
+<div class="stat-row"><span class="label">Avenging Wrath</span><span class="value val-warn">1.0/min <span class="muted">cohort 1.1/min</span></span></div>
+<div class="stat-row"><span class="label">Execution Sentence</span><span class="value val-warn">1.0/min <span class="muted">cohort 1.1/min</span></span><div class="dmg-detail">total 747k &middot; avg hit 149k (cohort 180k)</div></div>
+<div class="stat-row"><span class="label">Divine Toll</span><span class="value val-bad">1.7/min <span class="muted">cohort 2.0/min</span></span></div>
+<div class="stat-row"><span class="label">Blade of Justice</span><span class="value val-warn">8.0/min <span class="muted">cohort 9.3/min</span></span><div class="dmg-detail">total 561k &middot; avg hit 23k (cohort 25k)</div></div>
+<div class="stat-row"><span class="label">Hammer of Wrath</span><span class="value val-bad">3.3/min <span class="muted">cohort 4.4/min</span></span><div class="dmg-detail">total 916k &middot; avg hit 48k (cohort 41k)</div></div>
+<div class="stat-row"><span class="label">Judgment</span><span class="value val-neutral">6.4/min <span class="muted">cohort 6.7/min</span></span><div class="dmg-detail">total 386k &middot; avg hit 16k (cohort 18k)</div></div>
+<div class="stat-row"><span class="label">Templar Strike</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Crusader Strike</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Rebuke</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Avenging Wrath</span><span class="value val-warn">32% uptime <span class="muted">cohort 38%</span></span></div>
+<div class="stat-row"><span class="label">Art of War</span><span class="value val-neutral">15% uptime <span class="muted">cohort 14%</span></span></div>
+<div class="stat-row"><span class="label">Execution Sentence</span><span class="value val-neutral">16% uptime <span class="muted">cohort 17%</span></span></div>
+<div class="stat-row"><span class="label">Undisputed Ruling</span><span class="value val-warn">48% uptime <span class="muted">cohort 55%</span></span></div>
+<div class="stat-row"><span class="label">Hammer of Wrath</span><span class="value val-warn">32% uptime <span class="muted">cohort 38%</span></span></div>
+<div class="stat-row"><span class="label">Divine Hammer</span><span class="value val-neutral">21% uptime <span class="muted">cohort 25%</span></span></div>
+<div class="stat-row"><span class="label">Empyrean Legacy</span><span class="value val-neutral">3% uptime <span class="muted">cohort 3%</span></span></div>
+<div class="stat-row"><span class="label">Divine Purpose</span><span class="value val-neutral">5% uptime <span class="muted">cohort 7%</span></span></div>
+<div class="stat-row"><span class="label">Holy Power at cap</span><span class="value val-good">10% <span class="muted">cohort 22%</span></span></div>
+
+      <details>
+        <summary>GCD gaps &mdash; 21 gaps &middot; 21.8s idle</summary>
+        <table class="gap-table">
+          <thead><tr><th>Time</th><th>Previous</th><th>Gap</th><th>Next</th></tr></thead>
+          <tbody>
+<tr class="gap-long"><td>22:37.4</td><td><span class="muted">segment start</span></td><td class="gap-dur">5.8s (4.4 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>22:44.5</td><td>Judgment</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>22:46.1</td><td>Judgment</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>22:53.5</td><td>Crusading Strikes</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>23:05.4</td><td>Crusading Strikes</td><td class="gap-dur">1.6s (1.2 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>23:08.3</td><td>Crusading Strikes</td><td class="gap-dur">0.2s (0.1 GCDs)</td><td>Algeth&#x27;ar Puzzle</td></tr>
+<tr class="gap-micro"><td>23:10.0</td><td>Algeth&#x27;ar Puzzle</td><td class="gap-dur">1.4s (1.1 GCDs)</td><td>Final Verdict</td></tr>
+<tr class="gap-micro"><td>23:41.0</td><td>Crusading Strikes</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>23:42.6</td><td>Judgment</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>23:46.5</td><td>Judgment</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Wake of Ashes</td></tr>
+<tr class="gap-micro"><td>24:06.2</td><td>Judgment</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>24:08.1</td><td>Final Verdict</td><td class="gap-dur">0.7s (0.5 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>24:13.0</td><td>Final Verdict</td><td class="gap-dur">0.8s (0.6 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>24:15.1</td><td>Crusading Strikes</td><td class="gap-dur">1.3s (1.0 GCDs)</td><td>Final Verdict</td></tr>
+<tr class="gap-micro"><td>24:17.7</td><td>Final Verdict</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Avenging Wrath</td></tr>
+<tr class="gap-micro"><td>24:42.8</td><td>Crusading Strikes</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Final Verdict</td></tr>
+<tr class="gap-micro"><td>24:51.6</td><td>Final Verdict</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Final Verdict</td></tr>
+<tr class="gap-micro"><td>25:06.5</td><td>Crusading Strikes</td><td class="gap-dur">2.0s (1.5 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>25:09.8</td><td>Judgment</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>25:22.9</td><td>Final Verdict</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Algeth&#x27;ar Puzzle</td></tr>
+<tr class="gap-notable"><td>25:24.5</td><td>Algeth&#x27;ar Puzzle</td><td class="gap-dur">2.7s (2.1 GCDs)</td><td>Crusading Strikes</td></tr>
+          </tbody>
+        </table>
+      </details>
+      </details>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Trash (overall)</div>
+      <div class="bar-bg"><div class="bar user" style="width:55.8%">You: 174k</div></div>
+      <div class="bar-bg"><div class="bar cohort" style="width:93.1%">Cohort: 290k</div></div>
+      <details>
+        <summary>Rotation detail (21 metrics)</summary>
+<div class="stat-row"><span class="label">Activity</span><span class="value val-warn">471.1s / 549.7s active (86%) <span class="muted">(cohort 90%)</span> &mdash; 60 idle GCDs</span></div>
+<div class="stat-row"><span class="label">Wake of Ashes</span><span class="value val-neutral">2.0/min <span class="muted">cohort 1.9/min</span></span><div class="dmg-detail">total 3.7M &middot; avg hit 14k (cohort 15k)</div></div>
+<div class="stat-row"><span class="label">Avenging Wrath</span><span class="value val-good">1.2/min <span class="muted">cohort 1.0/min</span></span></div>
+<div class="stat-row"><span class="label">Execution Sentence</span><span class="value val-good">1.2/min <span class="muted">cohort 1.0/min</span></span><div class="dmg-detail">total 7.4M &middot; avg hit 120k (cohort 126k)</div></div>
+<div class="stat-row"><span class="label">Divine Toll</span><span class="value val-neutral">1.9/min <span class="muted">cohort 1.8/min</span></span></div>
+<div class="stat-row"><span class="label">Blade of Justice</span><span class="value val-warn">7.8/min <span class="muted">cohort 8.8/min</span></span><div class="dmg-detail">total 3.3M &middot; avg hit 12k (cohort 11k)</div></div>
+<div class="stat-row"><span class="label">Hammer of Wrath</span><span class="value val-good">5.2/min <span class="muted">cohort 4.1/min</span></span><div class="dmg-detail">total 6.2M &middot; avg hit 31k (cohort 35k)</div></div>
+<div class="stat-row"><span class="label">Judgment</span><span class="value val-bad">4.0/min <span class="muted">cohort 5.5/min</span></span><div class="dmg-detail">total 2.3M &middot; avg hit 13k (cohort 14k)</div></div>
+<div class="stat-row"><span class="label">Templar Strike</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Crusader Strike</span><span class="value val-neutral">0.0/min <span class="muted">cohort 0.0/min</span></span></div>
+<div class="stat-row"><span class="label">Rebuke</span><span class="value val-bad">0.7/min <span class="muted">cohort 1.0/min</span></span></div>
+<div class="stat-row"><span class="label">Avenging Wrath</span><span class="value val-good">45% uptime <span class="muted">cohort 38%</span></span></div>
+<div class="stat-row"><span class="label">Art of War</span><span class="value val-neutral">20% uptime <span class="muted">cohort 16%</span></span></div>
+<div class="stat-row"><span class="label">Execution Sentence</span><span class="value val-neutral">20% uptime <span class="muted">cohort 16%</span></span></div>
+<div class="stat-row"><span class="label">Undisputed Ruling</span><span class="value val-neutral">46% uptime <span class="muted">cohort 48%</span></span></div>
+<div class="stat-row"><span class="label">Hammer of Wrath</span><span class="value val-good">45% uptime <span class="muted">cohort 38%</span></span></div>
+<div class="stat-row"><span class="label">Divine Hammer</span><span class="value val-neutral">23% uptime <span class="muted">cohort 24%</span></span></div>
+<div class="stat-row"><span class="label">Empyrean Legacy</span><span class="value val-good">10% uptime <span class="muted">cohort 4%</span></span></div>
+<div class="stat-row"><span class="label">Divine Purpose</span><span class="value val-neutral">4% uptime <span class="muted">cohort 5%</span></span></div>
+<div class="stat-row"><span class="label">Holy Power at cap</span><span class="value val-neutral">18% <span class="muted">cohort 22%</span></span></div>
+<div class="stat-row"><span class="label">Free Divine Storms (Divine Purpose)</span><span class="value val-neutral">9% <span class="muted">cohort 12%</span></span></div>
+
+      <details>
+        <summary>GCD gaps &mdash; 62 gaps &middot; 78.4s idle</summary>
+        <table class="gap-table">
+          <thead><tr><th>Time</th><th>Previous</th><th>Gap</th><th>Next</th></tr></thead>
+          <tbody>
+<tr class="gap-micro"><td>2:12.3</td><td>Wake of Ashes</td><td class="gap-dur">1.2s (0.9 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>2:17.1</td><td>Hammer of Wrath</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Hammer of Wrath</td></tr>
+<tr class="gap-micro"><td>2:24.7</td><td>Hammer of Wrath</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>2:32.7</td><td>Final Verdict</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td><span class="muted">segment end</span></td></tr>
+<tr class="gap-micro"><td>5:06.6</td><td><span class="muted">segment start</span></td><td class="gap-dur">0.7s (0.6 GCDs)</td><td>Final Verdict</td></tr>
+<tr class="gap-notable"><td>5:16.2</td><td>Crusading Strikes</td><td class="gap-dur">3.5s (2.6 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>6:09.1</td><td><span class="muted">segment start</span></td><td class="gap-dur">1.7s (1.3 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-long"><td>6:32.9</td><td>Divine Storm</td><td class="gap-dur">5.8s (4.4 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-long"><td>6:58.6</td><td>Divine Storm</td><td class="gap-dur">6.4s (4.8 GCDs)</td><td>Hammer of Wrath</td></tr>
+<tr class="gap-micro"><td>7:06.3</td><td>Hammer of Wrath</td><td class="gap-dur">1.2s (0.9 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>7:30.9</td><td>Divine Storm</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>7:32.4</td><td>Crusading Strikes</td><td class="gap-dur">1.0s (0.7 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>7:40.0</td><td>Divine Storm</td><td class="gap-dur">1.1s (0.8 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>7:43.9</td><td>Divine Storm</td><td class="gap-dur">2.6s (2.0 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>11:55.3</td><td>Hammer of Light</td><td class="gap-dur">0.6s (0.4 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>12:13.6</td><td>Divine Storm</td><td class="gap-dur">0.8s (0.6 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>12:15.7</td><td>Crusading Strikes</td><td class="gap-dur">0.2s (0.1 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>12:32.8</td><td>Crusading Strikes</td><td class="gap-dur">0.9s (0.7 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-long"><td>12:36.8</td><td>Final Verdict</td><td class="gap-dur">4.7s (3.6 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>12:42.9</td><td>Judgment</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>12:45.8</td><td>Divine Storm</td><td class="gap-dur">0.9s (0.7 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>12:49.4</td><td>Divine Storm</td><td class="gap-dur">1.9s (1.4 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>12:52.6</td><td>Crusading Strikes</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>12:55.6</td><td>Divine Storm</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>12:58.2</td><td>Crusading Strikes</td><td class="gap-dur">2.3s (1.7 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>13:01.8</td><td>Crusading Strikes</td><td class="gap-dur">0.8s (0.6 GCDs)</td><td>Avenging Wrath</td></tr>
+<tr class="gap-micro"><td>13:21.2</td><td>Divine Storm</td><td class="gap-dur">1.1s (0.9 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>13:23.9</td><td>Hammer of Wrath</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>13:26.0</td><td>Blade of Justice</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>13:28.1</td><td>Divine Storm</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-notable"><td>13:29.5</td><td>Judgment</td><td class="gap-dur">3.3s (2.5 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>13:44.1</td><td>Crusading Strikes</td><td class="gap-dur">1.8s (1.4 GCDs)</td><td><span class="muted">segment end</span></td></tr>
+<tr class="gap-micro"><td>14:05.7</td><td><span class="muted">segment start</span></td><td class="gap-dur">0.8s (0.6 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>14:30.3</td><td><span class="muted">segment start</span></td><td class="gap-dur">2.4s (1.8 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>15:29.1</td><td>Judgment</td><td class="gap-dur">0.5s (0.4 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>15:35.6</td><td>Divine Storm</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>15:38.2</td><td>Divine Storm</td><td class="gap-dur">1.2s (0.9 GCDs)</td><td>Avenging Wrath</td></tr>
+<tr class="gap-micro"><td>15:41.5</td><td>Crusading Strikes</td><td class="gap-dur">1.3s (1.0 GCDs)</td><td>Will to Survive</td></tr>
+<tr class="gap-notable"><td>18:54.6</td><td><span class="muted">segment start</span></td><td class="gap-dur">2.9s (2.2 GCDs)</td><td>Algeth&#x27;ar Puzzle</td></tr>
+<tr class="gap-micro"><td>18:59.3</td><td>Algeth&#x27;ar Puzzle</td><td class="gap-dur">1.6s (1.2 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>19:17.8</td><td>Divine Storm</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Hammer of Wrath</td></tr>
+<tr class="gap-micro"><td>19:19.5</td><td>Hammer of Wrath</td><td class="gap-dur">0.2s (0.1 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-long"><td>19:42.2</td><td>Final Verdict</td><td class="gap-dur">4.5s (3.4 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>19:49.4</td><td>Divine Storm</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>19:50.8</td><td>Judgment</td><td class="gap-dur">0.4s (0.3 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>19:52.6</td><td>Crusading Strikes</td><td class="gap-dur">0.6s (0.4 GCDs)</td><td>Divine Storm</td></tr>
+<tr class="gap-micro"><td>19:55.3</td><td>Crusading Strikes</td><td class="gap-dur">0.6s (0.5 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>19:58.5</td><td>Divine Storm</td><td class="gap-dur">1.5s (1.1 GCDs)</td><td>Blade of Justice</td></tr>
+<tr class="gap-micro"><td>20:01.4</td><td>Crusading Strikes</td><td class="gap-dur">1.0s (0.8 GCDs)</td><td>Divine Storm</td></tr>
+<tr class="gap-micro"><td>20:07.0</td><td>Hammer of Light</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>20:21.8</td><td>Hammer of Wrath</td><td class="gap-dur">0.3s (0.3 GCDs)</td><td>Hammer of Wrath</td></tr>
+<tr class="gap-micro"><td>20:48.3</td><td><span class="muted">segment start</span></td><td class="gap-dur">1.0s (0.7 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>20:51.7</td><td>Judgment</td><td class="gap-dur">0.1s (0.1 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>20:53.2</td><td>Crusading Strikes</td><td class="gap-dur">1.3s (1.0 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>20:56.0</td><td>Divine Storm</td><td class="gap-dur">1.4s (1.0 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>21:28.7</td><td>Crusading Strikes</td><td class="gap-dur">0.2s (0.2 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>21:48.9</td><td><span class="muted">segment start</span></td><td class="gap-dur">1.2s (0.9 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>21:56.6</td><td>Crusading Strikes</td><td class="gap-dur">2.0s (1.5 GCDs)</td><td>Judgment</td></tr>
+<tr class="gap-micro"><td>22:01.1</td><td>Divine Storm</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>22:21.6</td><td>Hammer of Light</td><td class="gap-dur">0.8s (0.6 GCDs)</td><td>Crusading Strikes</td></tr>
+<tr class="gap-micro"><td>22:28.1</td><td>Hammer of Wrath</td><td class="gap-dur">0.2s (0.1 GCDs)</td><td>Hammer of Wrath</td></tr>
+<tr class="gap-micro"><td>22:32.3</td><td>Final Verdict</td><td class="gap-dur">0.3s (0.2 GCDs)</td><td>Judgment</td></tr>
+          </tbody>
+        </table>
+      </details>
+      </details>
+    </div>
+
+  <details>
+    <summary>Per-trash-pull DPS (10 pulls)</summary>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 1</div>
+        <div class="bar-bg"><div class="bar user" style="width:59.8%">186k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 2</div>
+        <div class="bar-bg"><div class="bar user" style="width:26.1%">81k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 3</div>
+        <div class="bar-bg"><div class="bar user" style="width:53.9%">168k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 4</div>
+        <div class="bar-bg"><div class="bar user" style="width:69.5%">216k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 5</div>
+        <div class="bar-bg"><div class="bar user" style="width:9.9%">31k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 6</div>
+        <div class="bar-bg"><div class="bar user" style="width:58.3%">181k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 7</div>
+        <div class="bar-bg"><div class="bar user" style="width:87.7%">273k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 8</div>
+        <div class="bar-bg"><div class="bar user" style="width:72.5%">226k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 9</div>
+        <div class="bar-bg"><div class="bar user" style="width:39.7%">124k</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trash pull 10</div>
+        <div class="bar-bg"><div class="bar user" style="width:28.3%">88k</div></div>
+      </div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="rotation">Rotation <a href="#rotation" class="anchor-hash">#</a></h2>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--text)">Active DPS</div>
+<div class="finding-card" data-tip="DPS counting only time you were alive and in combat. Removes death downtime so you can see your actual rotation quality separately from survivability.
+If your overall DPS is low but Active DPS is close to cohort, deaths are the main problem, not your rotation."><div class="severity-dot severity-critical"></div><div class="name">Active DPS</div><div class="vals">127k <span class="muted">cohort 202k</span> <span class="val-bad">-37%</span></div></div>
+  </div>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--warn)">Improvements</div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Empyrean Legacy uptime</div><div class="vals">7% <span class="muted">cohort 4%</span> <span class="val-good">+81%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Rebuke casts/min</div><div class="vals">0.4/min <span class="muted">cohort 0.5/min</span> <span class="val-bad">-31%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Judgment casts/min</div><div class="vals">5.4/min <span class="muted">cohort 6.2/min</span> <span class="val-warn">-14%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Hammer of Wrath uptime</div><div class="vals">44% <span class="muted">cohort 39%</span> <span class="val-good">+11%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Avenging Wrath uptime</div><div class="vals">44% <span class="muted">cohort 39%</span> <span class="val-good">+11%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Execution Sentence uptime</div><div class="vals">18% <span class="muted">cohort 17%</span> <span class="val-good">+9%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Blade of Justice casts/min</div><div class="vals">8.1/min <span class="muted">cohort 8.9/min</span> <span class="val-warn">-9%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-critical"></div><div class="name">Art of War uptime</div><div class="vals">132% <span class="muted">cohort 123%</span> <span class="val-good">+8%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-critical"></div><div class="name">Divine Toll casts/min</div><div class="vals">1.8/min <span class="muted">cohort 1.9/min</span> <span class="val-neutral">-5%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-warning"></div><div class="name">Wake of Ashes casts/min</div><div class="vals">1.9/min <span class="muted">cohort 1.9/min</span> <span class="val-neutral">-0%</span></div></div>
+  </div>
+  <div class="finding-group">
+    <div class="finding-group-title" style="color:var(--good)">Strong Points</div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-strong"></div><div class="name">Divine Purpose uptime</div><div class="vals">6% <span class="muted">cohort 7%</span> <span class="val-bad">-22%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-strong"></div><div class="name">Undisputed Ruling uptime</div><div class="vals">48% <span class="muted">cohort 53%</span> <span class="val-warn">-10%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Avenging Wrath casts/min</div><div class="vals">1.1/min <span class="muted">cohort 1.0/min</span> <span class="val-good">+8%</span></div></div>
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-strong"></div><div class="name">Execution Sentence casts/min</div><div class="vals">1.1/min <span class="muted">cohort 1.0/min</span> <span class="val-good">+8%</span></div></div>
+<div class="finding-card" data-tip="Percentage of fight time the buff was active on you or your target. Compare to cohort to see if you&#x27;re refreshing often enough."><div class="severity-dot severity-strong"></div><div class="name">Divine Hammer uptime</div><div class="vals">24% <span class="muted">cohort 25%</span> <span class="val-neutral">-4%</span></div></div>
+  </div>
+  <details>
+    <summary>On par (1 metrics)</summary>
+    <div class="finding-group">
+<div class="finding-card" data-tip="Casts per minute of this ability. Higher generally means better rotational execution — you&#x27;re fitting more casts into the same time.
+If you&#x27;re low, check: are you holding the CD too long, or not pressing the button on cooldown?"><div class="severity-dot severity-info"></div><div class="name">Hammer of Wrath casts/min</div><div class="vals">4.7/min <span class="muted">cohort 4.5/min</span> <span class="val-neutral">+4%</span></div></div>
+    </div>
+  </details>
+  <details>
+    <summary>Damage distribution (8 metrics, varies with pull size)</summary>
+    <div class="finding-group">
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-critical"></div><div class="name">Crusading Strikes damage %</div><div class="vals">8% <span class="muted">cohort 9%</span> <span class="val-warn">-12%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-critical"></div><div class="name">Divine Storm damage %</div><div class="vals">10% <span class="muted">cohort 12%</span> <span class="val-warn">-12%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-critical"></div><div class="name">Blade of Justice damage %</div><div class="vals">17% <span class="muted">cohort 18%</span> <span class="val-warn">-6%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-info"></div><div class="name">Divine Hammer damage %</div><div class="vals">10% <span class="muted">cohort 9%</span> <span class="val-neutral">+3%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-strong"></div><div class="name">Final Verdict damage %</div><div class="vals">6% <span class="muted">cohort 5%</span> <span class="val-good">+28%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-strong"></div><div class="name">Hammer of Wrath damage %</div><div class="vals">6% <span class="muted">cohort 5%</span> <span class="val-good">+24%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-strong"></div><div class="name">Judgment damage %</div><div class="vals">3% <span class="muted">cohort 2%</span> <span class="val-good">+19%</span></div></div>
+<div class="finding-card" data-tip="This ability&#x27;s share of your total damage. Varies significantly with pull size and comp — focus on cast rate instead for rotation feedback."><div class="severity-dot severity-strong"></div><div class="name">Hammer of Light damage %</div><div class="vals">12% <span class="muted">cohort 10%</span> <span class="val-good">+15%</span></div></div>
+    </div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="details">Details <a href="#details" class="anchor-hash">#</a></h2>
+  <details class="subsection" open><summary><h3 id="deaths">Deaths<span class="tip-icon" data-tip="Each death shows the last few hits you took and the killing blow. Look at the damage sources — could you have interrupted, moved, or used a defensive?">?</span> <a href="#deaths" class="anchor-hash">#</a></h3></summary>
+    <div class="death-card">
+      <div class="title">Death #1 at 18:26 — Vexamus</div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Arcane Fissure</span><div class="bar-bg"><div class="bar user" style="width:70%"></div></div><span class="amount">164k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px">Corrupted Mana</span><div class="bar-bg"><div class="bar user" style="width:90%"></div></div><span class="amount">209k</span></div>
+<div class="hit-bar"><span style="width:120px;font-size:11px" class="killing-blow">Arcane Fissure</span><div class="bar-bg"><div class="bar" style="width:100%;background:var(--bad)"></div></div><span class="amount" style="color:var(--bad)">233k</span></div>
+<div class="downtime">Dead for 27.7s</div>
+    </div>
+  </details>
+  <details class="subsection" open><summary><h3 id="gcd-efficiency">GCD Efficiency<span class="tip-icon" data-tip="Counts moments where you weren&#x27;t pressing any button during combat. Each wasted GCD is ~1.5s of doing nothing.
+Common causes: running without instant casts, hesitating on what to press next, or being dead.">?</span> <a href="#gcd-efficiency" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Idle GCDs</span>
+    <span class="value val-bad">110 (2m26s)</span>
+  </div>
+<div class="stat-row"><span class="label">&nbsp;&nbsp;↳ Dead</span><span class="value val-bad">13 (17.2s)</span></div><div class="stat-row"><span class="label">&nbsp;&nbsp;↳ Alive</span><span class="value val-warn">97 (2m8s)</span></div>
+  <div class="stat-row">
+    <span class="label">Cohort</span>
+    <span class="value">50 (best 43)</span>
+  </div>
+<div class="stat-row"><span class="label">Rate (alive)</span><span class="value">5.0/min (cohort 3.4/min, best 2.8/min)</span></div>
+  <div class="stat-row">
+    <span class="label">Effective GCD</span>
+    <span class="value">1.32s (haste 13.7%)</span>
+  </div>
+<div class="stat-row"><span class="label">Worst segment</span><span class="value">Trash (overall) (60 idle GCDs)</span></div>
+<div class="stat-row"><span class="label">Gap pattern</span><span class="value"></span></div>
+<div class="stat-row"><span class="label">&nbsp;&nbsp;Sub-GCD (&lt;1 GCD)</span><span class="value">115 gaps, 57.9s</span></div>
+<div class="stat-row"><span class="label">&nbsp;&nbsp;Micro (1-2 GCDs)</span><span class="value">19 gaps, 34.8s</span></div>
+<div class="stat-row"><span class="label">&nbsp;&nbsp;Notable (2-3 GCDs)</span><span class="value">6 gaps, 18.4s</span></div>
+<div class="stat-row"><span class="label">&nbsp;&nbsp;Long (3+ GCDs)</span><span class="value">6 gaps, 34.4s</span></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="cooldown-hold-times">Cooldown Hold Times<span class="tip-icon" data-tip="Time between a cooldown becoming available and you pressing it. Lower is better — a 10s hold on a 30s CD means the ability sat ready for 10 seconds while you could have been using it.
+Check the &#x27;worst&#x27; timestamp to find where you held the longest.">?</span> <a href="#cooldown-hold-times" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row"><span class="label">Wake of Ashes (CD: 30s)</span><span class="value val-warn">avg 8.8s hold <span class="muted">cohort 7.6s</span></span></div>
+<div class="stat-row"><span class="label">Avenging Wrath (CD: 120s)</span><span class="value val-neutral">avg 0.0s hold <span class="muted">cohort 0.0s</span></span></div>
+<div class="stat-row"><span class="label">Execution Sentence (CD: 60s)</span><span class="value val-good">avg 9.9s hold <span class="muted">cohort 13.5s</span></span></div>
+<div class="stat-row"><span class="label">Divine Toll (CD: 60s)</span><span class="value val-warn">avg 2.2s hold <span class="muted">cohort 0.6s</span></span></div>
+<div class="stat-row"><span class="label">Blade of Justice (CD: 12s)</span><span class="value val-warn">avg 1.6s hold <span class="muted">cohort 0.9s</span></span></div>
+<div class="stat-row"><span class="label">Hammer of Wrath (CD: 8s)</span><span class="value val-neutral">avg 10.7s hold <span class="muted">cohort 10.9s</span></span></div>
+<div class="stat-row"><span class="label">Judgment (CD: 11s)</span><span class="value val-warn">avg 5.9s hold <span class="muted">cohort 4.8s</span></span></div>
+<div class="stat-row"><span class="label">Rebuke (CD: 15s)</span><span class="value val-bad">avg 65.0s hold <span class="muted">cohort 43.4s</span></span></div>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="survivability">Survivability <a href="#survivability" class="anchor-hash">#</a></h2>
+  <details class="subsection" open><summary><h3 id="damage-taken">Damage Taken <a href="#damage-taken" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Total damage taken</span>
+    <span class="value">15.3M (10k DTPS)</span>
+  </div>
+  <div style="margin-top:8px">
+<div class="hit-bar"><span style="width:180px;font-size:12px">Overwhelming Power</span><div class="bar-bg"><div class="bar user" style="width:100%"></div></div><span class="amount">2.5M (16.0%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Deafening Screech</span><div class="bar-bg"><div class="bar user" style="width:82%"></div></div><span class="amount">2.0M (13.2%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Mana Bomb</span><div class="bar-bg"><div class="bar user" style="width:63%"></div></div><span class="amount">1.6M (10.2%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Melee</span><div class="bar-bg"><div class="bar user" style="width:50%"></div></div><span class="amount">1.2M (8.0%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Blistering Fire</span><div class="bar-bg"><div class="bar user" style="width:41%"></div></div><span class="amount">1.0M (6.6%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Arcane Smash</span><div class="bar-bg"><div class="bar user" style="width:37%"></div></div><span class="amount">898k (5.9%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Splinterbark</span><div class="bar-bg"><div class="bar user" style="width:32%"></div></div><span class="amount">785k (5.1%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Arcane Fissure</span><div class="bar-bg"><div class="bar user" style="width:29%"></div></div><span class="amount">700k (4.6%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Mana Void</span><div class="bar-bg"><div class="bar user" style="width:28%"></div></div><span class="amount">688k (4.5%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Vicious Lunge</span><div class="bar-bg"><div class="bar user" style="width:27%"></div></div><span class="amount">656k (4.3%)</span></div>
+  </div>
+  </details>
+  <details class="subsection" open><summary><h3 id="damage-spikes">Damage Spikes <a href="#damage-spikes" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Spikes detected</span>
+    <span class="value">10</span>
+  </div>
+<div class="stat-row"><span class="label">Undefended spikes</span><span class="value val-bad">5 of 10</span></div>
+  <details>
+    <summary>Spike details (10 spikes)</summary>
+<div class="death-card"><div class="title">Spike #1 at 11:05 — Crawth</div><div style="font-size:13px">272k in 3.5s (78k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Deafening Screech (204k), Blistering Fire (68k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Blessing of Freedom, Blessing of Sacrifice, Word of Glory</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Divine Shield, Divine Protection, Lay on Hands</span></div><div style="font-size:12px;margin-top:2px">Self (121k): <span style="color:var(--accent);font-size:11px">Healthstone (116k), Lightbearer (3k), Leech (2k)</span></div><div style="font-size:12px">External (156k): <span style="color:var(--good);font-size:11px">Light of Dawn (60k), Dawnlight (57k), Sun&#x27;s Avatar (17k), Beacon of the Savior (13k), Sun Sear (9k)</span></div></div>
+<div class="death-card"><div class="title">Spike #2 at 13:39 — Trash pull 4</div><div style="font-size:13px">410k in 5.5s (75k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Melee (314k), Spellbound Weapon (96k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Divine Shield, Divine Protection, Word of Glory</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Blessing of Freedom, Blessing of Sacrifice</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Lay on Hands</span></div><div style="font-size:12px;margin-top:2px">Self (82k): <span style="color:var(--accent);font-size:11px">Word of Glory (80k), Leech (2k)</span></div><div style="font-size:12px">External (0): <span style="color:var(--text-dim);font-size:11px">none</span></div></div>
+<div class="death-card"><div class="title">Spike #3 at 16:48 — Vexamus</div><div style="font-size:13px">255k in 3.5s (73k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Mana Bomb (255k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Divine Protection, Blessing of Freedom, Blessing of Sacrifice, Word of Glory</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Divine Shield, Lay on Hands</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Beacon of the Savior (from Sokneridder), Dream Guide (from Telarion)</span></div><div style="font-size:12px;margin-top:2px">Self (251k): <span style="color:var(--accent);font-size:11px">Word of Glory (142k), Sacrosanct Crusade (106k), Leech (3k), Lightbearer (84)</span></div><div style="font-size:12px">External (28k): <span style="color:var(--good);font-size:11px">Beacon of the Savior (25k), Beacon of Light (3k)</span></div></div>
+<div class="death-card"><div class="title">Spike #4 at 17:14 — Vexamus</div><div style="font-size:13px">268k in 3.5s (77k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Mana Bomb (268k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Divine Protection, Blessing of Freedom, Blessing of Sacrifice, Word of Glory</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Divine Shield, Lay on Hands</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Beacon of the Savior (from Sokneridder)</span></div><div style="font-size:12px;margin-top:2px">Self (31k): <span style="color:var(--accent);font-size:11px">Sacrosanct Crusade (28k), Lightbearer (3k), Leech (630)</span></div><div style="font-size:12px">External (154k): <span style="color:var(--good);font-size:11px">Beacon of Light (141k), Beacon of the Savior (13k)</span></div></div>
+<div class="death-card"><div class="title">Spike #5 at 17:32 — Vexamus</div><div style="font-size:13px">258k in 3.5s (74k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Mana Bomb (258k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Divine Protection, Blessing of Freedom, Blessing of Sacrifice, Word of Glory</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Divine Shield, Lay on Hands</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Regrowth (from Telarion)</span></div><div style="font-size:12px;margin-top:2px">Self (6k): <span style="color:var(--accent);font-size:11px">Lightbearer (4k), Leech (2k)</span></div><div style="font-size:12px">External (185k): <span style="color:var(--good);font-size:11px">Regrowth (78k), Light of Dawn (32k), Beacon of Light (29k), After the Wildfire (23k), Dawnlight (23k)</span></div></div>
+<div class="death-card"><div class="title">Spike #6 at 17:58 — Vexamus</div><div style="font-size:13px">277k in 3.0s (92k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Mana Bomb (277k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--bad);font-size:11px">NONE</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Blessing of Freedom, Blessing of Sacrifice, Word of Glory</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Divine Shield, Divine Protection, Lay on Hands</span></div><div style="font-size:12px;margin-top:2px">Self (57k): <span style="color:var(--accent);font-size:11px">Sacrosanct Crusade (53k), Leech (4k), Lightbearer (46)</span></div><div style="font-size:12px">External (0): <span style="color:var(--text-dim);font-size:11px">none</span></div></div>
+<div class="death-card"><div class="title">Spike #7 at 18:21 — Vexamus</div><div style="font-size:13px">373k in 4.0s (93k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Corrupted Mana (209k), Arcane Fissure (164k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Word of Glory</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Blessing of Freedom, Blessing of Sacrifice</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Divine Shield, Divine Protection, Lay on Hands</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Sun Sear (from Sokneridder)</span></div><div style="font-size:12px;margin-top:2px">Self (140k): <span style="color:var(--accent);font-size:11px">Sacrosanct Crusade (76k), Word of Glory (62k), Leech (1k), Lightbearer (53)</span></div><div style="font-size:12px">External (3k): <span style="color:var(--good);font-size:11px">Sun Sear (3k)</span></div></div>
+<div class="death-card"><div class="title">Spike #8 at 21:05 — Trash pull 9</div><div style="font-size:13px">458k in 5.5s (83k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Arcane Bolt (294k), Arcane Smash (165k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Word of Glory</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Divine Protection, Blessing of Freedom, Blessing of Sacrifice, Lay on Hands</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Divine Shield</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Sun Sear (from Sokneridder), Beacon of the Savior (from Sokneridder), Dream Guide (from Telarion)</span></div><div style="font-size:12px;margin-top:2px">Self (211k): <span style="color:var(--accent);font-size:11px">Word of Glory (141k), Sacrosanct Crusade (51k), Leech (13k), Lightbearer (6k)</span></div><div style="font-size:12px">External (231k): <span style="color:var(--good);font-size:11px">Holy Shock (106k), Light of Dawn (61k), Beacon of Light (31k), Beacon of the Savior (13k), Sun Sear (10k), Sun&#x27;s Avatar (7k), Dawnlight (2k)</span></div></div>
+<div class="death-card"><div class="title">Spike #9 at 24:37 — Echo of Doragosa</div><div style="font-size:13px">424k in 5.5s (77k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Energy Eruption (265k), Energy Bomb (118k), Overwhelming Power (41k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Divine Shield, Word of Glory</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Divine Protection, Blessing of Freedom, Blessing of Sacrifice, Lay on Hands</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Regrowth (from Telarion)</span></div><div style="font-size:12px;margin-top:2px">Self (223k): <span style="color:var(--accent);font-size:11px">Word of Glory (141k), Divine Shield (46k), Sacrosanct Crusade (28k), Lightbearer (4k), Leech (3k)</span></div><div style="font-size:12px">External (198k): <span style="color:var(--good);font-size:11px">Holy Shock (153k), Regrowth (45k)</span></div></div>
+<div class="death-card"><div class="title">Spike #10 at 25:21 — Echo of Doragosa</div><div style="font-size:13px">351k in 5.5s (64k DTPS)</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Energy Eruption (265k), Overwhelming Power (87k)</div><div style="font-size:12px;margin-top:4px">Defensives: <span style="color:var(--good);font-size:11px">Divine Protection</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--bad);font-size:11px">[!] Available but unused: Blessing of Freedom, Blessing of Sacrifice, Lay on Hands, Word of Glory</span></div><div style="font-size:12px"><span style="color:var(--text-dim);font-size:11px">On cooldown: Divine Shield</span></div><div style="font-size:12px;margin-top:2px"><span style="color:var(--accent);font-size:11px">External CDs: Dream Guide (from Telarion), Beacon of the Savior (from Sokneridder)</span></div><div style="font-size:12px;margin-top:2px">Self (90k): <span style="color:var(--accent);font-size:11px">Sacrosanct Crusade (52k), Shield of Vengeance (24k), Lightbearer (13k), Leech (1k)</span></div><div style="font-size:12px">External (389k): <span style="color:var(--good);font-size:11px">Flash of Light (195k), Beacon of Light (96k), Light of Dawn (40k), Eternal Flame (33k), Beacon of the Savior (24k), Dawnlight (1k)</span></div></div>
+  </details>
+  </details>
+  <details class="subsection" open><summary><h3 id="defensive-usage">Defensive Usage <a href="#defensive-usage" class="anchor-hash">#</a></h3></summary>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Divine Shield (immunity)</span><span class="value val-good">6/5 uses (120%)</span><div style="font-size:11px;color:var(--text-muted)">2 during spikes, 4 outside</div></div>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Divine Protection</span><span class="value val-bad">8/25 uses (32%)</span><div style="font-size:11px;color:var(--text-muted)">2 during spikes, 6 outside</div></div>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Blessing of Freedom</span><span class="value val-bad">2/61 uses (3%)</span><div style="font-size:11px;color:var(--text-muted)">0 during spikes, 2 outside</div></div>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Blessing of Sacrifice</span><span class="value val-bad">0/12 uses (0%)</span></div>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Lay on Hands</span><span class="value val-warn">1/2 uses (50%)</span><div style="font-size:11px;color:var(--text-muted)">0 during spikes, 1 outside</div></div>
+<div class="stat-row" style="flex-wrap:wrap"><span class="label">Word of Glory</span><span class="value val-good">10/0 uses (100%)</span><div style="font-size:11px;color:var(--text-muted)">4 during spikes, 6 outside</div></div>
+  </details>
+  <details class="subsection" open><summary><h3 id="healing-received">Healing Received <a href="#healing-received" class="anchor-hash">#</a></h3></summary>
+  <div class="stat-row">
+    <span class="label">Effective healing</span>
+    <span class="value">14.7M</span>
+  </div>
+  <div class="stat-row">
+    <span class="label">Overheal</span>
+    <span class="value val-warn">39%</span>
+  </div>
+  <div class="stat-row">
+    <span class="label">Self-healing</span>
+    <span class="value">5.9M (40.2%)</span>
+  </div>
+  <details open style="margin-left:16px;margin-bottom:8px">
+    <summary style="cursor:pointer;color:var(--text-muted);font-size:12px;user-select:none">
+      Self-healing breakdown (9 abilities)</summary>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Sacrosanct Crusade <span class="muted">(174 casts)</span></span><div class="bar-bg"><div class="bar" style="width:100%;background:var(--accent)"></div></div><span class="amount">2.8M <span class="muted">(30% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Word of Glory <span class="muted">(10 casts)</span></span><div class="bar-bg"><div class="bar" style="width:51%;background:var(--accent)"></div></div><span class="amount">1.4M <span class="muted">(1% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Shield of Vengeance <span class="muted">(25 casts)</span></span><div class="bar-bg"><div class="bar" style="width:18%;background:var(--accent)"></div></div><span class="amount">498k</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Leech <span class="muted">(460 casts)</span></span><div class="bar-bg"><div class="bar" style="width:15%;background:var(--accent)"></div></div><span class="amount">418k <span class="muted">(1% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Lay on Hands <span class="muted">(1 casts)</span></span><div class="bar-bg"><div class="bar" style="width:8%;background:var(--accent)"></div></div><span class="amount">219k <span class="muted">(53% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Silvermoon Health Potion <span class="muted">(1 casts)</span></span><div class="bar-bg"><div class="bar" style="width:8%;background:var(--accent)"></div></div><span class="amount">214k</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Lightbearer <span class="muted">(482 casts)</span></span><div class="bar-bg"><div class="bar" style="width:7%;background:var(--accent)"></div></div><span class="amount">189k <span class="muted">(47% oh)</span></span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Healthstone <span class="muted">(1 casts)</span></span><div class="bar-bg"><div class="bar" style="width:4%;background:var(--accent)"></div></div><span class="amount">116k</span></div>
+<div class="hit-bar"><span style="width:160px;font-size:12px">Divine Shield <span class="muted">(2 casts)</span></span><div class="bar-bg"><div class="bar" style="width:2%;background:var(--accent)"></div></div><span class="amount">46k <span class="muted">(50% oh)</span></span></div>
+  </details>
+  <div class="stat-row">
+    <span class="label">External healing</span>
+    <span class="value">8.8M (59.8%)</span>
+  </div>
+  <details>
+    <summary>Top sources (10)</summary>
+    <div style="margin-top:8px">
+<div class="hit-bar"><span style="width:180px;font-size:12px">Sacrosanct Crusade <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:100%;background:var(--good)"></div></div><span class="amount">2.8M (19.0%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Holy Shock <span class="muted">(Sokneridder)</span></span><div class="bar-bg"><div class="bar" style="width:71%;background:var(--good)"></div></div><span class="amount">2.0M (13.5%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Word of Glory <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:51%;background:var(--good)"></div></div><span class="amount">1.4M (9.7%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Beacon of Light <span class="muted">(Sokneridder)</span></span><div class="bar-bg"><div class="bar" style="width:49%;background:var(--good)"></div></div><span class="amount">1.4M (9.2%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Light of Dawn <span class="muted">(Sokneridder)</span></span><div class="bar-bg"><div class="bar" style="width:48%;background:var(--good)"></div></div><span class="amount">1.3M (9.1%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Beacon of the Savior <span class="muted">(Sokneridder)</span></span><div class="bar-bg"><div class="bar" style="width:25%;background:var(--good)"></div></div><span class="amount">692k (4.7%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Dawnlight <span class="muted">(Sokneridder)</span></span><div class="bar-bg"><div class="bar" style="width:18%;background:var(--good)"></div></div><span class="amount">498k (3.4%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Shield of Vengeance <span class="muted">(Self)</span></span><div class="bar-bg"><div class="bar" style="width:18%;background:var(--good)"></div></div><span class="amount">498k (3.4%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Greater Judgment <span class="muted">(Sokneridder)</span></span><div class="bar-bg"><div class="bar" style="width:18%;background:var(--good)"></div></div><span class="amount">497k (3.4%)</span></div>
+<div class="hit-bar"><span style="width:180px;font-size:12px">Flash of Light <span class="muted">(Sokneridder)</span></span><div class="bar-bg"><div class="bar" style="width:18%;background:var(--good)"></div></div><span class="amount">491k (3.3%)</span></div>
+    </div>
+  </details>
+  </details>
+</div>
+
+<div class="section">
+  <h2 id="holy-power-usage">Holy Power Usage <a href="#holy-power-usage" class="anchor-hash">#</a></h2>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;
+              padding:12px 16px;margin-bottom:20px;border-left:3px solid var(--good)">
+    <span style="font-size:13px;line-height:1.5">Holy Power usage looks similar to top players</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+    <div>
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;
+                  color:var(--text-muted);margin-bottom:10px">
+        Time at max Holy Power (wasted regeneration)
+      </div>
+      <div style="margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+          <span>You</span><span style="font-weight:600">14%</span>
+        </div>
+        <div class="bar-bg" style="height:18px">
+          <div class="bar" style="width:62.3%;background:var(--bar-user)"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;color:var(--text-muted)">
+          <span>Cohort</span><span>22%</span>
+        </div>
+        <div class="bar-bg" style="height:18px">
+          <div class="bar cohort" style="width:100.0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;
+                  color:var(--text-muted);margin-bottom:10px">
+        Time at zero Holy Power (starved)
+      </div>
+      <div style="margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+          <span>You</span><span style="font-weight:600">11%</span>
+        </div>
+        <div class="bar-bg" style="height:18px">
+          <div class="bar" style="width:100.0%;background:var(--bar-user)"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;color:var(--text-muted)">
+          <span>Cohort</span><span>7%</span>
+        </div>
+        <div class="bar-bg" style="height:18px">
+          <div class="bar cohort" style="width:68.8%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;display:flex;gap:24px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;
+                padding:10px 16px;flex:1">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;
+                  color:var(--text-muted)">Avg Holy Power</div>
+      <div style="font-size:20px;font-weight:700;margin-top:2px">2.5
+        <span style="font-size:14px;color:var(--text-muted)">/ 5</span>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted)">cohort 2.9</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;
+                padding:10px 16px;flex:1">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;
+                  color:var(--text-muted)">Data points</div>
+      <div style="font-size:20px;font-weight:700;margin-top:2px">1377</div>
+      <div style="font-size:12px;color:var(--text-muted)">samples across fight</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 id="cohort">Cohort <a href="#cohort" class="anchor-hash">#</a></h2>
+  <table class="cohort-table">
+    <tr><th>#</th><th>Player</th><th>ilvl</th><th>DPS</th><th>Deaths</th><th>Date</th><th>Log</th></tr>
+    <tr><td>1</td><td>Muschet-TwistingNether</td><td>283</td><td>173k</td><td>0 deaths</td><td>2026-05-11</td><td><a href="https://www.warcraftlogs.com/reports/D36f7VrmgYqMB4Pb#fight=3" target="_blank">WCL</a></td></tr>
+    <tr><td>2</td><td>Lalyy-Doomhammer</td><td>285</td><td>170k</td><td>1 death</td><td>2026-05-13</td><td><a href="https://www.warcraftlogs.com/reports/89mDYnfQqpW1xABP#fight=97" target="_blank">WCL</a></td></tr>
+    <tr><td>3</td><td>Constantia-Draenor</td><td>284</td><td>168k</td><td>0 deaths</td><td>2026-05-06</td><td><a href="https://www.warcraftlogs.com/reports/KGJDgcbwY3C9MVPn#fight=5" target="_blank">WCL</a></td></tr>
+    <tr><td>4</td><td>Hanoriartt-Azralon</td><td>282</td><td>167k</td><td>0 deaths</td><td>2026-05-05</td><td><a href="https://www.warcraftlogs.com/reports/DrBjdW7YXp4gPVLx#fight=1" target="_blank">WCL</a></td></tr>
+    <tr><td>5</td><td>Sadpal-Ragnaros</td><td>286</td><td>166k</td><td>0 deaths</td><td>2026-05-13</td><td><a href="https://www.warcraftlogs.com/reports/rYha3B6ZNqzDPyHc#fight=7" target="_blank">WCL</a></td></tr>
+    <tr><td>6</td><td>Carnemis-Elune</td><td>283</td><td>165k</td><td>0 deaths</td><td>2026-05-13</td><td><a href="https://www.warcraftlogs.com/reports/nyYQz7tVpFjgqT1H#fight=3" target="_blank">WCL</a></td></tr>
+    <tr><td>7</td><td>Barnó-Zul&#x27;jin</td><td>285</td><td>165k</td><td>0 deaths</td><td>2026-05-16</td><td><a href="https://www.warcraftlogs.com/reports/WBPdQzYGt8XA764c#fight=36" target="_blank">WCL</a></td></tr>
+    <tr><td>8</td><td>Pudziila-BurningLegion</td><td>283</td><td>164k</td><td>0 deaths</td><td>2026-05-04</td><td><a href="https://www.warcraftlogs.com/reports/r4tGgzjDF63kvAJT#fight=4" target="_blank">WCL</a></td></tr>
+    <tr><td>9</td><td>Fiskerenfisk-Hellscream</td><td>286</td><td>161k</td><td>0 deaths</td><td>2026-05-13</td><td><a href="https://www.warcraftlogs.com/reports/zrCXvcT3V6LdqxGh#fight=2" target="_blank">WCL</a></td></tr>
+    <tr><td>10</td><td>索瑞娜-白银之手</td><td>283</td><td>160k</td><td>0 deaths</td><td>2026-05-07</td><td><a href="https://www.warcraftlogs.com/reports/Haw2Wk13D8nfxzhV#fight=4" target="_blank">WCL</a></td></tr>
+  </table>
+</div>
+<div style="text-align:center;padding:24px 0;font-size:11px;color:var(--text-dim)">
+  Generated by <a href="https://github.com">wcl-compare</a>
+</div>
+<script>
+(function() {
+  function openAndScroll(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var node = el.closest('details');
+    while (node) {
+      node.open = true;
+      node = node.parentElement ? node.parentElement.closest('details') : null;
+    }
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('.anchor-hash');
+    if (link) {
+      e.preventDefault();
+      var id = link.getAttribute('href').slice(1);
+      history.replaceState(null, '', '#' + id);
+      openAndScroll(id);
+    }
+  });
+  if (location.hash) openAndScroll(location.hash.slice(1));
+})();
+</script>
+</body>
+</html>
