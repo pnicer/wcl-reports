@@ -105,7 +105,9 @@ Method, Blizzard forums]
   apply at `6235-6257`]
 - **Bombardments** — see §0. Density-scaling, partly allied-damage-driven AoE.
 - **Strafing Run** — Deep Breath hits harder and is **recastable within ~18s**.
-  [Guide] [SimC `6076`]
+  ⚠️ Per SimC this is a **Devastation spec-tree** talent (`ST("Strafing Run")`,
+  `sc_evoker.cpp:9701`, row 10), **not** a Scale Commander *hero* node — it
+  powers the SC playstyle but lives in the spec tree. [Guide] [SimC `6076, 9701`]
 - **Melt Armor** — Deep Breath marks enemies to take increased Disintegrate/
   Pyre/Bombardment damage (~20%). [Guide] [SimC `5852`]
 - **Wingleader** — Bombardments reduce Deep Breath CD ~1s/target (≤3s). [Guide]
@@ -144,18 +146,23 @@ buffs/amps it gives allies, not its own damage. [Guide]
 ### Hero tree A — **Chronowarden** (the Scale Commander alternative for Aug)
 Bronze-dragonflight time manipulation; smoother, **single-target / raid-leaning**.
 
-- **Temporal Burst / Time Skip** — Tip the Scales overloads you with temporal
-  energy: ramps Haste, movement, and **cooldown-recovery rate up to ~40% over
-  20s**. New Midnight nodes **Chronoboon** (−30s Tip the Scales CD) and
-  **Nozdormu Adept** (−2s Prescience CD, crit buff 3%→4%). [Guide]
+- **Temporal Burst** — Tip the Scales overloads you with temporal energy:
+  ramps Haste, movement, and **cooldown-recovery rate up to ~40% over 20s**;
+  with **Energy Cycles** it also grants an Essence Burst every ~6s (see §4).
+  Other nodes: **Chronoboon** (−30s Tip the Scales CD), **Overclock**, **Time
+  Convergence**, **Reverberations**, **Temporality**, **Motes of Acceleration**,
+  **Primacy**, **Master of Destiny**, **Afterimage**, **Chronal Dynamo**. [SimC
+  `struct chronowarden_t:1420`] [Guide]
 - **Chrono Flame / Warp** — empowers fire up to 3 Chrono Flames (small chance
-  to grant Essence Burst); Hover ("Warp") gains −5s CD. [Guide]
-- **Threads of Fate / Interwoven Threads** — empowers amplify active Threads
-  (+100% power, stacks 2). ⚠️ **Source disagreement / in flux:** at least one
-  source says Threads of Fate was reworked/removed — verify for current patch.
-  [Guide]
+  to grant Essence Burst); Hover ("Warp") gains −5s CD. [SimC `1420+`] [Guide]
 - **Playstyle:** sustained, precise; **wins by landing Breath of Eons inside
   coordinated ally burst windows** — best when the group executes perfectly.
+
+> ⚠️ **Corrected attribution:** **Time Skip** and **Interwoven Threads** are
+> **Augmentation spec-tree** talents (`ST(...)`, `sc_evoker.cpp:1397/1404`),
+> **not** Chronowarden hero talents — an earlier draft listed them here. A
+> talent literally named **"Threads of Fate" does not exist** in the current
+> Midnight build (0 matches in source); only **Interwoven Threads** is real.
 
 ### Hero tree B — **Scale Commander** (Aug)
 - **Mass Eruption** — empower makes the next Eruption hit up to 3 targets
@@ -318,8 +325,63 @@ weakest EB toolkit, and is chosen despite that for its AoE/density/Hover profile
 - **Carryover from TWW:** empower system, Dragonrage, Essence/Essence Burst,
   Shattering Star, the Scale Commander toolkit (Mass Disintegrate/Eruption,
   Bombardments, Strafing Run, Melt Armor), and both hero trees themselves.
-- **Uncertain / verify live:** Bombardments debuff 6s vs 10s; Threads of Fate
-  status; exact tier-list letters; the Mass-Eruption-amp bug.
+- **Uncertain / verify live:** Bombardments debuff 6s vs 10s; exact tier-list
+  letters; the Mass-Eruption-amp bug. (Note: "Threads of Fate" is now confirmed
+  *not* a current talent.)
+
+## 6. Coverage map & known gaps
+
+This doc is **signature-level**, not an exhaustive talent catalog. Audited
+against the SimC talent structs, here is what's covered vs missing.
+
+**Hero-tree node coverage** (counts = nodes named in this doc / total in
+`sc_evoker.cpp`):
+- **Scale Commander** (`struct scalecommander_t`, 18 nodes): documented Mass
+  Disintegrate, Mass Eruption, Bombardments, Melt Armor, Wingleader, Extended
+  Battle, Diverted Power, Maneuverability, Command Squadron, Concentrated Power.
+  **Not documented:** Might of the Black Dragonflight, Onslaught, Unrelenting
+  Siege, Hardened Scales, Menacing Presence, Nimble Flyer, Slipstream, Refined
+  Essence (~8 mostly passive/utility nodes).
+- **Flameshaper** (`struct flameshaper_t`, 18 nodes): documented Consume Flame,
+  Enkindle, Titanic Precision, Essence Well, +1 Fire Breath charge. **Not
+  documented:** Legacy of the Lifebinder, Trailblazer, Shape of Flame, Conduit
+  of Flame, Burning Adrenaline, Fan the Flames, Expanded Lungs, Fulminous Roar,
+  Lifecinders, Draconic Instincts, Ashes in Motion, Deep Exhalation, Twin Flame,
+  Fire Torrent (~14 nodes).
+- **Chronowarden** (`struct chronowarden_t`, 17 nodes): documented Temporal
+  Burst, Chrono Flame, Warp, Energy Cycles, Chronoboon, Overclock, Time
+  Convergence. **Not documented:** Reverberations, Temporality, Motes of
+  Acceleration, Primacy, Double Time, Master of Destiny, Golden Opportunity,
+  Instability Matrix, Afterimage, Chronal Dynamo (~10 nodes).
+
+**Spec trees: not documented at all.** We covered core abilities + hero trees,
+but the **Devastation and Augmentation class/spec talent trees** are only
+referenced incidentally (e.g. Eternity's Span, Animosity, Imminent Destruction,
+Iridescence, Scintillation, Volatility, Feed the Flames, Snapfire, Font of
+Magic, Tip the Scales, Power Swell, Charged Blast, Azure Sweep for Dev;
+Time Skip, Interwoven Threads, Anachronism, Ricocheting Pyroclast, Timelessness,
+Pupil of Alexstrasza, Dream of Spring for Aug). **Azure Sweep** in particular is
+a heavily-used Midnight Dev AoE button in the MID1 APL that we never defined.
+
+**Attribution corrections found in this audit** (we had trusted guide groupings
+over SimC's `HT()`/`ST()` markers):
+- **Time Skip** and **Interwoven Threads** → Augmentation **spec** talents, not
+  Chronowarden hero talents. ("Threads of Fate" isn't a real current talent.)
+- **Strafing Run** → Devastation **spec** talent (row 10), not a Scale Commander
+  hero node (it still powers the SC playstyle).
+- *Not exhaustively re-audited:* other talents may be similarly mis-filed; the
+  reliable test is `HT(` (hero) vs `ST(` (spec) in `sc_evoker.cpp`.
+
+**Tuning gaps:** most proc chances / coefficients are approximate or absent
+(e.g. Diverted Power ~8.5% is a SimC "reasonable guess"); Bombardments debuff
+duration unresolved (6s vs 10s).
+
+**Other scope notes:** Preservation (3rd Evoker spec) intentionally excluded.
+We have no pre-built SimC *gear* profile for Augmentation (APL only). We have
+**not** parsed the actual talent strings out of this repo's WCL report HTML to
+confirm each logged player's exact build — we inferred Scale Commander from
+Bombardments uptime only.
+
 
 ## Sources
 SimC (midnight): [`sc_evoker.cpp`](https://github.com/simulationcraft/simc/blob/midnight/engine/class_modules/sc_evoker.cpp),
