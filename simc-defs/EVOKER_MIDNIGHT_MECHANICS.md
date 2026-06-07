@@ -241,7 +241,75 @@ Bronze-dragonflight time manipulation; smoother, **single-target / raid-leaning*
 
 ---
 
-## 4. Quick War-Within-vs-Midnight flags
+## 4. Essence Burst generation — by spec & hero tree
+
+**Essence Burst (EB)** makes the next Essence spender free (Eruption for Aug;
+Disintegrate/Pyre for Dev). Base **max 1 stack → 2 with Essence Attunement**;
+**Hoarded Power** gives a chance to *not* consume EB when spent. [SimC EB buff
+`sc_evoker.cpp:10029-10037`, Essence Attunement `1312`, Hoarded Power `3019`]
+[Guide: [Wowhead 359618](https://www.wowhead.com/spell=359618/essence-burst),
+[Essence Attunement 375722](https://www.wowhead.com/spell=375722/essence-attunement)]
+
+### Shared baseline (both specs, class/spec trees — independent of hero tree)
+- **Ruby Essence Burst → Living Flame** ~20% chance (scales with Inner Flame /
+  Leaping Flames). [SimC `4916, 6673, 9917`] [Guide]
+- **Azure Essence Burst → Azure Strike** ~15% chance (also Inner-Flame-scaled).
+  [SimC `5314`] [Guide]
+- **Pupil of Alexstrasza** → extra Living Flame EB roll on single target. [SimC
+  `9913-9922`]
+
+### Devastation — EB generation **differs by hero tree**
+- **Spec/class baseline:** the two fillers above **plus**:
+  - **Dragonrage** — *guarantees* EB on fillers (Living Flame) while up. [SimC
+    `6673`: `buff.dragonrage.up() || roll`] [Guide]
+  - **Risen Fury** (Rising Fury apex, **Midnight-new**) — grants an EB every ~4s
+    as it decays after Dragonrage. [SimC `10108`] [Guide: Wowhead 1271788]
+- **Flameshaper ADDS** (verified under `struct flameshaper_t`, `sc_evoker.cpp:1449-1471`):
+  - **Titanic Precision** — Living Flame / Azure Strike **crits** get an extra EB
+    roll. [SimC `4933, 4952, 5314`]
+  - **Essence Well** — **Fire Breath** has a ~50% chance to grant EB. [SimC
+    `5060`] [Guide: Wowhead 1265993]
+  → Flameshaper's EB is **crit- and Fire-Breath-driven**, feeding its
+  Essence-hungry Consume Flame ramp.
+- **Scale Commander ADDS** only **Diverted Power** — Bombardments have a chance
+  (~8.5% in sim) to grant EB. [SimC `7919-7922`, declared as hero talent `9887`]
+  It's a choice node (vs Extended Battle), considered undertuned and **rarely
+  taken**. [Guide: Maxroll] → SC adds **almost no** EB generation in practice.
+
+> ⚠️ **Sim-vs-guide discrepancy:** Icy Veins says **Arcane Vigor** makes
+> **Shattering Star** an EB source in Midnight. The SimC `midnight` source has
+> **no `arcane_vigor` talent and no Shattering Star → EB trigger** — only
+> `scintillation` (Disintegrate ticks proc Eternity Surge, *not* EB). Treat
+> Shattering Star → EB as unconfirmed for the current build; verify in-game.
+
+### Augmentation — EB generation **differs by hero tree**
+- **Spec/class baseline:** the two fillers above **plus**:
+  - **Anachronism** — Prescience has a chance to grant EB. [SimC `7467`] [Guide]
+  - **Leaping Flames** extra Living Flames (incl. ally-healing ones) each roll
+    the LF EB chance. [Guide: Maxroll]
+  - *(Ricocheting Pyroclast is a likely contributor — medium confidence, exact
+    EB clause not pinned down. [Guide])*
+- **Chronowarden ADDS** (the big one):
+  - **Energy Cycles** (**Midnight-new**) — **Temporal Burst grants an EB every
+    ~6s** while active. [SimC `chronowarden.energy_cycles`, `10296`] [Guide:
+    Wowhead 1260568, Maxroll]
+  - **Chrono Flame** inherits the Living Flame EB chance. [Guide]
+  → Chronowarden adds a **steady periodic EB drip** in cooldown windows.
+- **Scale Commander ADDS** only **Diverted Power** (Bombardments → EB) — same
+  rarely-taken choice node as Dev. [SimC `7919`; Guide: Wowhead 441219]
+
+### Bottom line on hero-tree EB differences
+The **alternative trees are the ones that boost EB**: **Flameshaper** (Titanic
+Precision + Essence Well) for Devastation and **Chronowarden** (Energy Cycles)
+for Augmentation. **Scale Commander adds essentially none** (only the
+rarely-taken Diverted Power) — so SC players run on the **baseline** EB economy
+and lean on raw cleave/Bombardment throughput instead. In other words, Scale
+Commander is *not* picked for Essence Burst generation; if anything it has the
+weakest EB toolkit, and is chosen despite that for its AoE/density/Hover profile.
+
+---
+
+## 5. Quick War-Within-vs-Midnight flags
 - **NEW in Midnight:** Devastation Rising Fury apex; Flameshaper rework (Engulf
   + Firestorm removed → Consume Flame, +1 Fire Breath charge); Deep Breath /
   Imminent Destruction Essence redesign; Pyre + Disintegrate buffs. Aug: raid-
