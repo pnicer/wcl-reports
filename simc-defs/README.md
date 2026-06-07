@@ -21,6 +21,7 @@ were wrong — see below.
 | `EVOKER_MIDNIGHT_TALENTS.md` | **Complete** value-resolved talent catalog — Class + both spec trees + all 3 hero trees, with rows, Wowhead links, real numbers. |
 | `EVOKER_MIDNIGHT_ABILITIES.md` | Value-resolved active-ability reference — cast/channel, cooldowns, charges, costs, range, SP coefficients. |
 | `EVOKER_MIDNIGHT_ANALYSIS.md` | **In-depth synthesis** answering "why Scale Commander in high M+" with every claim cited to the data above. |
+| `EVOKER_MIDNIGHT_SIM_RESULTS.md` | **Self-run SimC** (built from midnight, 12.0.5) SC-vs-FS DPS across fight styles — the Devastation tuning ground truth (key finding: M+-shaped sims actually favour Flameshaper). |
 
 ## Two kinds of "definition" — don't confuse them
 

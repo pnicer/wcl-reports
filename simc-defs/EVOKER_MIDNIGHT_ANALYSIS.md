@@ -9,6 +9,7 @@ Mythic+?* — with every claim grounded in the extracted research. Citations:
 - **[mech]** `EVOKER_MIDNIGHT_MECHANICS.md` (incl. §0 Bombardments, §4 Essence Burst)
 - **[APL]** the SimC action lists in this folder (`MID1_Evoker_Devastation*.simc`, `evoker_augmentation_apl.simc`)
 - **[src]** `sc_evoker.cpp` (engine implementation; line numbers)
+- **[sim]** `EVOKER_MIDNIGHT_SIM_RESULTS.md` (our own SimC 12.0.5 run, SC vs FS)
 - **[meta]** Archon.gg / Murlok.io / Maxroll / Icy Veins (patch 12.0.5)
 
 Values are current-build but patch-volatile — Wowhead spell links in the
@@ -159,21 +160,29 @@ the group executes perfectly [meta].
 6. **Lower execution variance** — SC leans on throughput, not on allies or
    perfect timing; that matters more as keys get deadlier and rotations break.
 
-### Why the sim agrees but can't *prove* it [mech §3]
-- SimC's **default** Dev profile **is** the Scale Commander build (`source=default`),
-  and its **default Aug APL is written around SC** (`bombardments_pooling`,
-  `mass_eruption_stacks`, `target_if=…bombardments`) [APL]. The theorycraft
-  baseline already assumes SC.
-- SimC supports **DungeonSlice / DungeonRoute / CleaveAdd / HecticAddCleave**
-  fight styles (Raidbots' "Dungeon Slice"), layered on these profiles; the APLs
-  branch on `fight_style.*` [src util.cpp]. Under those, SC's cleave is exactly
-  what's rewarded.
-- **But** even DungeonSlice is a *scripted* add sequence — it captures target
-  count and cleave throughput, not routing, mechanics, forced movement, deaths,
-  defensives or interrupts. SC's biggest real edges (Hover-covered movement,
-  burst-on-pull, mis-timing tolerance) are **under-credited** by any sim — which
-  is *why live M+ skews to SC harder, and harder with key level, than raw sim
-  deltas predict* [meta].
+### What the sim actually says (we ran it — see `EVOKER_MIDNIGHT_SIM_RESULTS.md`)
+We built SimC (midnight, 12.0.5.67823) and ran SC vs FS head-to-head. The result
+**refines — and partly contradicts — the naive "SC wins M+" story** [sim]:
+- **Stacked-target Patchwerk:** SC is strongly ahead at 2–6 targets, **peaking
+  +38% at 3T** (the Mass Disintegrate 3-target cap), tapering to +5% at 10T;
+  FS edges pure 1T by ~2%.
+- **M+-shaped fight styles:** **Flameshaper sims HIGHER** — DungeonSlice −7% and
+  HecticAddCleave −14% *for SC*. So raw sim DPS in the sustained M+ abstractions
+  does **not** justify the SC meta.
+- SimC's **default** Dev profile is nonetheless the SC build (`source=default`)
+  and the **default Aug APL is written around SC** [APL] — the theorycraft
+  *baseline* assumes SC even though the sustained M+ styles favour FS.
+
+**Reconciliation:** the M+ fight styles are *sustained* (targets live long),
+over-crediting FS's DoT-ramp/Consume Flame and its ST edge. Real high keys
+**burst packs down in seconds**, so FS's ramp never matures while SC's
+front-loaded Mass Disintegrate + Bombardments + Deep Breath lands instantly —
+the Patchwerk **2–5T (+17–38%)** numbers are the better proxy for a real
+pull-burst. Net: the 93% is **real burst-window tuning + un-simmable
+pacing/mobility + some meta bias**, *not* a raw-DPS verdict the sim prints. Even
+DungeonSlice is scripted — it captures target count, not routing, time-to-die,
+forced movement, deaths, defensives or interrupts, which is *why live M+ skews
+to SC harder than the sustained sim deltas predict* [sim, meta].
 
 ---
 
