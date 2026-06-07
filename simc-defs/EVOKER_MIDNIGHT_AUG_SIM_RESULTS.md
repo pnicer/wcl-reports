@@ -58,12 +58,42 @@ explain it, grounded in these numbers + mechanics:
   performance." The sim executes everything deterministically (Chronowarden's
   near-best case); live PUG keys are messy, which erodes Chronowarden's
   alignment-dependent value and favors SC.
-- **Under-modeled density loop.** SC's **Wingleader → Breath-of-Eons CDR** and
-  **Bombardments** scale with target *density* and **allied hits on the marked
-  target**, but SimC approximates Bombardments with RPPM and DungeonSlice has
-  limited sustained density — so the sim likely **under-credits** SC in real,
-  dense high-key pulls with four allies hammering marked targets.
+- **NOT a Breath-of-Eons uptime advantage** (see next section): contrary to the
+  common "Wingleader flywheel" claim, SC does **not** get Breath up more often —
+  Chronowarden does. SC's M+ case rests on team-amplification + consistency, not
+  Breath frequency.
 - Plus mobility/consistency and a meta/recommendation feedback loop.
+
+## Breath of Eons effective cooldown by hero tree (the Wingleader question)
+
+The premise that "Bombardments shortens Breath of Eons CD for SC" is **true but
+small and non-scaling** in a 5-man context. Measured Breath casts per fight →
+effective CD (Aug + Guardian/Ret/Unholy DK comp):
+
+| Scenario | **SC** eff. CD | **Chronowarden** eff. CD |
+|---|--:|--:|
+| 1T | 92.4 s | 75.6 s |
+| 3T | 92.2 s | **45.8 s** |
+| 5T | 92.6 s | 44.4 s |
+| 8T | 92.1 s | 44.5 s |
+| DungeonSlice | 92.7 s | 75.9 s |
+
+Findings:
+- **SC ≈ 92 s, flat across all target counts.** Wingleader delivers a fixed
+  ~28 s reduction off the 120 s base; in a 5-man it does **not** scale with
+  density. Verified robust: forcing **real allied-damage Bombardments**
+  (`evoker.simulate_bombardments=0`, allies present) gave the *same* ~92 s — so
+  this is not an RPPM artifact. (Raids with ~20 allied attackers could compress
+  it further; that's outside the dungeon scope asked.)
+- **Chronowarden has the *shorter* Breath CD** everywhere — ~76 s single-target,
+  **~45 s at 3+ targets** — i.e. it gets Breath of Eons up roughly **twice as
+  often** in AoE. So Breath-uptime is a Chronowarden advantage, not an SC one.
+- **Implication:** the widely-repeated "SC's Wingleader→Breath flywheel is why
+  Aug runs SC in M+" is **not supported by the sim**. SC still amplifies the
+  team more (prior section) via Bombardments/Melt Armor + steady Ebon Might, not
+  via more Breaths. *Caveat:* this is the provided hero-tree-only-swap builds;
+  the exact mechanism behind Chronowarden's target-scaling wasn't traced to a
+  single node, and a different Chronowarden loadout could differ.
 
 ## Caveats / limitations
 - **Healer omitted** (no SimC profile) — slightly understates Ebon Might target
@@ -73,8 +103,9 @@ explain it, grounded in these numbers + mechanics:
   move the AoE numbers, *toward* Chronowarden if alignment is clean. This
   sensitivity is the core reason the Aug meta defers to logs.
 - **Deterministic execution** flatters Chronowarden vs messy live play.
-- **Bombardments is RPPM-approximated**, not driven by actual allied hits —
-  likely under-credits SC in a full group.
+- **Bombardments is RPPM-approximated** by default, but we re-ran with
+  `evoker.simulate_bombardments=0` (real allied damage events) and SC's Breath CD
+  was unchanged — so for this 5-man comp the approximation is not the issue.
 - **Hero-tree-only swap:** spec talents identical across builds (clean
   isolation), not each tree's fully-optimized loadout.
 - **Small gaps (±1%) are within noise** at `target_error=0.3`; the 3T/5T
@@ -82,11 +113,12 @@ explain it, grounded in these numbers + mechanics:
 - No M+ affixes/mechanics/forced movement; DungeonSlice is scripted.
 
 ## Reproduce
-Harness in `simc-defs/aug-sim/` (allies are stock SimC `profiles/MID1` files):
 ```bash
 # allies: MID1_Druid_Guardian, MID1_Paladin_Retribution, MID1_Death_Knight_Unholy
-python aug-sim/sweep.py     # baseline + SC + Chrono across 1T/3T/5T/DungeonSlice
+python aug-sim/sweep.py       # raid-DPS sweep (baseline + SC + Chrono)
+python aug-sim/breath_cd.py   # Breath of Eons cast count / effective CD per tree
 ```
+Harness in `simc-defs/aug-sim/` (allies are stock SimC `profiles/MID1` files).
 Aug profile = Dev SC gear with `spec=augmentation` + the provided talent string;
 buffs auto-apply to the other actors via SimC's Augmentation modeling.
 </content>

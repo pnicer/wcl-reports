@@ -114,13 +114,19 @@ The tree's identity is a single chain, verified end-to-end in the engine
 cleave + a density-scaling, partly-passive Bombardment stream + a 20% group
 amp + extra Hover uptime** — at the cost of adding ~no Essence Burst.
 
-### Why Aug's SC loop is special: the Breath-of-Eons flywheel
-For Augmentation specifically, **Wingleader** ties Bombardments to **Breath of
-Eons cooldown reduction** [tal], pulling its 120 s CD down toward ~60–90 s in
-dense pulls [meta]. More Breath casts → more **Duplicate** (Midnight apex) and
-Ebon-Might uptime. The Aug APL encodes this: `bombardments_pooling` defaults on,
-and Eruptions are pooled/spread via `target_if=…debuff.bombardments` [APL].
-Chronowarden has no equivalent density→cooldown loop.
+### The Wingleader→Breath-of-Eons "flywheel" — tested, and mostly a myth in 5-man
+**Wingleader** ties Bombardments to **Breath of Eons cooldown reduction** [tal],
+and guides claim this pulls its 120 s CD toward ~60–90 s [meta]. **We measured
+it [sim, aug-results] and it does not hold in a dungeon group:** SC's Breath CD
+sits at a **flat ~92 s** across 1–8 targets (a fixed ~28 s Wingleader reduction
+that does *not* scale with density — robust even with real allied-damage
+Bombardments). **Chronowarden actually gets Breath up *more* often** (~76 s ST,
+~45 s at 3+ targets). So Breath uptime is a **Chronowarden** advantage, not an SC
+one — the "SC flywheel" is the wrong reason for SC's M+ dominance. SC's real edge
+is **team-amplification** (Bombardments/Melt Armor + steady Ebon Might amplify
+allies more — it wins team-amp in every tested scenario) plus consistency, *not*
+Breath frequency. (Raids with ~20 allied attackers may compress SC's Breath CD
+further; this is the 5-man dungeon result.)
 
 ---
 
@@ -156,9 +162,13 @@ the group executes perfectly [meta].
 2. **Partly-passive, density-scaling Bombardments** (SP×4.75, allied-damage
    driven [abil, src]) — value climbs directly with pack size; high-key trash is
    dense. Needs no extra casts.
-3. **Aug's Breath-of-Eons flywheel** (Wingleader CDR → more Breath → more
-   Duplicate/Ebon Might [tal, meta]) — uniquely strong in dense M+, absent on
-   Chronowarden. This is the single biggest reason Aug is ~99% SC.
+3. **Aug team-amplification** — SC amplifies the *group* more than Chronowarden
+   in every tested scenario [sim] (via Bombardments/Melt Armor + steady Ebon
+   Might), even though it does **not** get Breath of Eons up more often
+   (Chronowarden's Breath CD is actually shorter — the "Wingleader flywheel" is
+   a myth in 5-man, see above). A support's value is what it adds to allies, and
+   SC wins that — *that* is the likeliest real driver of Aug's ~99% SC, alongside
+   execution-independence and bias (the meta is **not** a total-DPS verdict).
 4. **Group amp on demand** — Melt Armor **+20%** on a fresh pack [abil].
 5. **Mobility via Hover economy** — Deep Breath/Maneuverability/Slipstream
    **refund Hover** [tal], so the channels stay castable through M+'s constant
