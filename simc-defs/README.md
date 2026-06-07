@@ -22,6 +22,7 @@ were wrong — see below.
 | `EVOKER_MIDNIGHT_ABILITIES.md` | Value-resolved active-ability reference — cast/channel, cooldowns, charges, costs, range, SP coefficients. |
 | `EVOKER_MIDNIGHT_ANALYSIS.md` | **In-depth synthesis** answering "why Scale Commander in high M+" with every claim cited to the data above. |
 | `EVOKER_MIDNIGHT_SIM_RESULTS.md` | **Self-run SimC** (built from midnight, 12.0.5) SC-vs-FS DPS across fight styles — the Devastation tuning ground truth (key finding: M+-shaped sims actually favour Flameshaper). |
+| `EVOKER_MIDNIGHT_AUG_SIM_RESULTS.md` | **Self-run group sim** of Augmentation SC vs Chronowarden (real dungeon comp) — SC wins **team-amplification** everywhere; total raid DPS is tied/Chrono-favoured, so the 99% SC meta isn't a raw-DPS verdict. Harness in `aug-sim/`. |
 
 ## Two kinds of "definition" — don't confuse them
 
