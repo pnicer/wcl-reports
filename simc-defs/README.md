@@ -76,7 +76,9 @@ actions+=/run_action_list,name=st_fs
 ```
 
 The `sc` list is built around **empower → Mass Disintegrate → Bombardments**:
-casting an empower (Fire Breath / Eternity Surge) grants `mass_disintegrate_stacks`, which makes the next **Disintegrate instant-cast and cleave**;
+casting an empower (Fire Breath / Eternity Surge) grants `mass_disintegrate_stacks`, which makes the next **Disintegrate cleave** to up to 3 targets — it
+stays a **channel** (`channeled=true`, `sc_evoker.cpp:6113`; it is *not* instant,
+and you move during it with **Hover**);
 *spending* that Mass Disintegrate is what **applies the `bombardments` debuff to
 the primary target** (`target_if=min:debuff.bombardments.remains`), and your
 subsequent damage to a marked target procs the bomb explosions. **Deep Breath
@@ -106,15 +108,19 @@ regardless of hero tree; the hero choice is decided by the personal/AoE damage
 layer, and SimC's default picks SC.)
 
 ### Why this is the M+ pick (mechanical reasoning)
-1. **Instant, movement-proof cleave.** Mass Disintegrate (Dev) and pooled
-   Mass Eruption (Aug) turn the spec's main spend into instant AoE you can use
-   while repositioning — M+ is constant movement, which is exactly where
-   Flameshaper's channel/DoT-ramp pattern bleeds damage.
-2. **Bombardments scales with density.** It re-fires across every bombarded
-   mob, so its value climbs with pack size — high-key trash is dense.
-3. **Burst-on-pull shape.** Deep Breath + Bombardments dumps AoE the instant a
-   pack is grabbed, matching how high keys burst packs inside a CC/cooldown
-   window rather than sustaining over minutes.
+> Note: Mass Disintegrate (channel) and Mass Eruption (hard-cast) are **not
+> instant** — Evoker moves while casting via **Hover**. See
+> `EVOKER_MIDNIGHT_MECHANICS.md` §3 for the corrected reasoning.
+
+1. **High cleave per cast/channel.** Mass Disintegrate / Mass Eruption make the
+   main spender hit up to 3 targets, so each one does AoE as density rises — at
+   no rotational cost.
+2. **Bombardments scales with density.** Partly allied-damage-driven, splitting
+   among nearby mobs, so its value climbs with pack size — high-key trash is
+   dense, and it needs no extra casts.
+3. **More mobile-casting uptime.** SC's Deep Breath / Maneuverability refund
+   Hover, giving more windows to keep channeling while repositioning (the spell
+   stays a channel — Hover is what covers the movement).
 4. Under a `DungeonSlice`/`HecticAddCleave` fight style these mechanics are
    precisely what gets rewarded, which is why the default APLs are SC-shaped.
 

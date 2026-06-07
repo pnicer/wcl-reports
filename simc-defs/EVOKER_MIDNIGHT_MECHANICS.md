@@ -25,9 +25,14 @@ tooltip:
    Upheaval (Aug). This grants **Mass Disintegrate** / **Mass Eruption** stacks.
    [SimC `sc_evoker.cpp:4407-4411`]
 2. **Spend the stack** — the next **Disintegrate** (Dev) / **Eruption** (Aug)
-   becomes instant + cleave, and **on its primary-target impact it applies the
-   `bombardments` debuff** to that target. [SimC `sc_evoker.cpp:6250-6253` (Dev),
-   `5583-5586` (Aug)]
+   gains **cleave** (strikes up to 3 targets, +damage per missing target below
+   3), and **on its primary-target impact it applies the `bombardments` debuff**
+   to that target. **These spells are NOT instant:** Disintegrate stays a
+   **channel** (`channeled = true`, `sc_evoker.cpp:6113` — Mass Disintegrate only
+   adds targets/tick-damage, it never removes the channel) and Eruption stays a
+   **hard-cast**. To move while channeling/casting you need **Hover** — that is
+   Evoker's mobility tool, not these spells. [SimC `sc_evoker.cpp:6250-6253`
+   (Dev), `5583-5586` (Aug); channel flag `6113`]
 3. **Proc the bombs** — while the debuff is up, *you and your allies* damaging
    the marked target have an **RPPM chance to trigger a Bombardment**, dealing
    Volcanic damage split among nearby enemies. [SimC proc-callback
@@ -94,9 +99,10 @@ Method, Blizzard forums]
 
 ### Hero tree B — **Scale Commander** (Dev)
 - **Mass Disintegrate** — empower makes the next Disintegrate hit up to 3
-  targets (+25% per missing target below 3); instant cleave with no extra
-  spec-tree cost. [Guide] [SimC: stacks at `4407`, cleave + Bombardments apply
-  at `6235-6257`]
+  targets (+damage per missing target below 3) with no extra spec-tree cost.
+  **Still a channel** — it is cleave, not an instant; move during it with Hover.
+  [Guide] [SimC: stacks at `4407`, channel flag `6113`, cleave + Bombardments
+  apply at `6235-6257`]
 - **Bombardments** — see §0. Density-scaling, partly allied-damage-driven AoE.
 - **Strafing Run** — Deep Breath hits harder and is **recastable within ~18s**.
   [Guide] [SimC `6076`]
@@ -106,8 +112,10 @@ Method, Blizzard forums]
 - **Extended Battle** (+1s Bombardments/Essence ability), **Diverted Power**
   (Bombardments → chance at Essence Burst), **Maneuverability** (steerable Deep
   Breath, Hover refund → near-unlimited movement). [Guide]
-- **Playstyle:** **instant, burst-on-demand cleave** with elite mobility and
-  spread cleave; minimal loss on target swaps.
+- **Playstyle:** high **channeled/cast cleave** with strong spread cleave and
+  minimal loss on target swaps. Mobility is **Hover-based** — the SC edge is
+  that Deep Breath/Maneuverability **refund Hover**, so you get more windows to
+  channel Mass Disintegrate *while* moving (not that the spell is instant).
 
 ---
 
@@ -184,22 +192,31 @@ Bronze-dragonflight time manipulation; smoother, **single-target / raid-leaning*
 > scale up.
 
 ### The shared mechanical thesis
-1. **Instant, movement-proof damage.** Mass Disintegrate (Dev) and Mass
-   Eruption (Aug) turn the main spender into **instant cleave** you can fire
-   while repositioning. M+ is constant movement; Flameshaper's channel/DoT-ramp
-   and Chronowarden's precise-window play both bleed value when you move or when
-   the group mis-times cooldowns.
-2. **Density-scaling AoE.** Bombardments is partly *allied-damage-driven* and
-   splits among nearby enemies — its value rises directly with pack size, and
-   high-key trash is dense.
-3. **Cooldown compression (Aug).** Wingleader → Bombardments → shorter Breath
+> **Correction:** Mass Disintegrate and Mass Eruption are **NOT instant** and
+> not freely castable while moving. Disintegrate is **channeled**, Eruption is a
+> **hard-cast**, and the *only* way to move while casting either is **Hover**.
+> The SC edge is throughput + Hover uptime, not instant casts.
+
+1. **High cleave per cast/channel.** Mass Disintegrate makes one Disintegrate
+   channel hit up to 3 targets; Mass Eruption makes one Eruption cast hit up to
+   3 — so each spender does AoE instead of single-target. That's more damage per
+   GCD/channel as density rises, with no rotational cost.
+2. **More mobile-casting uptime via Hover.** Evoker casts/channels are made
+   mobile by **Hover**; SC's **Deep Breath + Maneuverability refund/extend
+   Hover**, so you get more windows to keep channeling Mass Disintegrate *while*
+   repositioning. M+ is constant movement, so this Hover economy matters — but
+   the spell itself is still a channel, you're just covering it with Hover.
+3. **Density-scaling AoE (Bombardments).** Partly *allied-damage-driven* and
+   splits among nearby enemies — value rises directly with pack size, and
+   high-key trash is dense. This is the part that needs no extra casts.
+4. **Cooldown compression (Aug).** Wingleader → Bombardments → shorter Breath
    of Eons → more Duplicate uptime. More packs = more Bombardment hits = faster
    Breath. This loop is uniquely strong in M+ and absent in Chronowarden.
-4. **Burst-on-pull + mobility.** Deep Breath (Melt Armor amp + Strafing Run
-   recast + Hover refund) lets you dump amplified AoE the instant a pack is
-   grabbed and keep moving — matching how high keys burst packs inside a
-   CC/cooldown window rather than sustaining over minutes.
-5. **Lower execution variance.** Both SC builds are more forgiving — less
+5. **Burst-on-pull amp.** Deep Breath (Melt Armor ~20% amp + Strafing Run
+   recast + Hover refund) lets you set up amplified AoE on a fresh pack and keep
+   Hover-mobile — matching how high keys burst packs inside a CC/cooldown window
+   rather than sustaining over minutes.
+6. **Lower execution variance.** Both SC builds are more forgiving — less
    reliant on allies or on perfect timing — which matters more as keys get
    deadlier.
 
@@ -212,14 +229,15 @@ Bronze-dragonflight time manipulation; smoother, **single-target / raid-leaning*
 - SimC supports M+-flavored **fight styles** (`DungeonSlice`, `DungeonRoute`,
   `CleaveAdd`, `HecticAddCleave`) layered on these profiles — this is what
   Raidbots' "Dungeon Slice" uses, and the APLs branch on `fight_style.*`. Under
-  those styles SC's instant cleave is exactly what's rewarded. [SimC
+  those styles SC's cleave throughput is exactly what's rewarded. [SimC
   `engine/util/util.cpp`]
 - **But:** even DungeonSlice is a *scripted* add sequence. It captures target
   count, add timing, and cleave throughput — **not** routing, boss mechanics,
   forced movement, deaths, defensives, or interrupt assignments. The biggest
-  real-world SC advantages (movement-proofing, burst-on-pull, mis-timing
-  tolerance) are therefore **under-credited** by any sim, which is *why the live
-  M+ representation skews to SC harder than raw sim deltas alone would predict.*
+  real-world SC advantages (Hover-covered cleave during movement, burst-on-pull,
+  mis-timing tolerance) are therefore **under-credited** by any sim, which is
+  *why the live M+ representation skews to SC harder than raw sim deltas alone
+  would predict.*
 
 ---
 
