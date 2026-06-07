@@ -175,7 +175,7 @@ Hero trees are **shared**, and the dump prints one spec's wording:
 - **Onslaught** _(row 2, [441245](https://www.wowhead.com/spell=441245))_ — Entering combat grants a charge of Burnout, causing your next Living Flame to cast instantly
 - **Command Squadron** _(row 2, [1260745](https://www.wowhead.com/spell=1260745))_ — While flying during Breath of Eons you are assisted by a squadron of Dracthyr who assault enemies with Pyre, dealing N Fire damage to nearby enemies up to 8 times
 - **Melt Armor** _(row 3, [441176](https://www.wowhead.com/spell=441176))_ — Breath of Eons causes enemies to take 20% increased damage from Bombardments and Essence abilities for 12 sec
-- **Wingleader** _(row 3, [441206](https://www.wowhead.com/spell=441206))_ — Bombardments reduce the cooldown of Deep Breath by 0.5 sec for each target struck, up to 1.5 sec
+- **Wingleader** _(row 3, [441206](https://www.wowhead.com/spell=441206))_ — Bombardments reduce the cooldown of **Deep Breath** (Devastation) by 0.5 sec per target struck, up to 1.5 sec — or **Breath of Eons** (Augmentation) by **1.0 sec per target struck, up to 3.0 sec** — *per Bombardment* (effN1/2 = Dev, effN3/4 = Aug). Scales with target density and proc count.
 - **Unrelenting Siege** _(row 3, [441246](https://www.wowhead.com/spell=441246))_ — For each second you are in combat, Azure Strike, Living Flame, and Disintegrate deal 1% increased damage, up to 15%
 - **Concentrated Power** _(row 3, [1261448](https://www.wowhead.com/spell=1261448))_ — Mass Disintegrate strikes 1 additional targets
 - **Hardened Scales** _(row 4, [441180](https://www.wowhead.com/spell=441180))_ — Obsidian Scales reduces damage taken by an additional 10%

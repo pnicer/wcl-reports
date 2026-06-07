@@ -66,34 +66,45 @@ explain it, grounded in these numbers + mechanics:
 
 ## Breath of Eons effective cooldown by hero tree (the Wingleader question)
 
-The premise that "Bombardments shortens Breath of Eons CD for SC" is **true but
-small and non-scaling** in a 5-man context. Measured Breath casts per fight →
-effective CD (Aug + Guardian/Ret/Unholy DK comp):
+**The real mechanic (verified from spell data + engine code) scales — it is NOT
+flat.** Wingleader (effect values, id 441206): for **Augmentation**, each
+Bombardment reduces Breath of Eons' cooldown by **1.0 s per target struck, capped
+at 3.0 s per Bombardment** (`effectN3=1000ms`, `effectN4=3000ms`;
+`sc_evoker.cpp:7905-7911`, `cdr = min(per_target × n_targets, cap)` on each
+Bombardment impact). Total reduction = (Bombardment procs) × min(1.0×targets, 3.0)
+— it grows with **both** target density and proc count.
 
-| Scenario | **SC** eff. CD | **Chronowarden** eff. CD |
+⚠️ **The sim numbers below are a SimC under-model, not ground truth.** Measured
+Breath casts → "effective CD":
+
+| Scenario | **SC** (sim) | **Chronowarden** (sim) |
 |---|--:|--:|
 | 1T | 92.4 s | 75.6 s |
-| 3T | 92.2 s | **45.8 s** |
+| 3T | 92.2 s | 45.8 s |
 | 5T | 92.6 s | 44.4 s |
 | 8T | 92.1 s | 44.5 s |
 | DungeonSlice | 92.7 s | 75.9 s |
 
-Findings:
-- **SC ≈ 92 s, flat across all target counts.** Wingleader delivers a fixed
-  ~28 s reduction off the 120 s base; in a 5-man it does **not** scale with
-  density. Verified robust: forcing **real allied-damage Bombardments**
-  (`evoker.simulate_bombardments=0`, allies present) gave the *same* ~92 s — so
-  this is not an RPPM artifact. (Raids with ~20 allied attackers could compress
-  it further; that's outside the dungeon scope asked.)
-- **Chronowarden has the *shorter* Breath CD** everywhere — ~76 s single-target,
-  **~45 s at 3+ targets** — i.e. it gets Breath of Eons up roughly **twice as
-  often** in AoE. So Breath-uptime is a Chronowarden advantage, not an SC one.
-- **Implication:** the widely-repeated "SC's Wingleader→Breath flywheel is why
-  Aug runs SC in M+" is **not supported by the sim**. SC still amplifies the
-  team more (prior section) via Bombardments/Melt Armor + steady Ebon Might, not
-  via more Breaths. *Caveat:* this is the provided hero-tree-only-swap builds;
-  the exact mechanism behind Chronowarden's target-scaling wasn't traced to a
-  single node, and a different Chronowarden loadout could differ.
+What's actually going on:
+- **SC came out flat ~92 s across 1→8 targets — which is impossible if the
+  mechanic scaled.** The flat ~28 s reduction implies the sim applied ~**1.0 s
+  per Bombardment regardless of targets** (i.e. it fed `n_targets = 1` into the
+  Wingleader CDR), across ~28 procs/cycle. The per-target scaling (1.0→3.0 s) is
+  **not being applied** — a SimC limitation in how the Bombardment proc (an
+  external action fired via `execute_on_target`) reports its target count to
+  Wingleader. (Forcing `evoker.simulate_bombardments=0` gave the same ~92 s —
+  both proc paths share the limitation, so this did *not* validate "flat".)
+- **Corrected estimate:** if those same ~28 procs/cycle hit the 3.0 s cap (3+
+  targets), that's ~**84 s** of CDR → a Breath CD in the **~mid-30s** range at 3+
+  targets — i.e. **shorter than Chronowarden's ~45 s**, scaling with density.
+  (Rough: assumes proc volume holds and the cap is reached; the sim can't confirm
+  it. Real allies hammering the marked target would add procs, shortening it
+  further.)
+- **Bottom line:** the Bombardments→Breath flywheel for SC is **real and
+  density-scaling**; SimC under-credits it, so all my SC sim results here likely
+  understate SC's Breath uptime (and its Bombardment/Wingleader value generally).
+  The earlier "Chronowarden wins Breath uptime / the flywheel is a myth"
+  conclusion is **retracted** — it was an artifact of the under-model.
 
 ## Caveats / limitations
 - **Healer omitted** (no SimC profile) — slightly understates Ebon Might target

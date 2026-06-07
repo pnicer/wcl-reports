@@ -114,19 +114,22 @@ The tree's identity is a single chain, verified end-to-end in the engine
 cleave + a density-scaling, partly-passive Bombardment stream + a 20% group
 amp + extra Hover uptime** — at the cost of adding ~no Essence Burst.
 
-### The Wingleader→Breath-of-Eons "flywheel" — tested, and mostly a myth in 5-man
-**Wingleader** ties Bombardments to **Breath of Eons cooldown reduction** [tal],
-and guides claim this pulls its 120 s CD toward ~60–90 s [meta]. **We measured
-it [sim, aug-results] and it does not hold in a dungeon group:** SC's Breath CD
-sits at a **flat ~92 s** across 1–8 targets (a fixed ~28 s Wingleader reduction
-that does *not* scale with density — robust even with real allied-damage
-Bombardments). **Chronowarden actually gets Breath up *more* often** (~76 s ST,
-~45 s at 3+ targets). So Breath uptime is a **Chronowarden** advantage, not an SC
-one — the "SC flywheel" is the wrong reason for SC's M+ dominance. SC's real edge
-is **team-amplification** (Bombardments/Melt Armor + steady Ebon Might amplify
-allies more — it wins team-amp in every tested scenario) plus consistency, *not*
-Breath frequency. (Raids with ~20 allied attackers may compress SC's Breath CD
-further; this is the 5-man dungeon result.)
+### The Wingleader→Breath-of-Eons flywheel — real and density-scaling
+**Wingleader** ties Bombardments to **Breath of Eons cooldown reduction** [tal].
+The verified mechanic (effect values + `sc_evoker.cpp:7905`): for Augmentation,
+**each Bombardment cuts Breath of Eons' CD by 1.0 s per target struck, up to 3.0 s
+per Bombardment** — so it scales with **both** target density and proc volume.
+With many Bombardment procs per cycle in a dense pull, this is a large,
+density-scaling reduction (a rough estimate puts SC's Breath CD in the ~mid-30s
+at 3+ targets [sim, aug-results]).
+
+⚠️ **SimC under-models this** — it applied a flat ~1.0 s/proc regardless of
+targets (≈92 s Breath CD, flat across 1–8 targets), feeding `n_targets=1` into
+the Wingleader CDR rather than the bomb's true target count. So my sim's Breath-CD
+numbers (and the earlier "Chronowarden wins Breath uptime" reading) **understate
+SC and should not be trusted for this metric** — see `EVOKER_MIDNIGHT_AUG_SIM_RESULTS.md`. The flywheel is real; the sim just couldn't show it. (SC also
+amplifies the team more in every tested scenario [sim] via Bombardments/Melt
+Armor + steady Ebon Might — that result stands independently.)
 
 ---
 
@@ -162,13 +165,14 @@ the group executes perfectly [meta].
 2. **Partly-passive, density-scaling Bombardments** (SP×4.75, allied-damage
    driven [abil, src]) — value climbs directly with pack size; high-key trash is
    dense. Needs no extra casts.
-3. **Aug team-amplification** — SC amplifies the *group* more than Chronowarden
-   in every tested scenario [sim] (via Bombardments/Melt Armor + steady Ebon
-   Might), even though it does **not** get Breath of Eons up more often
-   (Chronowarden's Breath CD is actually shorter — the "Wingleader flywheel" is
-   a myth in 5-man, see above). A support's value is what it adds to allies, and
-   SC wins that — *that* is the likeliest real driver of Aug's ~99% SC, alongside
-   execution-independence and bias (the meta is **not** a total-DPS verdict).
+3. **Aug team-amplification + Breath flywheel.** SC amplifies the *group* more
+   than Chronowarden in every tested scenario [sim] (Bombardments/Melt Armor +
+   steady Ebon Might). On top of that, **Wingleader's density-scaling Breath-of-
+   Eons CDR** (1.0 s/target, cap 3.0 s per Bombardment — see above) compresses
+   Breath in dense pulls, though SimC under-models it. A support's value is what
+   it adds to allies, and SC wins that — *that* (with execution-independence and
+   bias) is the likely driver of Aug's ~99% SC; the meta is **not** a total-DPS
+   verdict.
 4. **Group amp on demand** — Melt Armor **+20%** on a fresh pack [abil].
 5. **Mobility via Hover economy** — Deep Breath/Maneuverability/Slipstream
    **refund Hover** [tal], so the channels stay castable through M+'s constant
