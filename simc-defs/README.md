@@ -1,164 +1,134 @@
 # SimulationCraft Evoker definitions — Midnight Season 1 (MID1)
 
-Pulled on 2026-06-07 from the SimulationCraft `midnight` branch:
-`simulationcraft/simc` → `profiles/MID1/`.
+Pulled 2026-06-07 from the SimulationCraft `midnight` branch
+(`simulationcraft/simc`). This corrects an earlier draft that wrongly claimed
+"SimC has no Augmentation profile" and that "SimC only sims Patchwerk." Both
+were wrong — see below.
 
-These are the *upstream SimC profile definitions* the user asked for, plus an
-analysis of what they (and this repo's own WCL logs) say about the Scale
-Commander hero-spec meta in high-tier Mythic+.
+## Files in this folder
 
-## What was actually available to pull
+| File | What it is | Upstream path |
+|------|-----------|---------------|
+| `MID1_Evoker_Devastation_SC.simc` | Pre-built **gear+talent profile**, Scale Commander. **SimC's `source=default` Devastation build** (internal id `MID1_Evoker_Devastation_SC`). | `profiles/MID1/MID1_Evoker_Devastation.simc` |
+| `MID1_Evoker_Devastation_FS.simc` | Pre-built gear+talent profile, Flameshaper alternative. | `profiles/MID1/MID1_Evoker_Devastation_FS.simc` |
+| `evoker_augmentation_apl.simc` | The **default Augmentation rotation definition** (APL). This is the thing an Aug analyzer/sim is built on. | `ActionPriorityLists/default/evoker_augmentation.simc` |
+| `MID1_Generate_Evoker.simc` | The generator that produces the MID1 gear profiles (emits the two Devastation builds above). | `profiles/generators/MID1/MID1_Generate_Evoker.simc` |
 
-| Spec | Hero tree | SimC file | Status |
-|------|-----------|-----------|--------|
-| Devastation | **Scale Commander** | `MID1_Evoker_Devastation.simc` (internal name `MID1_Evoker_Devastation_SC`) | ✅ pulled, **this is SimC's `source=default`** build |
-| Devastation | Flameshaper | `MID1_Evoker_Devastation_FS.simc` | ✅ pulled |
-| Devastation | Chronomancer | — | ❌ does not exist |
-| Augmentation | Scale Commander | — | ❌ does not exist |
-| Augmentation | Chronomancer | — | ❌ does not exist |
+## Two kinds of "definition" — don't confuse them
 
-Probed filenames and HTTP status (all on `midnight` branch):
+SimC has **two** layers, and the earlier confusion came from conflating them:
+
+1. **Pre-built gear profiles** (`profiles/MID1/*.simc`) — a specific
+   character: ilvl ~289 gear, talent string, consumables. SimC only ships
+   these for **Devastation** (SC default + FS). It does **not** ship a
+   pre-built *gear* profile for Augmentation.
+2. **Spec / rotation definitions** (`ActionPriorityLists/` +
+   `engine/class_modules/apl/apl_evoker.cpp` + `sc_evoker.cpp`) — the actual
+   APL and spell behavior. These **do** exist for **Augmentation**. This is
+   what Raidbots/any analyzer drives when you paste your own armory string,
+   and it's almost certainly what the Aug reports in this repo were built on.
+
+So "no Aug profile" was only true for layer 1 (pre-built gear), and misleading.
+The Augmentation *definition* is fully present — `evoker_augmentation_apl.simc`
+in this folder.
+
+## SimC supports Mythic+ / cleave fight styles (you were right)
+
+SimC is **not** Patchwerk-only. Fight styles are layered on top of any profile
+via `fight_style=`, and the engine ships (from `engine/util/util.cpp`):
 
 ```
-200  MID1_Evoker_Devastation.simc        -> internal name MID1_Evoker_Devastation_SC
-200  MID1_Evoker_Devastation_FS.simc
-404  MID1_Evoker_Devastation_SC.simc     (no separate file; SC *is* the default)
-404  MID1_Evoker_Augmentation.simc
-404  MID1_Evoker_Augmentation_SC.simc
-404  MID1_Evoker_Augmentation_Chrono.simc
+Patchwerk  CastingPatchwerk  Ultraxion  Beastlord
+HelterSkelter  LightMovement  HeavyMovement
+CleaveAdd  HecticAddCleave  DungeonSlice  DungeonRoute
 ```
 
-So the two facts the definitions hand you *before any analysis* are:
+- **`DungeonSlice`** is exactly Raidbots' "Dungeon Slice" sim — a scripted
+  mixed single-target + add-wave sequence meant to approximate M+ trash/boss
+  pacing. **`DungeonRoute`** is the longer multi-pull variant.
+- **`CleaveAdd` / `HecticAddCleave`** are the cleave/AoE styles.
 
-1. **SimC ships no Augmentation Evoker profile at all** for Midnight S1.
-2. **For Devastation, the build SimC blesses as the canonical default is the
-   Scale Commander one** (`source=default`, internal id `..._Devastation_SC`).
-   Flameshaper is shipped only as a clearly-labelled alternative.
+The APLs even branch on the fight style — e.g. the Aug APL contains
+`...fight_remains<=30&!fight_style.dungeonroute` (line 48 of
+`evoker_augmentation_apl.simc`). So SimC profiles + a dungeon/cleave fight style
+*do* produce M+-flavored numbers; that's the pipeline Raidbots exposes.
 
-## ⚠️ Big caveat before you read too much into these
+(Honest limit: even `DungeonSlice`/`DungeonRoute` are *scripted* add sequences.
+They capture target count, add timing, and cleave throughput, but not routing,
+boss mechanics, forced movement beyond the canned `raid_event.movement`, or
+defensive checks. They're a strong proxy for M+ damage profile, not a literal
+key.)
 
-SimulationCraft is a **single-target / fixed-add "Patchwerk" raid simulator.**
-It does **not** model Mythic+ — no pull-by-pull routing, no forced movement, no
-defensive/utility checks, no "kill this priority add now," no mob density that
-changes shape every 10 seconds. So SimC profiles **cannot directly explain a
-Mythic+ meta.** What they *can* tell you is which build the theorycrafters
-treat as the baseline, and — by reading the action lists — *which mechanics the
-build is built around.* The "why everyone plays SC in M+" answer below is
-mechanical reasoning grounded in those action lists and in this repo's WCL
-logs, **not** a number SimC printed.
+## The actual answer: SimC's own defaults encode Scale Commander for BOTH specs
 
-## How the two Devastation profiles differ
+The strongest evidence is that **SimC's default rotations are written around
+Scale Commander mechanics for both specs** — you don't have to take a meta
+report's word for it:
 
-Both files contain the **same** action-priority list. The only meaningful
-difference is the `talents=` string, and the APL branches on it at the top:
+### Devastation
+`MID1_Evoker_Devastation_SC.simc` is `source=default`. The shared APL routes by
+hero tree:
 
 ```
 actions+=/run_action_list,name=sc,if=talent.mass_disintegrate   # Scale Commander
-actions+=/run_action_list,name=aoe_fs,if=active_enemies>=3       # Flameshaper AoE
-actions+=/run_action_list,name=st_fs                            # Flameshaper ST
+actions+=/run_action_list,name=aoe_fs,if=active_enemies>=3       # Flameshaper
+actions+=/run_action_list,name=st_fs
 ```
 
-- `MID1_Evoker_Devastation_SC.simc` takes **`talent.mass_disintegrate`** →
-  routes into the `sc` list.
-- `MID1_Evoker_Devastation_FS.simc` does not → routes into `st_fs` / `aoe_fs`.
+The `sc` list is built around **Deep Breath → Bombardments → Mass
+Disintegrate**: Deep Breath stamps the `bombardments` debuff on a whole pack,
+then Disintegrate becomes **instant-cast and cleaves to every bombarded target**
+(`buff.mass_disintegrate_stacks`), spread via `target_if=min:debuff.bombardments.remains`. Flameshaper's lists are a `fire_breath` DoT-ramp /
+`pyre` / `engulf` pattern that wants you stationary and wants targets to live.
 
-`mass_disintegrate` is the Scale Commander signature. The `sc` action list is
-built entirely around it (verbatim from the profile):
+### Augmentation
+`evoker_augmentation_apl.simc` — the **default** Aug rotation — is likewise
+written around Scale Commander:
 
 ```
-actions.sc=deep_breath,if=buff.strafing_run.remains<=gcd.max*2,cancel_if=gcd.remains=0
+actions.precombat+=/variable,name=bombardments_pooling,...,default=1
 ...
-actions.sc+=/disintegrate,target_if=min:debuff.bombardments.remains,
-    early_chain_if=ticks_remain<=1&buff.mass_disintegrate_stacks.up,
-    if=...&buff.mass_disintegrate_stacks.up&talent.mass_disintegrate,
-    interrupt_if=talent.volatility&active_enemies>=8
+actions+=/eruption,target_if=min:debuff.bombardments.remains,if=buff.mass_eruption_stacks.up
+actions+=/eruption,target_if=max:debuff.bombardments.remains,if=debuff.bombardments.remains>execute_time|...
 ```
 
-Reading that line tells you exactly why the build is an AoE monster:
+`bombardments` and `mass_eruption` are **Scale Commander** mechanics. SimC's
+default Augmentation rotation pools Eruptions and spreads them across bombarded
+targets — i.e. the maintained, supported build *is* the Scale Commander one.
+(Ebon Might / Prescience / Breath of Eons — the support core — are present
+regardless of hero tree; the hero choice is decided by the personal/AoE damage
+layer, and SimC's default picks SC.)
 
-- **Deep Breath → Bombardments**: Deep Breath stamps the **`bombardments`**
-  debuff on everything it flies over. The build then **`target_if=min:debuff.bombardments.remains`** — i.e. it actively spreads damage to refresh
-  Bombardments on as many mobs as possible.
-- **Mass Disintegrate**: after Deep Breath, Disintegrate becomes
-  **instant-cast and cleaves to all Bombardment targets** (`buff.mass_disintegrate_stacks`). That converts the spec's biggest single-target
-  spend into a multi-target nuke with no cast time → castable while moving.
-- **Strafing Run** (`buff.strafing_run`): the build paces Deep Breath to keep
-  this Scale Commander movement/damage window up.
-- The `interrupt_if=talent.volatility&active_enemies>=8` clause only fires at
-  8+ targets — the APL is explicitly tuned for big pulls.
+### Why this is the M+ pick (mechanical reasoning)
+1. **Instant, movement-proof cleave.** Mass Disintegrate (Dev) and pooled
+   Mass Eruption (Aug) turn the spec's main spend into instant AoE you can use
+   while repositioning — M+ is constant movement, which is exactly where
+   Flameshaper's channel/DoT-ramp pattern bleeds damage.
+2. **Bombardments scales with density.** It re-fires across every bombarded
+   mob, so its value climbs with pack size — high-key trash is dense.
+3. **Burst-on-pull shape.** Deep Breath + Bombardments dumps AoE the instant a
+   pack is grabbed, matching how high keys burst packs inside a CC/cooldown
+   window rather than sustaining over minutes.
+4. Under a `DungeonSlice`/`HecticAddCleave` fight style these mechanics are
+   precisely what gets rewarded, which is why the default APLs are SC-shaped.
 
-The Flameshaper lists (`st_fs`, `aoe_fs`) instead revolve around
-`fire_breath` DoT uptime, `engulf`/`consume_flame`, and `pyre` — strong, but
-fundamentally a **DoT-ramp / sustained** pattern that wants targets to live and
-wants you to stand still channeling.
-
-## Why Scale Commander wins in high Mythic+ (the actual answer)
-
-Combine the action-list mechanics above with what M+ rewards, and SC dominance
-falls out for **both** specs:
-
-1. **Instant, movement-friendly cleave.** M+ is constant movement (swirlies,
-   kiting, repositioning). Flameshaper's value is locked in *channeled*
-   Disintegrate and *standing* DoT ramp; every forced move is a damage loss.
-   Mass Disintegrate makes the same damage **instant and AoE**, so SC loses
-   almost nothing to movement. This is the single biggest reason.
-
-2. **Front-loaded burst AoE on demand.** Deep Breath + Mass Disintegrate +
-   Bombardments dumps a huge chunk of AoE the moment a pack is grabbed.
-   High keys are about *bursting packs down inside a CC/cooldown window*, not
-   a 4-minute Patchwerk — exactly the shape SC is built for and FS is not.
-
-3. **Bombardments scales with pack size.** Bombardments re-fires on your hits
-   across every tagged mob, so its value rises with density. Trash packs in
-   high keys are dense → Bombardments is near-permanent free AoE.
-
-4. **Built-in mobility / Deep Breath as a tool.** Deep Breath is both the
-   damage enabler *and* a gap-closer/repositioning tool — double-duty that M+
-   values and a raid sim never credits.
-
-### Why Augmentation *also* goes Scale Commander
-
-There is no SimC Aug profile, so the sim says nothing here directly — but this
-repo's own logs answer it. The Augmentation reports in this repo
-(`20260507_090328_Alokys.html`, `20260508_211858_Dzin.html`) **track
-`Bombardments` as a damage source and uptime metric**, e.g.:
+## Cross-check against this repo's own logs
+The Augmentation reports here (`20260507_090328_Alokys.html`,
+`20260508_211858_Dzin.html`) track **`Bombardments` uptime** as a metric, e.g.:
 
 ```
 <span class="label">Bombardments</span><span class="value val-warn">32% ...
-title="Bombardments: ~31% expected from random overlap"
 ```
 
-Bombardments only exists on the **Scale Commander** tree, so those Aug players
-are running Scale Commander, confirmed straight from the logs. The reasoning:
-
-- Augmentation's job is to **buff the group** (Ebon Might, Prescience, Breath
-  of Eons — all heavily present in these logs) while contributing personal
-  damage. Its hero choice is therefore decided by *which tree adds the most
-  low-effort personal/AoE throughput without compromising the support
-  rotation* — **not** by a personal-DPS sim (which is why SimC doesn't even
-  bother shipping an Aug profile).
-- **Scale Commander gives Aug exactly that**: Deep Breath + Bombardments is a
-  big, instant, density-scaling AoE chunk that slots around the support
-  globals, where Chronomancer's value is more single-target / cooldown-window
-  shaped and competes with the buffs for casts.
-- **Consistency / shared muscle memory**: same hero tree, same Deep Breath
-  usage across both Evoker specs.
-
-### One-line summary
-SimC's *definitions* tell you SC is the **default Devastation build** and that
-Aug isn't even modelled; the *action lists* tell you SC is built around
-**instant, movement-proof, density-scaling AoE** (Mass Disintegrate +
-Bombardments + Deep Breath). That mechanic profile is precisely what high
-Mythic+ rewards and what Flameshaper's channel/DoT-ramp pattern gives up — so
-both Evoker specs converge on Scale Commander. SimC itself can't *prove* the
-M+ result because it only sims Patchwerk, but the build it ships as default and
-this repo's own logs both point the same way.
+Bombardments only exists on the **Scale Commander** tree — so those Aug players
+are confirmed Scale Commander, matching SimC's default Aug APL.
 
 ## Sources
-- [`simc` profiles, `midnight` branch](https://github.com/simulationcraft/simc/tree/midnight/profiles)
-- [`MID1_Evoker_Devastation.simc` (Scale Commander default)](https://github.com/simulationcraft/simc/blob/midnight/profiles/MID1/MID1_Evoker_Devastation.simc)
-- [`MID1_Evoker_Devastation_FS.simc` (Flameshaper)](https://github.com/simulationcraft/simc/blob/midnight/profiles/MID1/MID1_Evoker_Devastation_FS.simc)
-- [SimulationCraft Evoker wiki](https://github.com/simulationcraft/simc/wiki/Evokers)
-- This repo's Augmentation WCL reports: `20260507_090328_Alokys.html`, `20260508_211858_Dzin.html` (both show Bombardments → Scale Commander).
+- [`simc` profiles, `midnight`](https://github.com/simulationcraft/simc/tree/midnight/profiles/MID1)
+- [`MID1_Evoker_Devastation.simc` (SC default)](https://github.com/simulationcraft/simc/blob/midnight/profiles/MID1/MID1_Evoker_Devastation.simc)
+- [`MID1_Evoker_Devastation_FS.simc`](https://github.com/simulationcraft/simc/blob/midnight/profiles/MID1/MID1_Evoker_Devastation_FS.simc)
+- [`ActionPriorityLists/default/evoker_augmentation.simc` (Aug rotation)](https://github.com/simulationcraft/simc/blob/midnight/ActionPriorityLists/default/evoker_augmentation.simc)
+- [`engine/class_modules/apl/apl_evoker.cpp`](https://github.com/simulationcraft/simc/blob/midnight/engine/class_modules/apl/apl_evoker.cpp)
+- [Fight styles in `engine/util/util.cpp`](https://github.com/simulationcraft/simc/blob/midnight/engine/util/util.cpp)
+- This repo's Aug logs (Bombardments uptime → Scale Commander).
 </content>
-</invoke>
