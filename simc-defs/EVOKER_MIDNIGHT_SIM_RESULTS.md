@@ -10,9 +10,13 @@ profiles head-to-head to separate **real tuning** from **meta bias**.
   `MID1_Evoker_Devastation_FS.simc` (Flameshaper).
 - **Convergence:** `target_error=0.2` (M+ styles reconfirmed at `0.1` — identical),
   `threads=4`. Patchwerk runs: `fight_length=300 fixed_time=1 desired_targets=N`.
-- **Caveat up front:** this is **Devastation only**. Augmentation has **no SimC
-  profile** (support spec — its value is buffing allies), so its ~99% Scale
-  Commander is *not* a sim-settleable question; it's log-driven (see analysis §5).
+- **Caveat up front:** this is **Devastation only**. Augmentation has **no
+  *standalone* SimC profile** (its value is buffing allies, so a solo run is
+  meaningless). It *can* be simmed in SimC/Raidbots — both run the same engine,
+  which applies Aug's buffs across the other player actors in the sim — but only
+  as a **group sim**, and the answer is highly sensitive to the assumed ally
+  roster / cooldown alignment. That roster-dependence (not an engine limit) is
+  why its ~99% Scale Commander leans on logs, not one decisive sim. (Analysis §2.)
 
 ## Results (mean DPS, personal only — no Bloodlust/PI/affixes)
 
@@ -78,7 +82,8 @@ burst-window tuning + un-simmable pacing/mobility advantages + some meta bias**,
   movement, deaths, or interrupt assignments.
 - **Personal DPS only:** no Bloodlust/Power Infusion/external buffs (affects
   both equally, so the *relative* gap is robust) and no group context.
-- **Augmentation not covered** — un-simmable (see above).
+- **Augmentation not covered here** — it needs a *group* sim (allies present),
+  which is roster-sensitive; not the standalone selfish-DPS run done above.
 
 ## Reproduce
 ```bash

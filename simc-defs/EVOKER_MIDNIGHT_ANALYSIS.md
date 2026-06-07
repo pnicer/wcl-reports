@@ -70,8 +70,14 @@ Most of Aug's value is **buffing allies**, so its "damage" is indirect [meta]:
 - Personal damage: **Eruption** (cast 2.5 s, SP×2.8, 3 Essence [abil]) maintains
   Ebon Might; **Upheaval** empower feeds Mass Eruption.
 
-This is why **SimC ships no Augmentation profile** [mech] and the meta is decided
-by group value, not a Patchwerk sim.
+This is why **SimC ships no standalone Augmentation profile** [mech]: a solo
+Patchwerk run has no allies for Ebon Might/Prescience/Breath of Eons to buff, so
+it's meaningless. Aug **can** be simmed in SimC/Raidbots, but only as a **group
+sim** — the engine applies its buffs across `sim->player_no_pet_list` /
+`allied_augmentations` [src 1088/4645/7249] — and the result is highly sensitive
+to the assumed ally roster and their cooldown alignment with Breath of Eons.
+That roster-dependence (not an engine limitation) is why the Aug hero-tree
+verdict leans on logs rather than a single decisive sim.
 
 ---
 
