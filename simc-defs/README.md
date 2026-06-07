@@ -75,11 +75,17 @@ actions+=/run_action_list,name=aoe_fs,if=active_enemies>=3       # Flameshaper
 actions+=/run_action_list,name=st_fs
 ```
 
-The `sc` list is built around **Deep Breath → Bombardments → Mass
-Disintegrate**: Deep Breath stamps the `bombardments` debuff on a whole pack,
-then Disintegrate becomes **instant-cast and cleaves to every bombarded target**
-(`buff.mass_disintegrate_stacks`), spread via `target_if=min:debuff.bombardments.remains`. Flameshaper's lists are a `fire_breath` DoT-ramp /
-`pyre` / `engulf` pattern that wants you stationary and wants targets to live.
+The `sc` list is built around **empower → Mass Disintegrate → Bombardments**:
+casting an empower (Fire Breath / Eternity Surge) grants `mass_disintegrate_stacks`, which makes the next **Disintegrate instant-cast and cleave**;
+*spending* that Mass Disintegrate is what **applies the `bombardments` debuff to
+the primary target** (`target_if=min:debuff.bombardments.remains`), and your
+subsequent damage to a marked target procs the bomb explosions. **Deep Breath
+does NOT apply or spread Bombardments** — its Scale Commander role is **Melt
+Armor** (a ~20% damage-taken debuff) plus the **Strafing Run** recast. See
+`EVOKER_MIDNIGHT_MECHANICS.md` for the full source-verified chain (an earlier
+draft of this file wrongly said Deep Breath spreads Bombardments). Flameshaper's
+lists are instead a `fire_breath` DoT-ramp / `pyre` / `consume_flame` pattern
+that wants you stationary and wants targets to live.
 
 ### Augmentation
 `evoker_augmentation_apl.simc` — the **default** Aug rotation — is likewise
