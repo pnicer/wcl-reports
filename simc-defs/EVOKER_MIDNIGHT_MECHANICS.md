@@ -331,8 +331,14 @@ weakest EB toolkit, and is chosen despite that for its AoE/density/Hover profile
 
 ## 6. Coverage map & known gaps
 
-This doc is **signature-level**, not an exhaustive talent catalog. Audited
-against the SimC talent structs, here is what's covered vs missing.
+> ✅ **Full talent catalog now exists:** see **`EVOKER_MIDNIGHT_TALENTS.md`** —
+> every node of the Class tree, Devastation spec, Augmentation spec, and all
+> three hero trees, auto-extracted from SimC's spell-data dump with correct
+> `HT()`/`ST()`/`CT()` attribution and Wowhead links. The "missing nodes" listed
+> below are now documented there; this section is kept as the audit record.
+
+This (mechanics) doc is **signature-level**, not an exhaustive talent catalog.
+Audited against the SimC talent structs, here is what's covered vs missing.
 
 **Hero-tree node coverage** (counts = nodes named in this doc / total in
 `sc_evoker.cpp`):
