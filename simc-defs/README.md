@@ -14,6 +14,14 @@ were wrong — see below.
 | `evoker_augmentation_apl.simc` | The **default Augmentation rotation definition** (APL). This is the thing an Aug analyzer/sim is built on. | `ActionPriorityLists/default/evoker_augmentation.simc` |
 | `MID1_Generate_Evoker.simc` | The generator that produces the MID1 gear profiles (emits the two Devastation builds above). | `profiles/generators/MID1/MID1_Generate_Evoker.simc` |
 
+### Knowledge-grounding docs (derived analysis)
+| Doc | Contents |
+|-----|----------|
+| `EVOKER_MIDNIGHT_MECHANICS.md` | Narrative mechanics: §0 Bombardments correction, core kits, hero trees, §3 why-SC, §4 Essence Burst, §5 TWW-vs-Midnight flags, §6 coverage/gaps. |
+| `EVOKER_MIDNIGHT_TALENTS.md` | **Complete** value-resolved talent catalog — Class + both spec trees + all 3 hero trees, with rows, Wowhead links, real numbers. |
+| `EVOKER_MIDNIGHT_ABILITIES.md` | Value-resolved active-ability reference — cast/channel, cooldowns, charges, costs, range, SP coefficients. |
+| `EVOKER_MIDNIGHT_ANALYSIS.md` | **In-depth synthesis** answering "why Scale Commander in high M+" with every claim cited to the data above. |
+
 ## Two kinds of "definition" — don't confuse them
 
 SimC has **two** layers, and the earlier confusion came from conflating them:
